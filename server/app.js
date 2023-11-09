@@ -28,18 +28,10 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
 // Connect to database
-mongoose.connect(config.database, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-mongoose.connection.on("connected", () => {
-  console.log("Connected to MongoDB Atlas");
-});
-
-mongoose.connection.on("error", (err) => {
-  console.error(`MongoDB Atlas connection error: ${err}`);
-});
+mongoose
+  .connect(config.database)
+  .then(() => console.log("Connected to MongoDB Atlas"))
+  .catch((err) => console.error("MongoDB Atlas connection error:", err));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
