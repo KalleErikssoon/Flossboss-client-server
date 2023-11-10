@@ -1,0 +1,11 @@
+image: node:18-alpine
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script:
+    - cd server
+    - npm install
