@@ -15,9 +15,12 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "mongoose": "^8.0.0",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "readdirp": "^3.6.0"
   },
   "devDependencies": {
+    "morgan": "~1.9.1",
+    "mqtt": "^5.2.0",
     "newman": "^6.0.0",
     "nodemon": "^3.0.1"
   }
