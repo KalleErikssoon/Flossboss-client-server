@@ -2,6 +2,7 @@ image: node:latest
 
 stages:
   - build
+  - test
 
 build:
   stage: build
@@ -10,3 +11,11 @@ build:
   script:
     - cd server
     - npm install
+
+test:
+  stage: test
+  tags:
+  - docker
+  script:
+  - cd server
+  - npm run test
