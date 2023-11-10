@@ -17,5 +17,6 @@ test:
   tags:
   - docker
   script:
+  - npm install -g newman
   - cd server
   - npm run test
