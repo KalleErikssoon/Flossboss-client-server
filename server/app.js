@@ -31,8 +31,9 @@ app.use("/", indexRouter);
 app.use("/users", userRouter);
 
 // Connect to database
+const mongoURI = process.env.MONGODB_URI || config.database;
 mongoose
-  .connect(config.database)
+  .connect(mongoURI)
   .then(() => console.log("Connected to MongoDB Atlas"))
   .catch((err) => console.error("MongoDB Atlas connection error:", err));
 
