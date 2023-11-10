@@ -51,9 +51,9 @@ app.use(function (err, req, res, next) {
 });
 
 const mqttHandler = new MQTTHandler(
-  "ssl://8f816fbc939b4099b39751f74878bc94.s2.eu.hivemq.cloud:8883/mqtt",
-  "flossbossgu",
-  "Kuggen2023"
+  config.hivemq.URL,
+  config.hivemq.Ussername,
+  config.hivemq.Password
 );
 
 // Connect to the MQTT broker
@@ -63,6 +63,6 @@ mqttHandler.connect();
 mqttHandler.subscribe("flossbosstest");
 
 // Publish a message to a topic
-mqttHandler.publish("flossbosstest", "Hello kalle");
+mqttHandler.publish("flossbosstest", "Hello Mqtt");
 
 module.exports = app;
