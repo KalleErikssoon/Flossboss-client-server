@@ -15,8 +15,10 @@ build:
 test:
   stage: test
   tags:
-  - docker
+    - docker
   script:
-  - npm install -g newman
-  - cd server
-  - npm run test
+    - npm install -g newman
+    - cd server
+    - (npm start &)
+    - sleep 10
+    - npm run test
