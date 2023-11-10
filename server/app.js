@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const config = require("./config");
+const MQTTHandler = require("./MQTTHandler");
 
 var indexRouter = require("./routes/index");
 var userRouter = require("./routes/users");
@@ -48,5 +49,20 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
+
+const mqttHandler = new MQTTHandler(
+  "ssl://8f816fbc939b4099b39751f74878bc94.s2.eu.hivemq.cloud:8883/mqtt",
+  "flossbossgu",
+  "Kuggen2023"
+);
+
+// Connect to the MQTT broker
+mqttHandler.connect();
+
+// Subscribe to a topic
+mqttHandler.subscribe("flossbosstest");
+
+// Publish a message to a topic
+mqttHandler.publish("flossbosstest", "Hello kalle");
 
 module.exports = app;
