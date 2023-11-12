@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -15,7 +16,13 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form submitted:", user);
-    
+    try {
+      const response = await axios.post('http://localhost:3000/users', user);
+      console.log('User registered:', response.data);
+    } catch (error) {
+      console.error('Error registering user:', error.message);
+    }
+
   };
 
   return (
