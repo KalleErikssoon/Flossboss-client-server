@@ -6,7 +6,7 @@ const Register = () => {
     name: '',
     password: '',
     email: '',
-    phone: ''
+    phoneNumber: ''
   });
 
   const handleChange = (e) => {
@@ -19,6 +19,14 @@ const Register = () => {
     try {
       const response = await axios.post('http://localhost:3000/users', user);
       console.log('User registered:', response.data);
+
+      setUser({
+        name: '',
+        password: '',
+        email: '',
+        phoneNumber: ''
+      });
+
     } catch (error) {
       console.error('Error registering user:', error.message);
     }
