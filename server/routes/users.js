@@ -8,6 +8,7 @@ const controller = new UserController();
 router.get('/', controller.getAllUsers);
 router.get('/:id', controller.getUserById);
 router.post('/', controller.createUser);
+router.post('/login', controller.loginUser); //for user login
 router.delete('/:id', controller.deleteById);
 router.patch('/:id', controller.updateByID);
 
