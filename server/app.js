@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const createError = require("http-errors");
 const mongoose = require("mongoose");
 const express = require("express");
@@ -7,8 +7,9 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 const MQTTHandler = require("./MQTTHandler");
-var indexRouter = require("./routes/index");
-var userRouter = require("./routes/users");
+const indexRouter = require("./routes/index");
+const userRouter = require("./routes/users");
+const loginRouter = require("./routes/login");
 
 var app = express();
 
@@ -24,10 +25,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-
-// Routers 
+// Routers
 app.use("/", indexRouter);
 app.use("/users", userRouter);
+app.use("/login", loginRouter);
 
 // Connect to database
 const mongoURI = process.env.MONGODB_URI;
