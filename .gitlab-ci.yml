@@ -1,0 +1,24 @@
+image: node:latest
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  tags:
+    - docker
+  script:
+    - cd server
+    - npm install
+
+test:
+  stage: test
+  tags:
+    - docker
+  script:
+    - npm install -g newman
+    - cd server
+    - (npm start &)
+    - sleep 10
+    - npm run test

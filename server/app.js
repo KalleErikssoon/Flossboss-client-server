@@ -1,3 +1,4 @@
+require("dotenv").config();
 const createError = require("http-errors");
 const mongoose = require("mongoose");
 const express = require("express");
@@ -5,11 +6,10 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
-const config = require("./config");
 const MQTTHandler = require("./MQTTHandler");
-
-var indexRouter = require("./routes/index");
-var userRouter = require("./routes/users");
+const indexRouter = require("./routes/index");
+const userRouter = require("./routes/users");
+const loginRouter = require("./routes/login");
 
 var app = express();
 
@@ -25,14 +25,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-
-// Routers 
+// Routers
 app.use("/", indexRouter);
 app.use("/users", userRouter);
+app.use("/login", loginRouter);
 
 // Connect to database
+const mongoURI = process.env.MONGODB_URI;
 mongoose
-  .connect(config.database)
+  .connect(mongoURI)
   .then(() => console.log("Connected to MongoDB Atlas"))
   .catch((err) => console.error("MongoDB Atlas connection error:", err));
 
@@ -53,9 +54,9 @@ app.use(function (err, req, res, next) {
 });
 
 const mqttHandler = new MQTTHandler(
-  config.hivemq.URL,
-  config.hivemq.Ussername,
-  config.hivemq.Password
+  process.env.MQTT_URL,
+  process.env.MQTT_USER,
+  process.env.MQTT_PASSWORD
 );
 
 // Connect to the MQTT broker
