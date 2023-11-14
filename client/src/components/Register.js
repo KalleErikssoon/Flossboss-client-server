@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Register = () => {
+const Register = ({ swtichPage }) => {
   const [user, setUser] = useState({
     name: '',
     password: '',
@@ -34,7 +34,7 @@ const Register = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container">
       <h1 className="mb-4">Register User</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -89,8 +89,11 @@ const Register = () => {
             onChange={handleChange}
           />
         </div>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary mx-2">
           Register
+        </button>
+        <button onClick={swtichPage} type="submit" className="btn btn-primary">
+          Login
         </button>
       </form>
     </div>

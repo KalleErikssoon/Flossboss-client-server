@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Login = () => {
+const Login = ({ swtichPage }) => {
     const [loginData, setLoginData] = useState({
         name: '',
         password: ''
@@ -30,7 +30,7 @@ const Login = () => {
       };    
 
     return (
-            <div className="container mt-5">
+            <div className="container">
             <h1 className="mb-4">Login user</h1>
             <form onSubmit={handleLogin}>
               <div className="mb-3">
@@ -61,6 +61,9 @@ const Login = () => {
               </div>
               <button type="submit" className="btn btn-primary">
                 Login
+              </button>
+              <button onClick={swtichPage} type="submit" className="btn btn-primary mx-3">
+                Register
               </button>
             </form>
           </div>

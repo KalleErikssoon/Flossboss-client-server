@@ -3,19 +3,24 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register'
-import LoginContainer from './components/LoginContainer';
+import { AppProvider } from './context/AppProvider';
+
+
 
 function App() {
-  return (
-  <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path='/loginsub' element={<LoginContainer />}/>
-        <Route path="/login" element={<Login />} />
-        <Route path='/register' element={<Register/>}/>
-      </Routes>
 
-  </BrowserRouter>
+  return (
+    <AppProvider>
+      <BrowserRouter>
+        <Routes>
+
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path='/register' element={<Register />} />
+        </Routes>
+
+      </BrowserRouter>
+    </AppProvider>
   );
 }
 
