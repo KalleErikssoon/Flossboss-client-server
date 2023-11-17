@@ -8,11 +8,11 @@ const clinicSchema = new mongoose.Schema({
     unique: true,
   },
   latitude: {
-    type: Number,
+    type: String,
     required: true,
   },
   longitude: {
-    type: Number,
+    type: String,
     required: true,
   },
   openingHours: {
