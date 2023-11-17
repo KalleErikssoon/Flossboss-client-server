@@ -1,0 +1,16 @@
+.calendar {
+    box-shadow: 5px 5px 8px;
+    width: 90%;
+    font-size: 1.2em;
+}
+.all {
+    height: 100vh;
+}
+.calendar-container {
+    display: flex;
+    justify-content: center;
+}
+
+#leftCalendar {
+    padding-right: 0px;
+}

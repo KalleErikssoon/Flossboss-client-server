@@ -4,8 +4,7 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register'
 import { AppProvider } from './context/AppProvider';
-
-
+import BookingPage from './pages/BookingPage';
 
 function App() {
 
@@ -17,6 +16,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/booking' element={<BookingPage />} />
         </Routes>
 
       </BrowserRouter>
