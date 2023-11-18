@@ -2,12 +2,14 @@ const UserModel = require("../models/user");
 const jwt = require("jsonwebtoken");
 
 class LoginController {
-  async login(req, res) {
-    try {
-      const email = req.body.email;
-      const password = req.body.password;
 
-      const user = await UserModel.findOne({ email });
+  async login(req, res) {
+    
+    const { name, password } = req.body;
+
+    try {
+      
+      const user = await UserModel.findOne({ name });
 
       if (!user) {
         return res.status(404).json({ message: "User does not exist" });
@@ -18,11 +20,9 @@ class LoginController {
       const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
         expiresIn: "1h",
       });
+      
 
-      res.setHeader("usertoken", token);
-      res.setHeader("userid", user._id);
-
-      res.status(200).json({ message: "Logged in" });
+      res.status(200).json({ message: "Logged in", token: token, userid: user._id });
     } catch (error) {
       console.error(error);
       res.status(500).json("Internal Server error");
