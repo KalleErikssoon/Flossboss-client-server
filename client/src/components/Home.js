@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import LoginContainer from "../components/LoginContainer";
-import CustomMap from "../components/CustomMap";
 import { AppContext } from "../context/AppProvider";
+import CustomMap from "../components/CustomMap";
 
 const Home = () => {
   const { showUserModal, setShowUserModal } = useContext(AppContext);

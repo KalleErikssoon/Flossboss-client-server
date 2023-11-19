@@ -4,7 +4,6 @@ class ClinicController {
   async getAllClinics(req, res) {
     try {
       const clinic = await ClinicModel.find({});
-      console.log(clinic);
       if (!clinic) {
         res.status(404).send("No clinics exist");
       }
