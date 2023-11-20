@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const Login = ({ swtichPage, history }) => {
     const [loginData, setLoginData] = useState({
-        name: '',
+        email: '',
         password: ''
       });
 
@@ -40,7 +40,7 @@ const Login = ({ swtichPage, history }) => {
           
 
           setLoginData({
-            name: '',
+            email: '',
             password: ''
           });
     
@@ -58,14 +58,14 @@ const Login = ({ swtichPage, history }) => {
             <form onSubmit={handleLogin}>
               <div className="mb-3">
                 <label htmlFor="name" className="form-label">
-                  Name:
+                  Email:
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="name"
-                  name="name"
-                  value={loginData.name}
+                  id="email"
+                  name="email"
+                  value={loginData.email}
                   onChange={handleChange}
                 />
               </div>

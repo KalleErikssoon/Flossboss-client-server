@@ -5,11 +5,11 @@ class LoginController {
 
   async login(req, res) {
     
-    const { name, password } = req.body;
+    const { email, password } = req.body;
 
     try {
       
-      const user = await UserModel.findOne({ name });
+      const user = await UserModel.findOne({ email });
 
       if (!user) {
         return res.status(404).json({ message: "User does not exist" });
