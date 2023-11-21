@@ -11,7 +11,7 @@ const NavbarComponent = () => {
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light p-1">
-          <a className="navbar-brand mx-auto" href="/">
+          <a className="navbar-brand mx-auto" href="/" style={{ fontSize: '35px', fontFamily: 'Adiro'}}>
             <img src={Logo} alt="Logo" style={{ height: 'auto', width: '70px' }} />
             FlossBoss
           </a>
@@ -21,7 +21,7 @@ const NavbarComponent = () => {
               {/* Other nav items here */}
             </ul>
             <div style={{ textAlign: 'center' }}>
-              <button className="user-logo-button" style={{ background: 'none', border: 'none', padding: 0 }} onClick={() => setShowUserModal(true)}>
+              <button className="user-logo-button" style={{ background: 'none', border: 'none', padding: 0, fontSize: '18px', fontFamily: 'Adiro' }} onClick={() => setShowUserModal(true)}>
                 <img src={UserLogo} alt="User Logo" style={{ height: 'auto', width: '35px' }} />
                 {!user && <div>Login/Register</div>}
               </button>

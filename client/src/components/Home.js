@@ -9,7 +9,7 @@ const Home = () => {
     return (
         <>
             <div style={{ flex: 1 }}>
-                <h1>FlossBoss (Home Page)</h1>
+                <h1>FlossBoss (Home Page under construction)</h1>
                 <button onClick={() => setShowUserModal(prev => !prev)} className="btn btn-primary">
                     Login/Register
                 </button>
