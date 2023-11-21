@@ -2,6 +2,7 @@ const ClinicModel = require("../models/clinic");
 const AppointmentModel = require("../models/appointment");
 
 class ClinicController {
+  // Gett all clinics from the database
   async getAllClinics(req, res) {
     try {
       const clinic = await ClinicModel.find({});
@@ -13,8 +14,8 @@ class ClinicController {
       res.status(500).send(err);
     }
   }
-  // Get all appointments based on a specfic clinic Id and specific criteria
 
+  // Get all appointments based on a specfic clinic Id and specific criteria
   async getAppointment(req, res) {
     try {
       const clinicid = req.params.clinicid;
@@ -24,9 +25,6 @@ class ClinicController {
       // Calculate the date two months from now
       let twoMonthsLater = new Date();
       twoMonthsLater.setMonth(twoMonthsLater.getMonth() + 2);
-
-      console.log("The current date is ", currentDate);
-      console.log("The future date is ", twoMonthsLater);
 
       const appointments = await AppointmentModel.find({
         clinicId: clinicid,
@@ -63,7 +61,6 @@ class ClinicController {
       let twoMonthsLater = new Date();
       twoMonthsLater.setMonth(twoMonthsLater.getMonth() + 2);
 
-      // Find one appointment that matches the criteria
       const appointmentExists = await AppointmentModel.findOne({
         clinicId: clinicId,
         booked: false,
@@ -78,13 +75,14 @@ class ClinicController {
         return res.status(404).send("No matching appointment found.");
       }
 
-      res.status(200).json(appointmentExists);
+      res.status(200).send(true);
     } catch (err) {
       res.status(500).send(err);
     }
   }
 
   // Create an appointment(This function will be removed later on)
+  // This function is not the responsibility of the web clinet side
   // The purpose of the function to add mock appointments for the sake of testing
   async createAppointment(req, res) {
     try {
@@ -95,9 +93,7 @@ class ClinicController {
       const clinicId = req.body.clinicId;
       const booked = req.body.booked;
       const pending = req.body.pending;
-      const pendingUntil = req.body.pendingUntil;
 
-      // Create a new appointment instance
       const newAppointment = new AppointmentModel({
         date: date,
         timeSlot: timeSlot,
@@ -106,10 +102,8 @@ class ClinicController {
         clinicId: clinicId,
         booked: booked,
         pending: pending,
-        pendingUntil: pendingUntil,
       });
 
-      // Save the new appointment to the database
       const savedAppointment = await newAppointment.save();
 
       res.status(201).json(savedAppointment);

@@ -29,9 +29,6 @@ const appointmentSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
-  pendingUntil: {
-    type: Date,
-  },
 });
 
 module.exports = mongoose.model("Appointment", appointmentSchema);
