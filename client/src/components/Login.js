@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
-import { AppProvider } from '../context/AppProvider';
-import App from '../App';
+import { AppContext, AppProvider } from '../context/AppProvider';
 
 const Login = ({ swtichPage }) => {
     const [loginData, setLoginData] = useState({
@@ -9,7 +8,7 @@ const Login = ({ swtichPage }) => {
         password: ''
       });
     
-    const { login } = useContext(AppProvider) // Using the login function from AppProvider
+    const { login } = useContext(AppContext) // Using the login function from AppProvider
 
 
       const handleChange = (e) => {
