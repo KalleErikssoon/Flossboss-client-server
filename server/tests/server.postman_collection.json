@@ -298,6 +298,70 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "GetAllClinics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/clinics",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"clinics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostAppointment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"date\": \"2023-11-21T15:00:00.000Z\",\n  \"timeSlot\": \"15:00\",\n  \"dentistId\": \"1234567890abcdef12345678\",\n  \"userId\": \"1234567890abcdef12345679\",\n  \"clinicId\": \"6558f076c94340ba8bd1c9d0\",\n  \"booked\": false,\n  \"pending\": false,\n  \"pendingUntil\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/clinics/appointments/6558f076c94340ba8bd1c9d0",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"clinics",
+						"appointments",
+						"6558f076c94340ba8bd1c9d0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAppointments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/clinics/appointments/6558f076c94340ba8bd1c9d0",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"clinics",
+						"appointments",
+						"6558f076c94340ba8bd1c9d0"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
