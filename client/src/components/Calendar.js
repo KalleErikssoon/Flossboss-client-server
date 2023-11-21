@@ -3,7 +3,7 @@ import {useState} from 'react'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css';
 
-export default function CalendarComponent({activeStartDate}) {
+export default function CalendarComponent({activeStartDate, onDateSelect}) {
     const [date, setDate] = useState(new Date());
 
     const [currentDate] = useState(new Date());
@@ -14,8 +14,7 @@ export default function CalendarComponent({activeStartDate}) {
     );
 
     function onDateClick(value) {
-        setDate(value)
-        console.log("Next step goes here!" + value)
+        onDateSelect(value);
     }
 
     return (

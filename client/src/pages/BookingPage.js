@@ -8,37 +8,61 @@ import '../styles/bookingPage.css';
 export default function BookingPage() {
     const currentDate = new Date();
     const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
-
+    
     const [showModal, setShowModal] = useState(false);
     const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+    const [showCalendar, setShowCalendar] = useState(true);
+    const [selectedDate, setSelectedDate] = useState(null);
 
     const handleBookClick = (timeSlot) => {
         setSelectedTimeSlot(timeSlot);
         setShowModal(true);
     };
 
+    const handleDateSelect = (date) => {
+        setSelectedDate(date);
+        setShowCalendar(false); 
+    }
+    
+    const handleBackToCalendar = () => {
+        setShowCalendar(true); 
+    };
+
     return (
-        <div className="booking-page-container">
-            <TimeSlot onBookClick={handleBookClick} />
-            <ConfirmBooking 
-                show={showModal} 
-                onHide={() => setShowModal(false)} 
-                timeSlot={selectedTimeSlot} 
-            />
-            <div class="card">
-            <div className="all d-lg-flex align-items-center justify-content-center">
-                <div className="col-lg-4 col-md-6 col-sm-12">
-                    <div className="calendar-container" id="leftCalendar">
-                        <Calendar className="calendar" activeStartDate={currentDate} />
-                    </div>
+            <div className="container my-4">
+                <div className="row justify-content-center">
+                        <div className="card justify-content-center align-items-flex-end">
+                            <div className="card-body">
+                                {showCalendar ? (
+                                   <div className="all d-lg-flex align-items-center justify-content-center">
+                                   <div className="col-lg-4 col-md-6 col-sm-12">
+                                       <div className="calendar-container" id="leftCalendar">
+                                           <Calendar className="calendar" activeStartDate={currentDate} onDateSelect={handleDateSelect} />
+                                       </div>
+                                   </div>
+                                   <div className="col-lg-4 col-md-6 col-sm-12">
+                                       <div className="calendar-container">
+                                           <Calendar className="calendar" activeStartDate={nextMonthDate} onDateSelect={handleDateSelect} />
+                                       </div>
+                                   </div>
+                               </div>
+                                ) : (
+                                    <>
+                                    <TimeSlot onBookClick={handleBookClick} />
+                                    <button onClick={handleBackToCalendar}>Back to Calendar</button>
+                                </>
+                                )}
+                            </div>
+                        </div>
                 </div>
-                <div className="col-lg-4 col-md-6 col-sm-12">
-                    <div className="calendar-container">
-                        <Calendar className="calendar" activeStartDate={nextMonthDate} />
-                    </div>
-                </div>
+                <ConfirmBooking 
+                    show={showModal} 
+                    onHide={() => setShowModal(false)} 
+                    timeSlot={selectedTimeSlot} 
+                    date={selectedDate}
+                />
             </div>
-            </div>
-        </div>
     );
 }
+
+

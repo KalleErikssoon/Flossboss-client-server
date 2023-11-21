@@ -2,8 +2,9 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function ConfirmBooking({ show, onHide, timeSlot }) {
-  // No need for internal state management for 'show' as it's passed via props
+function ConfirmBooking({ show, onHide, timeSlot, date }) {
+
+  const formattedDate = date ? date.toLocaleDateString() : ''
 
   return (
     <>
@@ -12,15 +13,20 @@ function ConfirmBooking({ show, onHide, timeSlot }) {
         onHide={onHide}
         backdrop="static"
         keyboard={false}
+        size="lg"
+        centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Confirm Booking</Modal.Title>
+          <Modal.Title>Booking Confirmation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          By confirming you will book a time at Dentist A, 
-          Date: 2023-11-25 {/* Replace with dynamic date if available */}
-          Time: {timeSlot}
-          Please click "Confirm" to confirm your booking.
+          <p className="modal-p">   
+          By confirming you will book a time at: <br /><br />
+          <b>Clinic:</b>  Dentist A <br />
+          <b>Date:</b> {formattedDate} <br />
+          <b>Time:</b> {timeSlot} <br /><br />
+          Please click <b>Confirm</b> to confirm your booking.
+          </p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={onHide}>
