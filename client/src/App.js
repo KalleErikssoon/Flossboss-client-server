@@ -11,8 +11,8 @@ function App() {
 
   return (
     <AppProvider>
-      <Navbar />
       <BrowserRouter>
+      <Navbar />
         <Routes>
 
           <Route path="/" element={<Home />} />
