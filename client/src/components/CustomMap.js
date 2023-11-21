@@ -1,32 +1,7 @@
 import React from "react";
-import axios from "axios";
-
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from "google-maps-react";
-const MapContainer = (props) => {
-  const [clinics, setClinics] = React.useState([]);
+const CustomMap = ({ clinics, google }) => {
   const [activeClinic, setActiveClinic] = React.useState(null);
-
-  React.useEffect(() => {
-    let isComponentMounted = true; // Flag to track component mount status
-
-    async function getAllClinics() {
-      try {
-        const response = await axios.get("http://localhost:3000/clinics");
-        if (isComponentMounted) {
-          setClinics(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching clinics:", error);
-      }
-    }
-
-    getAllClinics();
-
-    // Cleanup function
-    return () => {
-      isComponentMounted = false;
-    };
-  }, []);
 
   // Memoizing markers to prevent recalculating on every render(Avoid refreashing the markers for each render)
   const memoizedMarkers = React.useMemo(() => {
@@ -50,9 +25,9 @@ const MapContainer = (props) => {
 
   return (
     <Map
-      google={props.google}
+      google={google}
       style={{ width: "60%", height: "60%" }}
-      zoom={10}
+      zoom={9}
       initialCenter={{
         lat: 57.7089,
         lng: 11.9746,
@@ -79,4 +54,4 @@ const MapContainer = (props) => {
 };
 export default GoogleApiWrapper({
   apiKey: "AIzaSyB7MUqT1Pord-sdxh1DHIyeJwUagiMowyU",
-})(MapContainer);
+})(CustomMap);

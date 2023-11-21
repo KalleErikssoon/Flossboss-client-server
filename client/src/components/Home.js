@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import LoginContainer from "../components/LoginContainer";
 import { AppContext } from "../context/AppProvider";
-import CustomMap from "../components/CustomMap";
+import LogoutButton from "./LogoutButton";
+import ClinicsContainer from "./ClinicsContainer";
 
 const Home = () => {
   const { showUserModal, setShowUserModal } = useContext(AppContext);
@@ -10,12 +11,14 @@ const Home = () => {
     <>
       <div style={{ flex: 1 }}>
         <h1>FlossBoss (Home Page)</h1>
+        <p>Logged in as: {localStorage.getItem("userIdSession")} </p>
         <button
           onClick={() => setShowUserModal((prev) => !prev)}
           className="btn btn-primary"
         >
           Login/Register
         </button>
+        <LogoutButton></LogoutButton>
       </div>
       {showUserModal && (
         <LoginContainer
@@ -23,7 +26,7 @@ const Home = () => {
           visible={showUserModal}
         />
       )}
-      <CustomMap />
+      <ClinicsContainer />
     </>
   );
 };

@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
+// import jwt from 'jsonwebtoken';
 import axios from 'axios';
 
-const Login = ({ swtichPage }) => {
+const Login = ({ swtichPage, history }) => {
     const [loginData, setLoginData] = useState({
-        name: '',
+        email: '',
         password: ''
       });
+
+/*       useEffect(() => {
+
+        
+         localStorage.removeItem('userIdSession');
+        localStorage.removeItem('token');
+      }, []); */
 
       const handleChange = (e) => {
         setLoginData({ ...loginData, [e.target.name]: e.target.value });
@@ -13,36 +21,51 @@ const Login = ({ swtichPage }) => {
 
       const handleLogin = async (e) => {
         e.preventDefault();
-
+        
+        
         try {
-          const response = await axios.post('http://localhost:3000/users/login', loginData);
-          console.log('Login Successful:', response.data);
-    
+          
+          const response = await axios.post('http://localhost:3000/login', loginData);
+          
+          const userid = response.data.userid
+          const token = response.data.token
+          
+          console.log(response.data.message)
+          console.log(userid)
+          
+          if(userid){
+            localStorage.setItem('userIdSession', userid )
+            localStorage.setItem('token', token )
+          }
+          
+
           setLoginData({
-            name: '',
+            email: '',
             password: ''
           });
     
         } catch (error) {
           console.error('Error Logging in user:', error.message);
+
         }
     
       };    
 
     return (
             <div className="container">
-            <h1 className="mb-4">Login user</h1>
+            <h1 className="mb-4">Login user </h1>
+            <h4 className="mb-4">Logged in as: {localStorage.getItem('userIdSession')} </h4>
             <form onSubmit={handleLogin}>
               <div className="mb-3">
                 <label htmlFor="name" className="form-label">
-                  Name:
+                  Email:
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="name"
-                  name="name"
-                  value={loginData.name}
+                  id="email"
+                  name="email"
+                  value={loginData.email}
                   onChange={handleChange}
                 />
               </div>
