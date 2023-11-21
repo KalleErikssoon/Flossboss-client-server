@@ -9,13 +9,13 @@ class UserController {
         const password = req.body.password;
         const email = req.body.email;
         const phoneNumber = req.body.phoneNumber;
-        const message = req.body.message;
+        const messages = req.body.messages;
         const newUser = new UserModel({
           "name": name,
           "password": password,
           "email": email,
           "phoneNumber": phoneNumber,
-          "message": message
+          "messages": messages
         })
 
         const existingUser = await UserModel.findOne({ name });
@@ -43,24 +43,6 @@ class UserController {
       res.json(user);
     } catch (err) {
       res.status(500).send(err);
-    }
-  }
-
-  async loginUser(req, res) {
-    const { name, password } = req.body;
-
-    try {
-      // Check if the user exists
-      const user = await UserModel.findOne({ name, password });
-
-      if (user) {
-        res.status(200).json({ message: 'Login successful' });
-      } else {
-        res.status(401).json({ error: 'Invalid login' });
-      }
-    } catch (error) {
-      console.error('Error during login:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
     }
   }
 

@@ -10,6 +10,7 @@ const MQTTHandler = require("./MQTTHandler");
 const indexRouter = require("./routes/index");
 const userRouter = require("./routes/users");
 const loginRouter = require("./routes/login");
+const clinicRouter = require("./routes/clinic");
 
 var app = express();
 
@@ -29,6 +30,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", userRouter);
 app.use("/login", loginRouter);
+app.use("/clinics", clinicRouter);
 
 // Connect to database
 const mongoURI = process.env.MONGODB_URI;
