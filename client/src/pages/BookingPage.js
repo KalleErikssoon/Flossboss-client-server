@@ -4,8 +4,9 @@ import TimeSlot from '../components/TimeSlot';
 import ConfirmBooking from '../components/ConfirmBooking';
 import 'react-calendar/dist/Calendar.css';
 import '../styles/bookingPage.css';
+import Breadcrumb from '../components/Breadcrumb'
 
-export default function BookingPage() {
+export default function BookingPage({selectedClinic}) {
     const currentDate = new Date();
     const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
     
@@ -25,11 +26,22 @@ export default function BookingPage() {
     }
     
     const handleBackToCalendar = () => {
+        setSelectedDate(null);
         setShowCalendar(true); 
+    };
+
+    const resetTimeSlot = () => {
+        setSelectedTimeSlot(null);
     };
 
     return (
             <div className="container my-4">
+                <Breadcrumb 
+                    clinic={selectedClinic}
+                    handleCalendar={handleBackToCalendar} 
+                    date={selectedDate}
+                    timeslot={selectedTimeSlot}
+                />
                 <div className="row justify-content-center">
                         <div className="card justify-content-center align-items-flex-end">
                             <div className="card-body">
@@ -49,7 +61,6 @@ export default function BookingPage() {
                                 ) : (
                                     <>
                                     <TimeSlot onBookClick={handleBookClick} />
-                                    <button onClick={handleBackToCalendar}>Back to Calendar</button>
                                 </>
                                 )}
                             </div>
@@ -60,6 +71,7 @@ export default function BookingPage() {
                     onHide={() => setShowModal(false)} 
                     timeSlot={selectedTimeSlot} 
                     date={selectedDate}
+                    onReset={resetTimeSlot}
                 />
             </div>
     );
