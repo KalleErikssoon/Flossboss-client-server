@@ -8,7 +8,7 @@ import { logout } from '../utils/logout';
 
 const NavbarComponent = () => {
 
-    const { isLoggedIn, user, showUserModal, setShowUserModal } = useContext(AppContext);
+    const { isLoggedIn, showUserModal, setShowUserModal } = useContext(AppContext);
     const [showPopupMenu, setShowPopupMenu] = useState(false);
     const userName = localStorage.getItem('userName'); 
 
@@ -29,7 +29,7 @@ const NavbarComponent = () => {
                 borderRadius: '5px', 
                 padding: '15px' }}>
 
-                <button onClick={() => { /* Handle profile settings */ }}
+                <button onClick={() => { /* Handle profile settings, this will be implemented */ }}
                 style = {{
                     ...buttonStyle, 
                     marginRight: '10px',
