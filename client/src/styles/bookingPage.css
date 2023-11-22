@@ -3,20 +3,37 @@
     width: 90%;
     font-size: 1.2em;
 }
+
 .all {
     height: 100vh;
 }
-.calendar-container {
-    display: flex;
-    justify-content: center;
-}
-
-#leftCalendar {
-    padding-right: 0px;
-}
-
 .card {
-    padding: 20px;
     height: 70vh;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
 }
+.calendar-container {
+    max-width: 100%;
+}
+
+@media (max-width: 767px) {
+    .calendar-container .calendar {
+        width: 90%;
+        padding-bottom: 30px;
+    }
+    .all {
+        height: auto; 
+    }
+    .card-body.calendar-view {
+        overflow-y: auto;
+        padding-top: 250px;
+    }
+    .card-body.timeslot-view {
+        overflow-y: auto;
+        padding-top: 100px;
+    }
+    .calendar-container {
+        padding-left: 25px;
+        padding-bottom: 30px;
+    }
+}
+
