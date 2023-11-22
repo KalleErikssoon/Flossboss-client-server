@@ -19,11 +19,23 @@ const NavbarComponent = () => {
           <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul className="navbar-nav align-items-lg-center">
               {/* Other nav items here */}
+              {user && (
+                        // These items will only be displayed if a user is logged in
+                        <>
+                            <li className="nav-item">
+                                <a className="nav-link" href="/profile">Profile</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="/settings">Settings</a>
+                            </li>
+                        </>
+                    )}
             </ul>
             <div style={{ textAlign: 'center' }}>
               <button className="user-logo-button" style={{ background: 'none', border: 'none', padding: 0, fontSize: '18px', fontFamily: 'Adiro' }} onClick={() => setShowUserModal(true)}>
                 <img src={UserLogo} alt="User Logo" style={{ height: 'auto', width: '35px' }} />
                 {!user && <div>Login/Register</div>}
+                {user && <div>Profile</div>}
               </button>
             </div>
           </div>

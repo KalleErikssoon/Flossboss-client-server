@@ -17,6 +17,7 @@ const Login = ({ swtichPage }) => {
 
       const handleLogin = async (e) => {
         e.preventDefault();
+      
         try {
           const response = await axios.post('http://localhost:3000/users/login', loginData);
           console.log('Login Successful:', response.data);
