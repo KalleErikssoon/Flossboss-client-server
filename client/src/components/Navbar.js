@@ -10,16 +10,40 @@ const NavbarComponent = () => {
 
     const { isLoggedIn, user, showUserModal, setShowUserModal } = useContext(AppContext);
     const [showPopupMenu, setShowPopupMenu] = useState(false);
-    const userName = localStorage.getItem('userName'); // If you want to use local storage
+    const userName = localStorage.getItem('userName'); 
 
 
     const PopupMenu = () => {
+        const buttonStyle = {
+            borderRadius: '5px',
+            fontWeight: 'bold',
+            fontFamily: 'Adiro'
+        }
         return (
-            <div style={{ position: 'absolute', right: '20px', top: '60px', backgroundColor: 'white', 
-                border: '1px solid black', borderRadius: '5px', padding: '10px' }}>
+            <div style={{ 
+                position: 'absolute', 
+                right: '20px', 
+                top: '60px', 
+                backgroundColor: 'white', 
+                border: '1px solid grey', 
+                borderRadius: '5px', 
+                padding: '15px' }}>
 
-                <button onClick={() => { /* Handle profile settings */ }}>Profile Settings</button>
-                <button onClick= { logout }>Logout</button>
+                <button onClick={() => { /* Handle profile settings */ }}
+                style = {{
+                    ...buttonStyle, 
+                    marginRight: '10px',
+                    backgroundColor: '#4B5FE2',
+                    borderColor: '#4B5FE2',
+                    color: 'white'
+                    }}>Profile Settings</button>
+                <button onClick= { logout }
+                style = {{
+                    ...buttonStyle,
+                    backgroundColor: '#FB0133',
+                    borderColor: '#FB0133',
+                    color: 'white',
+                }}>Logout</button>
             </div>
         );
     };
@@ -30,9 +54,9 @@ const NavbarComponent = () => {
             // Show login/register modal
             setShowUserModal(true);
         } else {
-            // Redirect to profile or perform another action
-            // You can use history.push('/profile') if you are using react-router
-            // For example:
+            //redirect to profile or perform another action
+            //can use history.push('/profile') if using react-router
+            //for example:
             // history.push('/profile');
             setShowPopupMenu(!showPopupMenu);
         }
@@ -52,15 +76,12 @@ const NavbarComponent = () => {
                         // These items will only be displayed if a user is logged in
                         <>
                             <li className="nav-item">
-                                <a className="nav-link" href="/profile">Profile</a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="/settings">Settings</a>
+                                <a className="nav-link" href="/profile">Notifications</a>
                             </li>
                         </>
                     )}
             </ul>
-            <div style={{ textAlign: 'center' }}>
+            <div style={{ textAlign: 'center', marginRight: '20px', marginLeft: '3  0px' }}>
               <button className="user-logo-button" 
                 style={{ background: 'none', border: 'none', padding: 0, fontSize: '18px', fontFamily: 'Adiro' }} 
                 onClick={handleUserLogoClick}>
