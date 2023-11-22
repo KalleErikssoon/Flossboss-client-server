@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 // import jwt from 'jsonwebtoken';
 import axios from 'axios';
+import { AppContext } from '../context/AppProvider';
+
 
 const Login = ({ swtichPage, history }) => {
     const [loginData, setLoginData] = useState({
         email: '',
         password: ''
       });
+    
+    const { login } = useContext(AppContext) // Using the login function from AppProvider
+    const { setIsLoggedIn } = useContext(AppContext);
+
+
 
 /*       useEffect(() => {
 
@@ -29,13 +36,17 @@ const Login = ({ swtichPage, history }) => {
           
           const userid = response.data.userid
           const token = response.data.token
+          const name = response.data.name
           
           console.log(response.data.message)
           console.log(userid)
-          
+          login(response.data); //update the global user state
+          setIsLoggedIn(true);
+
           if(userid){
             localStorage.setItem('userIdSession', userid )
             localStorage.setItem('token', token )
+            localStorage.setItem('userName', name)
           }
           
 

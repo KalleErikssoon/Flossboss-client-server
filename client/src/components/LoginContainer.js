@@ -2,7 +2,6 @@ import React from 'react';
 import { useState } from 'react';
 import Login from './Login'
 import Register from './Register'
-import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 
 
