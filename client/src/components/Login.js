@@ -36,6 +36,7 @@ const Login = ({ swtichPage, history }) => {
           
           const userid = response.data.userid
           const token = response.data.token
+          const name = response.data.name
           
           console.log(response.data.message)
           console.log(userid)
@@ -45,6 +46,7 @@ const Login = ({ swtichPage, history }) => {
           if(userid){
             localStorage.setItem('userIdSession', userid )
             localStorage.setItem('token', token )
+            localStorage.setItem('userName', name)
           }
           
 

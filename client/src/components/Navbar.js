@@ -8,8 +8,10 @@ import { logout } from '../utils/logout';
 
 const NavbarComponent = () => {
 
-    const { isLoggedIn, showUserModal, setShowUserModal } = useContext(AppContext);
+    const { isLoggedIn, user, showUserModal, setShowUserModal } = useContext(AppContext);
     const [showPopupMenu, setShowPopupMenu] = useState(false);
+    const userName = localStorage.getItem('userName'); // If you want to use local storage
+
 
     const PopupMenu = () => {
         return (
@@ -65,7 +67,7 @@ const NavbarComponent = () => {
 
                 <img src={UserLogo} alt="User Logo" style={{ height: 'auto', width: '35px' }} />
                 {!isLoggedIn && <div>Login/Register</div>}
-                {isLoggedIn && <div>Profile</div>}
+                {isLoggedIn && <div>{userName}</div>}
               </button>
             </div>
             {showPopupMenu && <PopupMenu />}

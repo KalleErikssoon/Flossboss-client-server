@@ -22,7 +22,7 @@ class LoginController {
       });
       
 
-      res.status(200).json({ message: "Logged in", token: token, userid: user._id });
+      res.status(200).json({ message: "Logged in", token: token, userid: user._id, name: user.name });
     } catch (error) {
       console.error(error);
       res.status(500).json("Internal Server error");
