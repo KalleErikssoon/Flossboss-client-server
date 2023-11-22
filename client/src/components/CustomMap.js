@@ -47,6 +47,11 @@ const CustomMap = ({ clinics, google }) => {
         <div>
           <h2>{activeClinic?.name}</h2>
           <p>Opening Hours: {activeClinic?.openingHours}</p>
+          {activeClinic?.slotsAvailable ? (
+            <button>Book</button>
+          ) : (
+            <p>No slots available for the next months.</p>
+          )}
         </div>
       </InfoWindow>
     </Map>
