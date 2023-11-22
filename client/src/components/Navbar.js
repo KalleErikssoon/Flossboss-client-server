@@ -16,8 +16,8 @@ const NavbarComponent = () => {
     const PopupMenu = () => {
         const buttonStyle = {
             borderRadius: '5px',
-            fontWeight: 'bold',
-            fontFamily: 'Adiro'
+            /*fontWeight: 'bold',*/
+            fontFamily: 'Arial'
         }
         return (
             <div style={{ 
