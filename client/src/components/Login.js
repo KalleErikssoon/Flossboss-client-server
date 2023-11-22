@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { AppContext } from '../context/AppProvider';
 
+
 const Login = ({ swtichPage, history }) => {
     const [loginData, setLoginData] = useState({
         email: '',
@@ -10,6 +11,8 @@ const Login = ({ swtichPage, history }) => {
       });
     
     const { login } = useContext(AppContext) // Using the login function from AppProvider
+    const { setIsLoggedIn } = useContext(AppContext);
+
 
 
 /*       useEffect(() => {
@@ -37,6 +40,7 @@ const Login = ({ swtichPage, history }) => {
           console.log(response.data.message)
           console.log(userid)
           login(response.data); //update the global user state
+          setIsLoggedIn(true);
 
           if(userid){
             localStorage.setItem('userIdSession', userid )

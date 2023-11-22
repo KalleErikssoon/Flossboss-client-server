@@ -27,6 +27,7 @@ const AppProvider = ({ children }) => {
         <AppContext.Provider
             value={{
                 isLoggedIn,
+                setIsLoggedIn,
                 showUserModal,
                 setShowUserModal,
                 user,
