@@ -27,6 +27,18 @@
 .App-link {
   color: #61dafb;
 }
+.map-container {
+  overflow: hidden;
+  padding-bottom: 56.25%;
+  position: relative;
+  height: 0;
+}
+
+@media (max-width: 768px) {
+  .map-container {
+    padding-bottom: 90%;
+  }
+}
 
 @keyframes App-logo-spin {
   from {

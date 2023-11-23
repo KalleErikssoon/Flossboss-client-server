@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
+import { Container, Row, Col } from "react-bootstrap";
 import CustomMap from "./CustomMap";
+import "../App.css";
 
 const ClinicsContainer = () => {
   const [clinics, setClinics] = React.useState([]);
@@ -16,10 +18,9 @@ const ClinicsContainer = () => {
                 `http://localhost:3000/clinics/appointments/available/${clinic._id}`
               );
               return { ...clinic, slotsAvailable: availabilityResponse.data };
-            } catch (error) {
-              console.error(
-                `Error checking slots availability for clinic ${clinic._id}:`,
-                error
+            } catch {
+              console.log(
+                `No appointment found for the following clinic:  ${clinic._id}`
               );
               // Default to false if the API call for slot availability fails
               return { ...clinic, slotsAvailable: false };
@@ -36,9 +37,31 @@ const ClinicsContainer = () => {
   }, []);
 
   return (
-    <div>
-      <CustomMap clinics={clinics} />
-    </div>
+    <Container fluid className="p-3">
+      {" "}
+      {/* Padding on all sides */}
+      <Row>
+        {/* Clinics List */}
+        <Col md={12} xl={6} className="mb-3">
+          {" "}
+          {/* On small screens, this takes full width and is above the map */}
+          {/* Replace this div with your ClinicsList component */}
+          <div className="border p-3">
+            {" "}
+            {/* Placeholder for ClinicsList */}
+            <h3>Clinics List</h3>
+            {/* Render your list of clinics here */}
+          </div>
+        </Col>
+
+        {/* Custom Map */}
+        <Col md={12} xl={6} className="mb-3">
+          <div className="map-container">
+            <CustomMap clinics={clinics} />
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 export default ClinicsContainer;

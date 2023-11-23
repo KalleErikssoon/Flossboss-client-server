@@ -1,5 +1,7 @@
 import React from "react";
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from "google-maps-react";
+import "../App.css";
+
 const CustomMap = ({ clinics, google }) => {
   const [activeClinic, setActiveClinic] = React.useState(null);
 
@@ -26,10 +28,9 @@ const CustomMap = ({ clinics, google }) => {
   return (
     <Map
       google={google}
-      style={{ width: "60%", height: "60%" }}
       zoom={9}
       initialCenter={{
-        lat: 57.7089,
+        lat: 57.7289,
         lng: 11.9746,
       }}
     >
