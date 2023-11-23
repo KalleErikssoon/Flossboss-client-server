@@ -11,6 +11,7 @@
     height: 70vh;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
 }
+
 .calendar-container {
     max-width: 100%;
 }
@@ -25,11 +26,11 @@
     }
     .card-body.calendar-view {
         overflow-y: auto;
-        padding-top: 250px;
+        padding-top: 50px;
     }
     .card-body.timeslot-view {
         overflow-y: auto;
-        padding-top: 100px;
+        padding-top: 50px;
     }
     .calendar-container {
         padding-left: 25px;

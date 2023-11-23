@@ -2,15 +2,15 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function ConfirmBooking({ show, onHide, onReset, timeSlot, date }) {
+function ConfirmBooking({ show, onHide, onReset, timeSlot, date, onConfirm }) {
 
   const formattedDate = date ? date.toLocaleDateString() : ''
-
+  
   const handleClose = () => {
     onHide();
     onReset(); 
   };
-
+  
   return (
     <>
       <Modal
@@ -37,7 +37,7 @@ function ConfirmBooking({ show, onHide, onReset, timeSlot, date }) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary">Confirm</Button>
+          <Button variant="primary" onClick={onConfirm}>Confirm</Button>
         </Modal.Footer>
       </Modal>
     </>

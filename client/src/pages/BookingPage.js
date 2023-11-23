@@ -14,6 +14,7 @@ export default function BookingPage({selectedClinic}) {
 
     const [showModal, setShowModal] = useState(false);
     const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+    const [selectedAppointment, setSelectedAppointment] = useState(null);
     const [showCalendar, setShowCalendar] = useState(true);
     const [selectedDate, setSelectedDate] = useState(null);
     const [dates, setDates] = useState([]);
@@ -41,18 +42,15 @@ export default function BookingPage({selectedClinic}) {
         };
     }, []);
 
-    console.log(dates);
-
-    const handleBookClick = (timeSlot) => {
+    const handleBookClick = (timeSlot, appointment) => {
         setSelectedTimeSlot(timeSlot);
+        setSelectedAppointment(appointment);
         setShowModal(true);
     };
-
 
     const handleDateSelect = async (date) => {
         setSelectedDate(date);
         setShowCalendar(false);
-        console.log(date);
         try {
             const formattedDate = [
                 date.getFullYear(),
@@ -60,13 +58,28 @@ export default function BookingPage({selectedClinic}) {
                 ('0' + date.getDate()).slice(-2)
             ].join('-');
             const response = await axios.get(`http://localhost:3000/clinics/${id}/appointments?selectedDate=${formattedDate}`);
-            const timeslots = response.data.map(appointment => appointment.timeSlot)
+            const timeslots = response.data.map(appointment => {
+                return {
+                "timeslots": appointment.timeSlot,
+                "appointments": appointment._id
+                };
+            });
             setTimeSlots(timeslots);
         } catch (error) {
             console.error("Error fetching timeslots:", error);
         }
     };
     
+    const confirmBooking = async () => {
+        const userId = "abcaisodjasof"
+        try {
+            await axios.patch(`http://localhost:3000/users//${userId}/appointments/${selectedAppointment}/confirm`);
+        } catch (error) {
+            console.error("Error confirming booking:", error);
+        }
+    };
+
+
     const handleBackToCalendar = () => {
         setSelectedDate(null);
         setShowCalendar(true); 
@@ -101,7 +114,7 @@ export default function BookingPage({selectedClinic}) {
                             </div>
                         </div>
                     ) : (
-                        <TimeSlot className="timeslot" onBookClick={handleBookClick} timeSlots={availableTimeSlots} />
+                        <TimeSlot className="timeslot" onBookClick={handleBookClick} timeSlots={availableTimeSlots}/>
                     )}
                     </div>
                 </div>
@@ -112,6 +125,7 @@ export default function BookingPage({selectedClinic}) {
                 timeSlot={selectedTimeSlot} 
                 date={selectedDate}
                 onReset={resetTimeSlot}
+                onConfirm={confirmBooking}
             />
         </div>
     );
