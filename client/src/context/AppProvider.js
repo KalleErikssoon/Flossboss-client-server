@@ -11,7 +11,7 @@ const AppProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 
-    const login = userData => {
+    const loginName = userData => {
         setUser(userData);  //function that updates user data on login
     };
 
@@ -31,7 +31,7 @@ const AppProvider = ({ children }) => {
                 showUserModal,
                 setShowUserModal,
                 user,
-                login,
+                loginName,
                 logout
             }}
         >
