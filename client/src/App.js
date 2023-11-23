@@ -5,12 +5,15 @@ import Login from './components/Login';
 import Register from './components/Register'
 import { AppProvider } from './context/AppProvider';
 import BookingPage from './pages/BookingPage';
+import Navbar from './components/Navbar';
+
 
 function App() {
 
   return (
     <AppProvider>
       <BrowserRouter>
+      <Navbar />
         <Routes>
 
           <Route path="/" element={<Home />} />
