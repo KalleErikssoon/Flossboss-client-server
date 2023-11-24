@@ -59,5 +59,5 @@ const CustomMap = ({ clinics, google }) => {
   );
 };
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyB7MUqT1Pord-sdxh1DHIyeJwUagiMowyU",
+  apiKey: process.env.REACT_APP_GOOGLE_MAPS_KEY,
 })(CustomMap);
