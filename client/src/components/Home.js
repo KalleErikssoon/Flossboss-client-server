@@ -1,22 +1,12 @@
-/* 
-import React, { useContext } from "react";
- import LoginContainer from '../components/LoginContainer'
-import { AppContext } from "../context/AppProvider";
-import LogoutButton from "./LogoutButton"; 
-*/
-
+import React from "react";
+import ClinicsContainer from "./ClinicsContainer";
 
 const Home = () => {
-
-    //const { showUserModal, setShowUserModal } = useContext(AppContext)
-    // const isSigned = localStorage.getItem('userIdSession')
-
-
-    return (
-        <>
-
-        </>
-    );
+  return (
+    <>
+      <ClinicsContainer />
+    </>
+  );
 };
 
 export default Home;
