@@ -7,11 +7,13 @@ import '../styles/bookingPage.css';
 import Breadcrumb from '../components/Breadcrumb'
 import axios from 'axios'
 
-export default function BookingPage({selectedClinic}) {
+export default function BookingPage({selectedClinic, user}) {
     
+    const userId = "abcaisodjasof" //random ID for testing
     const currentDate = new Date();
-    const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+    const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1); //checks until the end of the month after the current one
 
+    //states to handle different components visibility/logic and relevant data to be able to book appoitments
     const [showModal, setShowModal] = useState(false);
     const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -21,6 +23,8 @@ export default function BookingPage({selectedClinic}) {
     const [availableTimeSlots, setTimeSlots] = useState([]);
     
     const id = '655cb0c8596ef74251a5cc3d';
+
+    //method called on entering page to get all appointments available from database in the date interval
     React.useEffect(() => {
         let isComponentMounted = true; // Flag to track component mount status
 
@@ -42,12 +46,18 @@ export default function BookingPage({selectedClinic}) {
         };
     }, []);
 
-    const handleBookClick = (timeSlot, appointment) => {
+    //function to handle user clicking book for a specific timeslot
+    // sets the selected timeslot and appointment ID for that timeslot, then uses an axios method to patch the selected appointment to pending
+    const handleBookClick = async (timeSlot, appointment) => {
         setSelectedTimeSlot(timeSlot);
         setSelectedAppointment(appointment);
+        await axios.patch(`http://localhost:3000/users//${userId}/appointments/${selectedAppointment}/pending`);
         setShowModal(true);
     };
 
+    //handles when a user selects a date
+    //gets the appointments available on the selected date through an axios request to the express server
+    //creates an object that maps the available timeslots/appointment ID's
     const handleDateSelect = async (date) => {
         setSelectedDate(date);
         setShowCalendar(false);
@@ -70,23 +80,32 @@ export default function BookingPage({selectedClinic}) {
         }
     };
     
+
+    //function to handle clicking on confirm booking
+    //makes an axios request to the server for patching the appointment to pending
     const confirmBooking = async () => {
         const userId = "abcaisodjasof"
         try {
             await axios.patch(`http://localhost:3000/users//${userId}/appointments/${selectedAppointment}/confirm`);
         } catch (error) {
-            console.error("Error confirming booking:", error);
+            console.error("Error confirming appointment:", error);
         }
     };
 
-
+    //function to handle clicking back to calendar in the breadcrumbs
     const handleBackToCalendar = () => {
         setSelectedDate(null);
         setShowCalendar(true); 
     };
 
-    const resetTimeSlot = () => {
-        setSelectedTimeSlot(null);
+    //function to reset the selected timeslot from the user
+    const resetTimeSlot = async () => {
+        try {
+            await axios.patch(`http://localhost:3000/users//${userId}/appointments/${selectedAppointment}/cancel`);
+            setSelectedTimeSlot(null);
+        } catch (error) {
+            console.error("Error cancelling appointment:", error);
+        }
     };
 
     return (

@@ -21,7 +21,7 @@ function ConfirmBooking({ show, onHide, onReset, timeSlot, date, onConfirm }) {
         size="lg"
         centered
       >
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title>Booking Confirmation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -34,7 +34,7 @@ function ConfirmBooking({ show, onHide, onReset, timeSlot, date, onConfirm }) {
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+        <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
           <Button variant="primary" onClick={onConfirm}>Confirm</Button>
