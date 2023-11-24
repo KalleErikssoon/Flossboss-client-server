@@ -106,8 +106,12 @@ async updateByID(req, res){
     const userId = req.params.id;
     const appointmentId = req.params.appointmentId;
     try {
-    const topic = `flossbosstest`
-    const message = `{"appointmentId": "${appointmentId}", "userId": "${userId}", "isBooked": "${true}};`
+    const topic = "flossboss/appointment/request/confirm"
+    const message = `{
+      "_id": "${appointmentId}",
+      "userId": "${userId}", 
+      "clinicId": " "};`
+
     mqttHandler.publish(topic, message);
     res.status(200).send("Checking booking");
     } catch (error) {
@@ -118,9 +122,14 @@ async updateByID(req, res){
   async pendingAppointment(req, res) {
     const userId = req.params.id;
     const appointmentId = req.params.appointmentId;
+    const clinicId = req.body.clinicId;
     try {
-    const topic = `flossboss/appointment/request/${userId}`
-    const message = `{"appointmentId": "${req.body.appointmentId}", "userId": "${userId}", "isPending": "${true}};`
+    const topic = "flossboss/appointment/request/pending"
+    const message = `{
+      "_id": "${appointmentId}",
+      "userId": "${userId}", 
+      "clinicId": " "};`
+
     mqttHandler.publish(topic, message);
     res.status(200).send("Checking booking");
     } catch (error) {
@@ -132,9 +141,9 @@ async updateByID(req, res){
     const userId = req.params.id;
     const appointmentId = req.params.appointmentId;
     try {
-    const topic = `flossboss/appointment/request/${userId}`
-    const message = `{"appointmentId": "${req.body.appointmentId}", "userId": "${userId}", "isPending": "${false}};`
-    mqttHandler.publish(topic, "Hello from user controller");
+    const topic = "flossboss/appointment/request/cancel"
+    const message = `{"_id": "${appointmentId}", "userId": "${userId}", "clinicId": " "};`
+    mqttHandler.publish(topic, message);
     res.status(200).send("Checking booking");
     } catch (error) {
       res.status(500).send("internal server error");
