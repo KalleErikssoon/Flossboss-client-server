@@ -58,7 +58,7 @@ const UserUpdateForm = () => {
                 Update
             </Button>
 
-            {message && <Alert variant={variant}>{message}</Alert>}
+            {message && <Alert variant={colorVariant}>{message}</Alert>}
         </Form>
     );
 };

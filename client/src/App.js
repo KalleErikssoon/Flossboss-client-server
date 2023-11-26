@@ -5,6 +5,8 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import { AppProvider } from "./context/AppProvider";
 import Navbar from "./components/Navbar";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   return (
