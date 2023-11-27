@@ -2,7 +2,7 @@ import React from 'react';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 
 function Breadcrumbs({ clinic, date, timeslot, handleCalendar }) {
-    const selectedClinic = clinic? clinic : "Home";
+    const selectedClinic = clinic;
     const formattedDate = date ? date.toLocaleDateString() : '';
 
     return (

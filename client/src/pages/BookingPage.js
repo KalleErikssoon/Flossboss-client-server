@@ -6,13 +6,15 @@ import 'react-calendar/dist/Calendar.css';
 import '../styles/bookingPage.css';
 import Breadcrumb from '../components/Breadcrumb'
 import axios from 'axios'
+import { useLocation } from "react-router-dom";
 
-export default function BookingPage({selectedClinic, user}) {
+export default function BookingPage({selectedClinic}) {
     
     const userId = "abcaisodjasof" //random ID for testing
     const currentDate = new Date();
     const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1); //checks until the end of the month after the current one
-
+    const location = useLocation();
+    const { clinicId, clinicName } = location.state || {};
     //states to handle different components visibility/logic and relevant data to be able to book appoitments
     const [showModal, setShowModal] = useState(false);
     const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
@@ -21,16 +23,15 @@ export default function BookingPage({selectedClinic, user}) {
     const [selectedDate, setSelectedDate] = useState(null);
     const [dates, setDates] = useState([]);
     const [availableTimeSlots, setTimeSlots] = useState([]);
-    
-    const id = '655cb0c8596ef74251a5cc3d';
 
     //method called on entering page to get all appointments available from database in the date interval
     React.useEffect(() => {
         let isComponentMounted = true; // Flag to track component mount status
 
     async function getAppointments() {
+        console.log(clinicName)
       try {
-        const response = await axios.get(`http://localhost:3000/clinics/${id}/appointments/`)
+        const response = await axios.get(`http://localhost:3000/clinics/${clinicId}/appointments/`)
         if (isComponentMounted) {
             const dates = response.data.map(appointment => appointment.date.split('T')[0]);
             setDates(dates);
@@ -44,7 +45,7 @@ export default function BookingPage({selectedClinic, user}) {
     return () => {
       isComponentMounted = false;
         };
-    }, []);
+    },[]);
 
     //function to handle user clicking book for a specific timeslot
     // sets the selected timeslot and appointment ID for that timeslot, then uses an axios method to patch the selected appointment to pending
@@ -67,7 +68,7 @@ export default function BookingPage({selectedClinic, user}) {
                 ('0' + (date.getMonth() + 1)).slice(-2),
                 ('0' + date.getDate()).slice(-2)
             ].join('-');
-            const response = await axios.get(`http://localhost:3000/clinics/${id}/appointments?selectedDate=${formattedDate}`);
+            const response = await axios.get(`http://localhost:3000/clinics/${clinicId}/appointments?selectedDate=${formattedDate}`);
             const timeslots = response.data.map(appointment => {
                 return {
                 "timeslots": appointment.timeSlot,
@@ -111,7 +112,7 @@ export default function BookingPage({selectedClinic, user}) {
     return (
         <div className="container my-4">
             <Breadcrumb 
-                clinic={selectedClinic}
+                clinic={clinicName}
                 handleCalendar={handleBackToCalendar} 
                 date={selectedDate}
                 timeslot={selectedTimeSlot}

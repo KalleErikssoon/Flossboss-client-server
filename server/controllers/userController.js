@@ -105,13 +105,14 @@ async updateByID(req, res){
   async confirmAppointment(req, res) {
     const userId = req.params.id;
     const appointmentId = req.params.appointmentId;
+    const clinicId = req.body.clinicId;
     try {
     const topic = "flossboss/appointment/request/confirm"
     const message = `{
       "_id": "${appointmentId}",
-      "userId": "${userId}", 
-      "clinicId": " "};`
-
+      "userId": "${userId}",
+      "clinicId": "${clinicId}"
+    }`
     mqttHandler.publish(topic, message);
     res.status(200).send("Checking booking");
     } catch (error) {
@@ -127,9 +128,9 @@ async updateByID(req, res){
     const topic = "flossboss/appointment/request/pending"
     const message = `{
       "_id": "${appointmentId}",
-      "userId": "${userId}", 
-      "clinicId": " "};`
-
+      "userId": "${userId}",
+      "clinicId": "${clinicId}"
+    }`
     mqttHandler.publish(topic, message);
     res.status(200).send("Checking booking");
     } catch (error) {
@@ -140,9 +141,14 @@ async updateByID(req, res){
   async cancelAppointment(req, res) {
     const userId = req.params.id;
     const appointmentId = req.params.appointmentId;
+    const clinicId = req.body.clinicId;
     try {
     const topic = "flossboss/appointment/request/cancel"
-    const message = `{"_id": "${appointmentId}", "userId": "${userId}", "clinicId": " "};`
+    const message = `{
+      "_id": "${appointmentId}",
+      "userId": "${userId}",
+      "clinicId": "${clinicId}"
+    }`
     mqttHandler.publish(topic, message);
     res.status(200).send("Checking booking");
     } catch (error) {
