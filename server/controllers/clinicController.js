@@ -19,31 +19,45 @@ class ClinicController {
   async getAppointment(req, res) {
     try {
       const clinicid = req.params.clinicid;
-
+      let appointments;
       // Get current date
       const currentDate = new Date();
-      // Calculate the date two months from now
-      let twoMonthsLater = new Date();
-      twoMonthsLater.setMonth(twoMonthsLater.getMonth() + 2);
+      // Calculate the last date of the next month
+      const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 2, 1);
 
-      const appointments = await AppointmentModel.find({
+      if (req.query.selectedDate) {
+        const selectedDate = new Date(req.query.selectedDate);
+         selectedDate.setHours(0, 0, 0, 0); // Set to the start of the selected day
+         const nextDay = new Date(selectedDate);
+    nextDay.setDate(selectedDate.getDate() + 1); // Set to the start of the next day
+
+    appointments = await AppointmentModel.find({
+      clinicId: clinicid,
+      booked: false,
+      pending: false,
+      date: {
+          $gte: selectedDate,
+          $lte: nextDay
+      }
+      }).sort({ 'timeSlot': 1 }).exec();
+      } else {
+       appointments = await AppointmentModel.find({
         clinicId: clinicid,
         booked: false,
         pending: false,
         date: {
           $gte: currentDate,
-          $lte: twoMonthsLater,
-        },
-      });
-
+          $lte: nextMonthDate,
+          },
+        });
+      }
       if (appointments.length === 0) {
         return res
           .status(404)
           .send(
-            "No appointments found within the next two months for the given clinic."
+            "No appointments found for the given clinic."
           );
       }
-
       res.status(200).json(appointments);
     } catch (err) {
       res.status(500).send(err);
