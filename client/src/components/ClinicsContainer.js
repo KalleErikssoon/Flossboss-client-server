@@ -3,6 +3,7 @@ import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
 import CustomMap from "./CustomMap";
 import "../App.css";
+import ClinicsList from './ClinicsList'
 
 const ClinicsContainer = () => {
   const [clinics, setClinics] = React.useState([]);
@@ -50,7 +51,9 @@ const ClinicsContainer = () => {
             {" "}
             {/* Placeholder for ClinicsList */}
             <h3>Clinics List</h3>
-            {/* Render your list of clinics here */}
+            <ClinicsList 
+            clinics={clinics}
+            />
           </div>
         </Col>
 
