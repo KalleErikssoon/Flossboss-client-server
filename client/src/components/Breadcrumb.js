@@ -7,7 +7,9 @@ function Breadcrumbs({ clinic, date, timeslot, handleCalendar }) {
 
     return (
         <Breadcrumb>
-            <Breadcrumb.Item href='/'>{selectedClinic}</Breadcrumb.Item>
+            <Breadcrumb.Item href="/">
+                {selectedClinic}
+            </Breadcrumb.Item>
             {date && (
                 <Breadcrumb.Item onClick={() => handleCalendar()}>
                     {formattedDate}

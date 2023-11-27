@@ -43,8 +43,6 @@ const CustomMap = ({ clinics, google }) => {
   };
 
   return (
-    <div>
-      <button onClick={onBookClick}>Test Book Button</button>
       <Map google={google} zoom={9} initialCenter={{ lat: 57.7289, lng: 11.9746 }}>
         {memoizedMarkers}
 
@@ -66,7 +64,6 @@ const CustomMap = ({ clinics, google }) => {
           </div>
         </InfoWindow>
       </Map>
-    </div>
   );
 };
 

@@ -8,9 +8,9 @@ import Breadcrumb from '../components/Breadcrumb'
 import axios from 'axios'
 import { useLocation } from "react-router-dom";
 
-export default function BookingPage({selectedClinic}) {
+export default function BookingPage() {
     
-    const userId = "abcaisodjasof" //random ID for testing
+    const userId = localStorage.getItem('userIdSession');
     const currentDate = new Date();
     const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1); //checks until the end of the month after the current one
     const location = useLocation();
@@ -50,10 +50,13 @@ export default function BookingPage({selectedClinic}) {
     //function to handle user clicking book for a specific timeslot
     // sets the selected timeslot and appointment ID for that timeslot, then uses an axios method to patch the selected appointment to pending
     const handleBookClick = async (timeSlot, appointment) => {
+        const clinic_id = clinicId;
         setSelectedTimeSlot(timeSlot);
         setSelectedAppointment(appointment);
-        await axios.patch(`http://localhost:3000/users//${userId}/appointments/${selectedAppointment}/pending`);
-        setShowModal(true);
+        setTimeout(async () => {
+            await axios.patch(`http://localhost:3000/users/${userId}/appointments/${appointment}/pending`, { clinicId: clinic_id});
+            setShowModal(true);
+        }, 0);
     };
 
     //handles when a user selects a date
@@ -85,9 +88,9 @@ export default function BookingPage({selectedClinic}) {
     //function to handle clicking on confirm booking
     //makes an axios request to the server for patching the appointment to pending
     const confirmBooking = async () => {
-        const userId = "abcaisodjasof"
+        const clinic_id = clinicId;
         try {
-            await axios.patch(`http://localhost:3000/users//${userId}/appointments/${selectedAppointment}/confirm`);
+            await axios.patch(`http://localhost:3000/users//${userId}/appointments/${selectedAppointment}/confirm`, { clinicId: clinic_id });
         } catch (error) {
             console.error("Error confirming appointment:", error);
         }
@@ -101,8 +104,9 @@ export default function BookingPage({selectedClinic}) {
 
     //function to reset the selected timeslot from the user
     const resetTimeSlot = async () => {
+        const clinic_id = clinicId;
         try {
-            await axios.patch(`http://localhost:3000/users//${userId}/appointments/${selectedAppointment}/cancel`);
+            await axios.patch(`http://localhost:3000/users//${userId}/appointments/${selectedAppointment}/cancel`, { clinicId: clinic_id });
             setSelectedTimeSlot(null);
         } catch (error) {
             console.error("Error cancelling appointment:", error);
