@@ -27,8 +27,8 @@ const UserUpdateForm = () => {
         try {
             const response = await updateUserInfo({ name, phoneNumber, password });
             
-            if (name!=null) {
-                localStorage.setItem('userName', name); //FIX SO THAT NAME WILL NOT UPDATE LOCALLY IF EMPTY
+            if (name.trim() !== '') {
+                localStorage.setItem('userName', name);
             }
             setMessage(response.message);
             alert("User data updated successfully")
