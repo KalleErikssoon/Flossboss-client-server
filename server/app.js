@@ -11,6 +11,7 @@ const indexRouter = require("./routes/index");
 const userRouter = require("./routes/users");
 const loginRouter = require("./routes/login");
 const clinicRouter = require("./routes/clinic");
+const settingsRouter = require("./routes/userSettings");
 
 var app = express();
 
@@ -31,6 +32,7 @@ app.use("/", indexRouter);
 app.use("/users", userRouter);
 app.use("/login", loginRouter);
 app.use("/clinics", clinicRouter);
+app.use("/update", settingsRouter);
 
 // Connect to database
 const mongoURI = process.env.MONGODB_URI;

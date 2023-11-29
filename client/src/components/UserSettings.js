@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-import userService from './userService';
- 
+import axios from 'axios';
 
 const UserUpdateForm = () => {
     const [name, setName] = useState('');
@@ -10,17 +9,37 @@ const UserUpdateForm = () => {
     const [message, setMessage] = useState('');
     const [colorVariant, setColorVariant] = useState('success');
 
+    const updateUserInfo = async (userData) => {
+        const token = localStorage.getItem('token'); // fetching the token that is set when user logs in'
+        const headers = {
+            'usertoken' : token
+        };
+        try {
+            const response = await axios.put(`http://localhost:3000/update`, userData,  { headers });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await userService.updateUserInfo({name, phoneNumber, password});
-            setMessage(response.data.message);
+            const response = await updateUserInfo({ name, phoneNumber, password });
+            
+            if (name!=null) {
+                localStorage.setItem('userName', name); //FIX SO THAT NAME WILL NOT UPDATE LOCALLY IF EMPTY
+            }
+            setMessage(response.message);
+            alert("User data updated successfully")
             setColorVariant('success');
         } catch (error) {
             setMessage(error.response.data.message);
             setColorVariant('danger');
+            alert("Error")
         }
     };
+
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -28,7 +47,7 @@ const UserUpdateForm = () => {
                 <Form.Label>Name</Form.Label>
                 <Form.Control
                     type="text"
-                    placeholder="Enter name"
+                    placeholder="Enter new Username"
                     value={name}
                     onChange={e => setName(e.target.value)}
                 />
@@ -38,7 +57,7 @@ const UserUpdateForm = () => {
                 <Form.Label>Phone Number</Form.Label>
                 <Form.Control 
                     type="tel" 
-                    placeholder="Enter phone number" 
+                    placeholder="Enter new Phone number" 
                     value={phoneNumber}
                     onChange={e => setPhoneNumber(e.target.value)}
                 />
@@ -48,7 +67,7 @@ const UserUpdateForm = () => {
                 <Form.Label>Password</Form.Label>
                 <Form.Control 
                     type="password" 
-                    placeholder="Password" 
+                    placeholder="Enter new Password" 
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                 />

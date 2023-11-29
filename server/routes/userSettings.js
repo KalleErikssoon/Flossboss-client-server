@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const authenticateToken = require('../middleware/authenticateToken');
 const userController = require('../controllers/userController');
 
-router.put('/update/:userID', userController.updateByID);
+const controller = new userController();
+
+// defines the PUT route
+router.put('/', authenticateToken,  controller.updateByAuthenticationId);
 
 module.exports = router;
