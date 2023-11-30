@@ -32,9 +32,10 @@ class ClinicController {
     nextDay.setDate(selectedDate.getDate() + 1); // Set to the start of the next day
 
     appointments = await AppointmentModel.find({
-      clinicId: clinicid,
-      booked: false,
-      pending: false,
+      _clinicId: clinicid,
+      isBooked: false,
+      isPending: false,
+      isAvailable: true,
       date: {
           $gte: selectedDate,
           $lte: nextDay
@@ -42,9 +43,10 @@ class ClinicController {
       }).sort({ 'timeSlot': 1 }).exec();
       } else {
        appointments = await AppointmentModel.find({
-        clinicId: clinicid,
-        booked: false,
-        pending: false,
+        _clinicId: clinicid,
+        isBooked: false,
+        isPending: false,
+        isAvailable: true,
         date: {
           $gte: currentDate,
           $lte: nextMonthDate,
@@ -76,9 +78,10 @@ class ClinicController {
       twoMonthsLater.setMonth(twoMonthsLater.getMonth() + 2);
 
       const appointmentExists = await AppointmentModel.findOne({
-        clinicId: clinicId,
-        booked: false,
-        pending: false,
+        _clinicId: clinicId,
+        isBooked: false,
+        isPending: false,
+        isAvailable: true,
         date: {
           $gte: currentDate,
           $lte: twoMonthsLater,

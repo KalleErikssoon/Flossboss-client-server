@@ -29,7 +29,6 @@ export default function BookingPage() {
         let isComponentMounted = true; // Flag to track component mount status
 
     async function getAppointments() {
-        console.log(clinicName)
       try {
         const response = await axios.get(`http://localhost:3000/clinics/${clinicId}/appointments/`)
         if (isComponentMounted) {
@@ -74,10 +73,12 @@ export default function BookingPage() {
             const response = await axios.get(`http://localhost:3000/clinics/${clinicId}/appointments?selectedDate=${formattedDate}`);
             const timeslots = response.data.map(appointment => {
                 return {
-                "timeslots": appointment.timeSlot,
+                "timeFrom": appointment.timeFrom,
+                "timeTo": appointment.timeTo,
                 "appointments": appointment._id
                 };
             });
+            console.log(timeslots)
             setTimeSlots(timeslots);
         } catch (error) {
             console.error("Error fetching timeslots:", error);
@@ -145,6 +146,7 @@ export default function BookingPage() {
             </div>
             <ConfirmBooking 
                 show={showModal} 
+                clinic={clinicName}
                 onHide={() => setShowModal(false)} 
                 timeSlot={selectedTimeSlot} 
                 date={selectedDate}
