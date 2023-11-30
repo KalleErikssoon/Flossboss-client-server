@@ -6,29 +6,37 @@ const appointmentSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  timeSlot: {
+  timeTo: {
     type: String,
     required: true,
   },
-  dentistId: {
-    type: mongoose.Schema.Types.ObjectId,
+  timeFrom: {
+    type: String,
     required: true,
   },
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-  },
-  clinicId: {
-    type: mongoose.Schema.Types.ObjectId,
+  _dentistId: {
+    type: String,
     required: true,
   },
-  booked: {
+  _userId: {
+    type: String,
+  },
+  _clinicId: {
+    type: String,
+    required: true,
+  },
+  isBooked: {
     type: Boolean,
     required: true,
   },
-  pending: {
+  isPending: {
     type: Boolean,
     required: true,
   },
+  isAvailable: {
+    type: Boolean,
+    required: true
+  }
 });
 
 module.exports = mongoose.model("Appointment", appointmentSchema);
