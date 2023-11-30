@@ -104,21 +104,25 @@ class ClinicController {
   async createAppointment(req, res) {
     try {
       const date = req.body.date;
-      const timeSlot = req.body.timeSlot;
-      const dentistId = req.body.dentistId;
-      const userId = req.body.userId;
-      const clinicId = req.body.clinicId;
-      const booked = req.body.booked;
-      const pending = req.body.pending;
+      const timeTo = req.body.timeTo;
+      const timeFrom = req.body.timeFrom;
+      const _dentistId = req.body._dentistId;
+      const _userId = req.body._userId;
+      const _clinicId = req.body._clinicId;
+      const isBooked = req.body.isBooked;
+      const isPending = req.body.isPending;
+      const isAvailable = req.body.isAvailable;
 
       const newAppointment = new AppointmentModel({
         date: date,
-        timeSlot: timeSlot,
-        dentistId: dentistId,
-        userId: userId,
-        clinicId: clinicId,
-        booked: booked,
-        pending: pending,
+        timeTo: timeTo,
+        timeFrom: timeFrom,
+        _dentistId: _dentistId,
+        _userId: _userId,
+        _clinicId: _clinicId,
+        isBooked: isBooked,
+        isPending: isPending,
+        isAvailable: isAvailable
       });
 
       const savedAppointment = await newAppointment.save();
@@ -126,6 +130,21 @@ class ClinicController {
       res.status(201).json(savedAppointment);
     } catch (err) {
       res.status(500).send(err);
+    }
+  }
+
+  async deleteAppointment(req, res) {
+    const id = req.params.appointmentId;
+    console.log(id);
+    try {
+      const result = await AppointmentModel.findByIdAndDelete(id);
+      if (!result) {
+          return res.status(404).send('Appointment not found');
+      }
+      res.status(200).send(`appointment with ID ${id} was deleted.`);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
     }
   }
 }
