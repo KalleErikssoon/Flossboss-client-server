@@ -20,8 +20,12 @@ app.set("view engine", "jade");
 
 app.use(logger("dev"));
 app.use(express.json());
-app.options("*", cors());
-app.use(cors());
+const corsOptions = {
+  origin: ["http://localhost:3001"], // Replace with your frontend's URL
+  credentials: true, // If your frontend needs to send credentials
+};
+
+app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
@@ -60,7 +64,6 @@ const USERNAME = process.env.MQTT_USER;
 const PASSWORD = process.env.MQTT_PASSWORD;
 
 const mqttHandler = getMQTTHandler(HOST, USERNAME, PASSWORD);
-
 
 // Connect to the MQTT broker
 mqttHandler.connect();

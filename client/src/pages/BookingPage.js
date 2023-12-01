@@ -31,29 +31,55 @@ export default function BookingPage() {
   React.useEffect(() => {
     let isComponentMounted = true; // Flag to track component mount status
 
-    async function getAppointments() {
+    async function getAppointment() {
       try {
         const response = await axios.get(
-          `http://localhost:3000/clinics/${clinicId}/appointments/`
+          `http://localhost:3000/clinics/${clinicId}/appointments/test`
         );
         if (isComponentMounted) {
-          const dates = response.data.map(
-            (appointment) => appointment.date.split("T")[0]
-          );
-          console.log(dates);
-
-          setDates(dates);
+          const date = response.data;
+          console.log(date);
+          setDates(date);
         }
       } catch (error) {
         console.error("Error fetching appointments:", error);
       }
     }
-    getAppointments();
+    getAppointment();
     // Cleanup function
     return () => {
       isComponentMounted = false;
     };
   }, []);
+
+  // Live Update
+
+  React.useEffect(() => {
+    // Create a new EventSource instance
+    const eventSource = new EventSource(
+      "http://localhost:3000/clinics/events",
+      { withCredentials: true }
+    ); // Adjust the URL to your server
+
+    // Handle incoming messages
+    eventSource.onmessage = (event) => {
+      const newMessage = JSON.parse(event.data);
+      console.log("Received SSE message:", newMessage);
+    };
+
+    // Handle any errors
+    eventSource.onerror = (error) => {
+      console.error("EventSource failed:", error);
+      eventSource.close();
+    };
+
+    // Clean up on component unmount
+    return () => {
+      eventSource.close();
+    };
+  }, []);
+
+  /////////////// TEST//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   //function to handle user clicking book for a specific timeslot
   // sets the selected timeslot and appointment ID for that timeslot, then uses an axios method to patch the selected appointment to pending
@@ -92,7 +118,6 @@ export default function BookingPage() {
           appointments: appointment._id,
         };
       });
-      console.log(timeslots);
       setTimeSlots(timeslots);
     } catch (error) {
       console.error("Error fetching timeslots:", error);

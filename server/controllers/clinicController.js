@@ -1,5 +1,77 @@
 const ClinicModel = require("../models/clinic");
 const AppointmentModel = require("../models/appointment");
+const getMQTTHandler = require("../MQTTHandler");
+const HOST = process.env.MQTT_URL;
+const USERNAME = process.env.MQTT_USER;
+const PASSWORD = process.env.MQTT_PASSWORD;
+global.dateScores = {};
+global.topics = ["topic1", "topic2", "topic3", "topic4"];
+global.sseConnections = [];
+
+const mqttHandler = getMQTTHandler(HOST, USERNAME, PASSWORD);
+mqttHandler.connect();
+
+mqttHandler.client.on("message", (topic, message) => {
+  console.log("Received MQTT message");
+  const update = { topic: topic, data: message.toString() };
+  console.log("Forwarding update:", update);
+
+  notifyFrontend(update);
+});
+
+// Subscribe to topics
+global.topics.forEach((topic) => {
+  mqttHandler.client.subscribe(topic);
+});
+function notifyFrontend(message) {
+  const data = JSON.stringify(message);
+  this.sseConnections.forEach(({ res }) => {
+    res.write(`data: ${data}\n\n`);
+  });
+}
+/* mqttHandler.client.on("message", (topic, message) => {
+  try {
+    const appointment = JSON.parse(message.toString());
+    const dateString = new Date(appointment.date).toISOString().split("T")[0];
+
+    // Ensure the date entry exists in the dateScores
+    if (!dateScores[dateString]) {
+      dateScores[dateString] = { count: 0, isAvailable: false };
+    }
+
+    // Save the old availability status
+    const oldAvailability = dateScores[dateString].isAvailable;
+
+    // Update the count based on the appointment attributes
+    if (appointment.isAvailable || appointment.isPending) {
+      dateScores[dateString].count = Math.max(
+        dateScores[dateString].count - 1,
+        0
+      );
+    } else {
+      dateScores[dateString].count++;
+    }
+
+    // Update isAvailable based on the count
+    dateScores[dateString].isAvailable = dateScores[dateString].count > 0;
+
+    // Check for significant availability change and notify the frontend
+    if (oldAvailability !== dateScores[dateString].isAvailable) {
+      notifyFrontend(dateString, dateScores[dateString]);
+    }
+  } catch (error) {
+    console.error("Error processing MQTT message:", error);
+  }
+}); */
+
+// Method to Notify Frontend
+/* function notifyFrontend(dateString, update) {
+  this.sseConnections.forEach(({ res }) => {
+    res.write(`data: ${JSON.stringify({ date: dateString, update })}\n\n`);
+  });
+} */
+
+/////////// The start of the class ////////////////////////////////////////////////////
 
 class ClinicController {
   // Gett all clinics from the database
@@ -36,10 +108,9 @@ class ClinicController {
         nextDay.setDate(selectedDate.getDate() + 1); // Set to the start of the next day
 
         appointments = await AppointmentModel.find({
-          _clinicId: clinicid,
-          isBooked: false,
-          isPending: false,
-          isAvailable: true,
+          clinicId: clinicid,
+          booked: false,
+          pending: false,
           date: {
             $gte: selectedDate,
             $lte: nextDay,
@@ -108,21 +179,25 @@ class ClinicController {
   async createAppointment(req, res) {
     try {
       const date = req.body.date;
-      const timeSlot = req.body.timeSlot;
-      const dentistId = req.body.dentistId;
-      const userId = req.body.userId;
-      const clinicId = req.body.clinicId;
-      const booked = req.body.booked;
-      const pending = req.body.pending;
+      const timeTo = req.body.timeTo;
+      const timeFrom = req.body.timeFrom;
+      const _dentistId = req.body._dentistId;
+      const _userId = req.body._userId;
+      const _clinicId = req.body._clinicId;
+      const isBooked = req.body.isBooked;
+      const isPending = req.body.isPending;
+      const isAvailable = req.body.isAvailable;
 
       const newAppointment = new AppointmentModel({
         date: date,
-        timeSlot: timeSlot,
-        dentistId: dentistId,
-        userId: userId,
-        clinicId: clinicId,
-        booked: booked,
-        pending: pending,
+        timeTo: timeTo,
+        timeFrom: timeFrom,
+        _dentistId: _dentistId,
+        _userId: _userId,
+        _clinicId: _clinicId,
+        isBooked: isBooked,
+        isPending: isPending,
+        isAvailable: isAvailable,
       });
 
       const savedAppointment = await newAppointment.save();
@@ -132,7 +207,20 @@ class ClinicController {
       res.status(500).send(err);
     }
   }
-
+  async deleteAppointment(req, res) {
+    const id = req.params.appointmentId;
+    console.log(id);
+    try {
+      const result = await AppointmentModel.findByIdAndDelete(id);
+      if (!result) {
+        return res.status(404).send("Appointment not found");
+      }
+      res.status(200).send(`appointment with ID ${id} was deleted.`);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  }
   /////////////////////////////////// SSE ///////////////////////////////////////////
   async getAppointments(req, res) {
     try {
@@ -177,11 +265,29 @@ class ClinicController {
           scores[dateString] = { count: scores[dateString], isAvailable: true };
         }
       }
-
+      global.dateScores = scores;
       res.status(200).json(scores);
     } catch (err) {
       res.status(500).send(err);
     }
+  }
+
+  sendSSE(req, res) {
+    console.log("Hello sendSSE");
+    res.writeHead(200, {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      Connection: "keep-alive",
+    });
+
+    const connection = { res };
+    global.sseConnections.push(connection);
+
+    req.on("close", () => {
+      global.sseConnections = global.sseConnections.filter(
+        (conn) => conn !== connection
+      );
+    });
   }
 }
 

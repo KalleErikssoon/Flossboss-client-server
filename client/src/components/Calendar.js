@@ -18,7 +18,10 @@ export default function CalendarComponent({
       const day = date.getDate().toString().padStart(2, "0");
       const dateString = `${year}-${month}-${day}`;
       // Check if this date is in the available dates
-      return !datesAvailable.includes(dateString);
+      // return !datesAvailable.includes(dateString);
+      return (
+        datesAvailable[dateString]?.count === 0 || !datesAvailable[dateString]
+      );
     }
     return (
       date < new Date() ||

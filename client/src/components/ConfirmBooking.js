@@ -2,7 +2,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function ConfirmBooking({ show, onHide, onReset, timeSlot, date, onConfirm }) {
+function ConfirmBooking({ show, onHide, onReset, timeSlot, date, onConfirm, clinic }) {
 
   const formattedDate = date ? date.toLocaleDateString() : ''
   
@@ -27,7 +27,7 @@ function ConfirmBooking({ show, onHide, onReset, timeSlot, date, onConfirm }) {
         <Modal.Body>
           <p className="modal-p">   
           By confirming you will book the following appointment: <br /><br />
-          <b>Clinic:</b>  Dentist A <br />
+          <b>Clinic:</b>  {clinic} <br />
           <b>Date:</b> {formattedDate} <br />
           <b>Time:</b> {timeSlot} <br /><br />
           Please click <b>Confirm</b> to confirm your booking.
