@@ -23,40 +23,46 @@ class ClinicController {
       // Get current date
       const currentDate = new Date();
       // Calculate the last date of the next month
-      const nextMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 2, 1);
+      const nextMonthDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 2,
+        1
+      );
 
       if (req.query.selectedDate) {
         const selectedDate = new Date(req.query.selectedDate);
-         selectedDate.setHours(0, 0, 0, 0); // Set to the start of the selected day
-         const nextDay = new Date(selectedDate);
-    nextDay.setDate(selectedDate.getDate() + 1); // Set to the start of the next day
+        selectedDate.setHours(0, 0, 0, 0); // Set to the start of the selected day
+        const nextDay = new Date(selectedDate);
+        nextDay.setDate(selectedDate.getDate() + 1); // Set to the start of the next day
 
-    appointments = await AppointmentModel.find({
-      clinicId: clinicid,
-      booked: false,
-      pending: false,
-      date: {
-          $gte: selectedDate,
-          $lte: nextDay
-      }
-      }).sort({ 'timeSlot': 1 }).exec();
+        appointments = await AppointmentModel.find({
+          _clinicId: clinicid,
+          isBooked: false,
+          isPending: false,
+          isAvailable: true,
+          date: {
+            $gte: selectedDate,
+            $lte: nextDay,
+          },
+        })
+          .sort({ timeSlot: 1 })
+          .exec();
       } else {
-       appointments = await AppointmentModel.find({
-        clinicId: clinicid,
-        booked: false,
-        pending: false,
-        date: {
-          $gte: currentDate,
-          $lte: nextMonthDate,
+        appointments = await AppointmentModel.find({
+          _clinicId: clinicid,
+          isBooked: false,
+          isPending: false,
+          isAvailable: true,
+          date: {
+            $gte: currentDate,
+            $lte: nextMonthDate,
           },
         });
       }
       if (appointments.length === 0) {
         return res
           .status(404)
-          .send(
-            "No appointments found for the given clinic."
-          );
+          .send("No appointments found for the given clinic.");
       }
       res.status(200).json(appointments);
     } catch (err) {
@@ -76,9 +82,10 @@ class ClinicController {
       twoMonthsLater.setMonth(twoMonthsLater.getMonth() + 2);
 
       const appointmentExists = await AppointmentModel.findOne({
-        clinicId: clinicId,
-        booked: false,
-        pending: false,
+        _clinicId: clinicId,
+        isBooked: false,
+        isPending: false,
+        isAvailable: true,
         date: {
           $gte: currentDate,
           $lte: twoMonthsLater,
@@ -121,6 +128,57 @@ class ClinicController {
       const savedAppointment = await newAppointment.save();
 
       res.status(201).json(savedAppointment);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  }
+
+  /////////////////////////////////// SSE ///////////////////////////////////////////
+  async getAppointments(req, res) {
+    try {
+      const clinicid = req.params.clinicid;
+      const currentDate = new Date();
+      const nextMonthDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 2,
+        0 // Last day of next month
+      );
+
+      const appointments = await AppointmentModel.find({
+        _clinicId: clinicid,
+        date: { $gte: currentDate, $lte: nextMonthDate },
+      });
+
+      if (appointments.length === 0) {
+        return res
+          .status(404)
+          .send("No appointments found for the given clinic.");
+      }
+
+      // Initialize scores object
+      let scores = {};
+
+      // Iterate over each appointment and update scores
+      appointments.forEach((appointment) => {
+        const dateString = appointment.date.toISOString().split("T")[0];
+        scores[dateString] = (scores[dateString] || 0) + 1;
+      });
+
+      // Fill in the dates with no appointments and set isAvailable
+      for (
+        let d = new Date(currentDate);
+        d <= nextMonthDate;
+        d.setDate(d.getDate() + 1)
+      ) {
+        const dateString = d.toISOString().split("T")[0];
+        if (!scores[dateString]) {
+          scores[dateString] = { count: 0, isAvailable: false };
+        } else {
+          scores[dateString] = { count: scores[dateString], isAvailable: true };
+        }
+      }
+
+      res.status(200).json(scores);
     } catch (err) {
       res.status(500).send(err);
     }
