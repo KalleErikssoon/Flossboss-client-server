@@ -6,7 +6,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
-const MQTTHandler = require("./MQTTHandler");
+const getMQTTHandler = require("./MQTTHandler");
 const indexRouter = require("./routes/index");
 const userRouter = require("./routes/users");
 const loginRouter = require("./routes/login");
@@ -57,11 +57,12 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-const mqttHandler = new MQTTHandler(
-  process.env.MQTT_URL,
-  process.env.MQTT_USER,
-  process.env.MQTT_PASSWORD
-);
+const HOST = process.env.MQTT_URL;
+const USERNAME = process.env.MQTT_USER;
+const PASSWORD = process.env.MQTT_PASSWORD;
+
+const mqttHandler = getMQTTHandler(HOST, USERNAME, PASSWORD);
+
 
 // Connect to the MQTT broker
 mqttHandler.connect();

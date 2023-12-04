@@ -1,5 +1,11 @@
 const UserModel = require('../models/user');
 const jwt = require('jsonwebtoken');
+const getMQTTHandler = require('../MQTTHandler')
+const HOST = process.env.MQTT_URL;
+const USERNAME = process.env.MQTT_USER;
+const PASSWORD = process.env.MQTT_PASSWORD;
+
+const mqttHandler = getMQTTHandler(HOST, USERNAME, PASSWORD);
 
 class UserController {
 
@@ -129,11 +135,60 @@ async updateByID(req, res){
       res.status(500).send('Internal Server Error');
     }
   }
+
+  async confirmAppointment(req, res) {
+    const userId = req.params.id;
+    const appointmentId = req.params.appointmentId;
+    const clinicId = req.body.clinicId;
+    try {
+    const topic = "flossboss/appointment/request/confirm"
+    const message = `{
+      "_id": "${appointmentId}",
+      "userId": "${userId}",
+      "clinicId": "${clinicId}"
+    }`
+    mqttHandler.publish(topic, message);
+    res.status(200).send("Checking booking");
+    } catch (error) {
+      res.status(500).send("internal server error");
+    }
+  }
   
+  async pendingAppointment(req, res) {
+    const userId = req.params.id;
+    const appointmentId = req.params.appointmentId;
+    const clinicId = req.body.clinicId;
+    try {
+    const topic = "flossboss/appointment/request/pending"
+    const message = `{
+      "_id": "${appointmentId}",
+      "userId": "${userId}",
+      "clinicId": "${clinicId}"
+    }`
+    mqttHandler.publish(topic, message);
+    res.status(200).send("Checking booking");
+    } catch (error) {
+      res.status(500).send("internal server error");
+    }
+  }
 
-
-
-
+  async cancelAppointment(req, res) {
+    const userId = req.params.id;
+    const appointmentId = req.params.appointmentId;
+    const clinicId = req.body.clinicId;
+    try {
+    const topic = "flossboss/appointment/request/cancel"
+    const message = `{
+      "_id": "${appointmentId}",
+      "userId": "${userId}",
+      "clinicId": "${clinicId}"
+    }`
+    mqttHandler.publish(topic, message);
+    res.status(200).send("Checking booking");
+    } catch (error) {
+      res.status(500).send("internal server error");
+    }
+  }
 }
 
 module.exports = UserController;

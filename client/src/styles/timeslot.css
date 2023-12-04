@@ -1,0 +1,23 @@
+.timeslot-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.timeslot-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-style: groove; 
+    padding: 10px;
+    margin-bottom: 5px; 
+}
+
+.timeslot {
+    flex-grow: 1; 
+    margin-right: 10px; 
+}
+
+.book-button {
+    flex-grow: 0;
+}

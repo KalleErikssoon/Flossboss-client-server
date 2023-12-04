@@ -3,11 +3,24 @@ const mqtt = require("mqtt");
 
 // Define the MQTTHandler class
 class MQTTHandler {
+  static instance = null;
+
   constructor(host, username, password) {
-    this.host = host;
-    this.username = username;
-    this.password = password;
-    this.client = null;
+    if (!MQTTHandler.instance) {
+      this.host = host;
+      this.username = username;
+      this.password = password;
+      this.client = null;
+      MQTTHandler.instance = this;
+    }
+    return MQTTHandler.instance;
+  }
+ 
+  static getInstance(host, username, password) {
+    if (!MQTTHandler.instance) {
+      MQTTHandler.instance = new MQTTHandler(host, username, password);
+    }
+    return MQTTHandler.instance;
   }
 
   // Connect to the MQTT broker
@@ -67,4 +80,4 @@ class MQTTHandler {
   }
 }
 
-module.exports = MQTTHandler;
+module.exports = MQTTHandler.getInstance;
