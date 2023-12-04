@@ -10,6 +10,7 @@ const UserUpdateForm = () => {
     const [message, setMessage] = useState('');
     const [colorVariant, setColorVariant] = useState('success');
 
+
     const updateUserInfo = async (userData) => {
         const token = localStorage.getItem('token'); // fetching the token that is set when user logs in'
         const headers = {
@@ -23,11 +24,29 @@ const UserUpdateForm = () => {
         }
     };
 
+    // Makes sure that a user can only input numbers in the phone number field
+    const handlePhoneNumberChange = (e) => {
+        const value = e.target.value;
+        if (value === '' || /^[0-9\b]+$/.test(value)) {
+            setPhoneNumber(value);
+        }
+    };
+
+    // This is what happens when a user clicks the "update" button
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+            // Check if all fields are empty
+        if (!name && !phoneNumber && !password) {
+            setMessage("No user data changed");
+            setColorVariant('warning');
+            return; // Prevent further execution
+        }
+
         try {
             const response = await updateUserInfo({ name, phoneNumber, password });
             
+            // update the local storage username to display below icon in navbar
             if (name.trim() !== '') {
                 localStorage.setItem('userName', name);
             }
@@ -64,6 +83,7 @@ const UserUpdateForm = () => {
                                     <Form.Control
                                         type="text"
                                         placeholder="Enter new Username"
+                                        maxLength="20"
                                         value={name}
                                         onChange={e => setName(e.target.value)}
                                     />
@@ -74,8 +94,9 @@ const UserUpdateForm = () => {
                                     <Form.Control 
                                         type="tel" 
                                         placeholder="Enter new Phone number" 
+                                        maxLength="20"
                                         value={phoneNumber}
-                                        onChange={e => setPhoneNumber(e.target.value)}
+                                        onChange={handlePhoneNumberChange}
                                     />
                                 </Form.Group>
 
@@ -84,6 +105,7 @@ const UserUpdateForm = () => {
                                     <Form.Control 
                                         type="password" 
                                         placeholder="Enter new Password" 
+                                        maxLength="20"
                                         value={password}
                                         onChange={e => setPassword(e.target.value)}
                                     />
