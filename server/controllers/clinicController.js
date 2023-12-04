@@ -211,6 +211,9 @@ class ClinicController {
 
       const appointments = await AppointmentModel.find({
         _clinicId: clinicid,
+        isBooked: false,
+        isPending: false,
+        isAvailable: true,
         date: { $gte: currentDate, $lte: nextMonthDate },
       });
 

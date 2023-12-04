@@ -1,4 +1,5 @@
 const UserModel = require("../models/user");
+const AppointmentModel = require("../models/appointment");
 const getMQTTHandler = require("../MQTTHandler");
 const HOST = process.env.MQTT_URL;
 const USERNAME = process.env.MQTT_USER;
@@ -120,14 +121,23 @@ class UserController {
     const appointmentId = req.params.appointmentId;
     const clinicId = req.body.clinicId;
     try {
-      const topic = "flossboss/appointment/request/pending";
-      const message = `{
-      "_id": "${appointmentId}",
-      "userId": "${userId}",
-      "clinicId": "${clinicId}"
-    }`;
-      mqttHandler.publish(topic, message);
-      res.status(200).send("Checking booking");
+      const appointment = await AppointmentModel.findById(appointmentId);
+      if (appointment.isPending === false) {
+        try {
+          const topic = "flossboss/appointment/request/pending";
+          const message = `{
+          "_id": "${appointmentId}",
+          "userId": "${userId}",
+          "clinicId": "${clinicId}"
+        }`;
+          mqttHandler.publish(topic, message);
+          res.status(200).send("Booking is in Progress");
+        } catch (error) {
+          res.status(500).send("Internal server error");
+        }
+      } else {
+        res.status(200).send("TimeSlot is Booked");
+      }
     } catch (error) {
       res.status(500).send("internal server error");
     }

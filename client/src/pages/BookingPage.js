@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Calendar from "../components/Calendar";
 import TimeSlot from "../components/TimeSlot";
 import ConfirmBooking from "../components/ConfirmBooking";
+import BookingUnavailable from "../components/BookingUnavailable";
 import "react-calendar/dist/Calendar.css";
 import "../styles/bookingPage.css";
 import Breadcrumb from "../components/Breadcrumb";
@@ -19,7 +20,9 @@ export default function BookingPage() {
   const location = useLocation();
   const { clinicId, clinicName } = location.state || {};
   //states to handle different components visibility/logic and relevant data to be able to book appoitments
-  const [showModal, setShowModal] = useState(false);
+  const [calendarUpdateTrigger, setCalendarUpdateTrigger] = React.useState(0);
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showUnavailableModal, setshowUnavailableModal] = useState(false);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [showCalendar, setShowCalendar] = useState(true);
@@ -34,7 +37,7 @@ export default function BookingPage() {
     async function getAppointment() {
       try {
         const response = await axios.get(
-          `http://localhost:3000/clinics/${clinicId}/appointments/test`
+          `http://localhost:3000/clinics/${clinicId}/appointments/calendar`
         );
         if (isComponentMounted) {
           const date = response.data;
@@ -50,7 +53,7 @@ export default function BookingPage() {
     return () => {
       isComponentMounted = false;
     };
-  }, []);
+  }, [calendarUpdateTrigger, clinicId]);
 
   // Live Update
 
@@ -87,8 +90,6 @@ export default function BookingPage() {
     };
   }, []);
 
-  /////////////// TEST//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
   //function to handle user clicking book for a specific timeslot
   // sets the selected timeslot and appointment ID for that timeslot, then uses an axios method to patch the selected appointment to pending
   const handleBookClick = async (timeSlot, appointment) => {
@@ -96,11 +97,16 @@ export default function BookingPage() {
     setSelectedTimeSlot(timeSlot);
     setSelectedAppointment(appointment);
     setTimeout(async () => {
-      await axios.patch(
+      const response = await axios.patch(
         `http://localhost:3000/users/${userId}/appointments/${appointment}/pending`,
         { clinicId: clinic_id }
       );
-      setShowModal(true);
+
+      if (response.data === "Booking is in Progress") {
+        setShowBookingModal(true);
+      } else {
+        setshowUnavailableModal(true);
+      }
     }, 0);
   };
 
@@ -110,6 +116,7 @@ export default function BookingPage() {
   const handleDateSelect = async (date) => {
     setSelectedDate(date);
     setShowCalendar(false);
+    setSelectedTimeSlot(null);
     try {
       const formattedDate = [
         date.getFullYear(),
@@ -129,6 +136,7 @@ export default function BookingPage() {
       setTimeSlots(timeslots);
     } catch (error) {
       console.error("Error fetching timeslots:", error);
+      setTimeSlots([]);
     }
   };
 
@@ -151,17 +159,18 @@ export default function BookingPage() {
     setSelectedDate(null);
     setTimeSlots([]);
     setShowCalendar(true);
+    setCalendarUpdateTrigger((prev) => prev + 1);
   };
 
   //function to reset the selected timeslot from the user
-  const resetTimeSlot = async () => {
+  const resetTimeSlot = async (date) => {
     const clinic_id = clinicId;
     try {
       await axios.patch(
         `http://localhost:3000/users//${userId}/appointments/${selectedAppointment}/cancel`,
         { clinicId: clinic_id }
       );
-      setSelectedTimeSlot(null);
+      handleDateSelect(date);
     } catch (error) {
       console.error("Error cancelling appointment:", error);
     }
@@ -216,12 +225,19 @@ export default function BookingPage() {
         </div>
       </div>
       <ConfirmBooking
-        show={showModal}
-        onHide={() => setShowModal(false)}
+        show={showBookingModal}
+        onHide={() => setShowBookingModal(false)}
         timeSlot={selectedTimeSlot}
         date={selectedDate}
         onReset={resetTimeSlot}
         onConfirm={confirmBooking}
+        clinicName={clinicName}
+      />
+      <BookingUnavailable
+        show={showUnavailableModal}
+        onHide={() => setshowUnavailableModal(false)}
+        date={selectedDate}
+        onReset={handleDateSelect}
       />
     </div>
   );
