@@ -77,7 +77,6 @@ class ClinicController {
 
   // Get all appointments based on a specfic clinic Id and specific criteria
   async getAppointmentsOnSpecificDate(req, res) {
-    console.log("hello");
     try {
       const clinicid = req.params.clinicid;
       let appointments;

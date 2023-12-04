@@ -9,7 +9,7 @@ router.get(
   "/:clinicid/appointments/",
   controller.getAppointmentsOnSpecificDate
 );
-router.get("/:clinicid/appointments/test", controller.getAppointments); // New function to get all appointments for a clinic
+router.get("/:clinicid/appointments/calendar", controller.getAppointments); // New function to get all appointments for a clinic
 router.get("/events", controller.sendSSE);
 router.get("/appointments/available/:clinicid", controller.getOneAppointment);
 router.post("/appointments", controller.createAppointment); // This function will be removed later on.
