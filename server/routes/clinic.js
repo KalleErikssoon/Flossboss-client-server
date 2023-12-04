@@ -5,7 +5,10 @@ const ClinicController = require("../controllers/clinicController");
 const controller = new ClinicController();
 
 router.get("/", controller.getAllClinics);
-router.get("/:clinicid/appointments/", controller.getAppointment);
+router.get(
+  "/:clinicid/appointments/",
+  controller.getAppointmentsOnSpecificDate
+);
 router.get("/:clinicid/appointments/test", controller.getAppointments); // New function to get all appointments for a clinic
 router.get("/events", controller.sendSSE);
 router.get("/appointments/available/:clinicid", controller.getOneAppointment);

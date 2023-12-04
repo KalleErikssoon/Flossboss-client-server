@@ -63,8 +63,16 @@ export default function BookingPage() {
 
     // Handle incoming messages
     eventSource.onmessage = (event) => {
-      const newMessage = JSON.parse(event.data);
-      console.log("Received SSE message:", newMessage);
+      const newDateUpdate = JSON.parse(event.data);
+      console.log("Received SSE message:", newDateUpdate);
+
+      // Update the dates state
+      setDates((currentDates) => {
+        return {
+          ...currentDates,
+          [newDateUpdate.date]: newDateUpdate.update, // Updating only the specific date
+        };
+      });
     };
 
     // Handle any errors
@@ -141,6 +149,7 @@ export default function BookingPage() {
   //function to handle clicking back to calendar in the breadcrumbs
   const handleBackToCalendar = () => {
     setSelectedDate(null);
+    setTimeSlots([]);
     setShowCalendar(true);
   };
 

@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "5a78bc2b-6cbe-4815-860d-d5a73aca12d5",
+		"_postman_id": "6593c69b-46b1-455a-b245-e856d01267dc",
 		"name": "server Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29410899"
+		"_exporter_id": "29410947"
 	},
 	"item": [
 		{
@@ -373,6 +373,52 @@
 			"response": []
 		},
 		{
+			"name": "new appointment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"bodyData = JSON.parse(responseBody);\r",
+							"appointmentId = bodyData._id;\r",
+							"date = bodyData.date;\r",
+							"pm.collectionVariables.set(\"appointment\", appointmentId);\r",
+							"pm.collectionVariables.set(\"date\", date);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function() {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2023-12-01\",\r\n    \"_clinicId\": \"655cb0c8596ef74251a5cc3d\",\r\n    \"timeTo\": \"10:00\",\r\n    \"timeFrom\": \"11:00\",\r\n    \"_dentistId\": \"65686817678d11680fafdb5c\",\r\n    \"isAvailable\": true,\r\n    \"isPending\": false,\r\n    \"isBooked\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/clinics/appointments",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"clinics",
+						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "appointments for specific clinic",
 			"event": [
 				{
@@ -423,7 +469,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/clinics/655cb0c8596ef74251a5cc3d/appointments?selectedDate=2023-12-01",
+					"raw": "{{host}}/clinics/655cb0c8596ef74251a5cc3d/appointments?selectedDate={{date}}",
 					"host": [
 						"{{host}}"
 					],
@@ -435,52 +481,8 @@
 					"query": [
 						{
 							"key": "selectedDate",
-							"value": "2023-12-01"
+							"value": "{{date}}"
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "new appointment",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"bodyData = JSON.parse(responseBody);\r",
-							"appointmentId = bodyData._id;\r",
-							"pm.collectionVariables.set(\"appointment\", appointmentId);\r",
-							"\r",
-							"pm.test(\"Status code is 201\", function() {\r",
-							"    pm.response.to.have.status(201);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"date\": \"2023-12-01\",\r\n    \"_clinicId\": \"655cb0c8596ef74251a5cc3d\",\r\n    \"timeTo\": \"10:00\",\r\n    \"timeFrom\": \"11:00\",\r\n    \"_dentistId\": \"65686817678d11680fafdb5c\",\r\n    \"isAvailable\": true,\r\n    \"isPending\": false,\r\n    \"isBooked\": false\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{host}}/clinics/appointments",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"clinics",
-						"appointments"
 					]
 				}
 			},
@@ -684,6 +686,11 @@
 		},
 		{
 			"key": "appointment",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "date",
 			"value": "",
 			"type": "string"
 		}

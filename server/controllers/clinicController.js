@@ -10,28 +10,16 @@ global.sseConnections = [];
 
 const mqttHandler = getMQTTHandler(HOST, USERNAME, PASSWORD);
 mqttHandler.connect();
-
-mqttHandler.client.on("message", (topic, message) => {
-  console.log("Received MQTT message");
-  const update = { topic: topic, data: message.toString() };
-  console.log("Forwarding update:", update);
-
-  notifyFrontend(update);
-});
-
 // Subscribe to topics
 global.topics.forEach((topic) => {
   mqttHandler.client.subscribe(topic);
 });
-function notifyFrontend(message) {
-  const data = JSON.stringify(message);
-  this.sseConnections.forEach(({ res }) => {
-    res.write(`data: ${data}\n\n`);
-  });
-}
-/* mqttHandler.client.on("message", (topic, message) => {
+
+mqttHandler.client.on("message", (topic, message) => {
+  console.log(global.dateScores);
   try {
     const appointment = JSON.parse(message.toString());
+    console.log(appointment);
     const dateString = new Date(appointment.date).toISOString().split("T")[0];
 
     // Ensure the date entry exists in the dateScores
@@ -43,7 +31,7 @@ function notifyFrontend(message) {
     const oldAvailability = dateScores[dateString].isAvailable;
 
     // Update the count based on the appointment attributes
-    if (appointment.isAvailable || appointment.isPending) {
+    if (appointment.isAvailable && appointment.isPending) {
       dateScores[dateString].count = Math.max(
         dateScores[dateString].count - 1,
         0
@@ -62,16 +50,16 @@ function notifyFrontend(message) {
   } catch (error) {
     console.error("Error processing MQTT message:", error);
   }
-}); */
+});
 
 // Method to Notify Frontend
-/* function notifyFrontend(dateString, update) {
+function notifyFrontend(dateString, update) {
   this.sseConnections.forEach(({ res }) => {
     res.write(`data: ${JSON.stringify({ date: dateString, update })}\n\n`);
   });
-} */
+}
 
-/////////// The start of the class ////////////////////////////////////////////////////
+////////////////////////////////  The start of the class ////////////////////////////////////////////////////
 
 class ClinicController {
   // Gett all clinics from the database
@@ -88,7 +76,8 @@ class ClinicController {
   }
 
   // Get all appointments based on a specfic clinic Id and specific criteria
-  async getAppointment(req, res) {
+  async getAppointmentsOnSpecificDate(req, res) {
+    console.log("hello");
     try {
       const clinicid = req.params.clinicid;
       let appointments;
@@ -101,35 +90,24 @@ class ClinicController {
         1
       );
 
-      if (req.query.selectedDate) {
-        const selectedDate = new Date(req.query.selectedDate);
-        selectedDate.setHours(0, 0, 0, 0); // Set to the start of the selected day
-        const nextDay = new Date(selectedDate);
-        nextDay.setDate(selectedDate.getDate() + 1); // Set to the start of the next day
+      const selectedDate = new Date(req.query.selectedDate);
+      selectedDate.setHours(0, 0, 0, 0); // Set to the start of the selected day
+      const nextDay = new Date(selectedDate);
+      nextDay.setDate(selectedDate.getDate() + 1); // Set to the start of the next day
 
-        appointments = await AppointmentModel.find({
-          clinicId: clinicid,
-          booked: false,
-          pending: false,
-          date: {
-            $gte: selectedDate,
-            $lte: nextDay,
-          },
-        })
-          .sort({ timeSlot: 1 })
-          .exec();
-      } else {
-        appointments = await AppointmentModel.find({
-          _clinicId: clinicid,
-          isBooked: false,
-          isPending: false,
-          isAvailable: true,
-          date: {
-            $gte: currentDate,
-            $lte: nextMonthDate,
-          },
-        });
-      }
+      appointments = await AppointmentModel.find({
+        _clinicId: clinicid,
+        isBooked: false,
+        isPending: false,
+        isAvailable: true,
+        date: {
+          $gte: selectedDate,
+          $lte: nextDay,
+        },
+      })
+        .sort({ timeSlot: 1 })
+        .exec();
+
       if (appointments.length === 0) {
         return res
           .status(404)
@@ -273,7 +251,6 @@ class ClinicController {
   }
 
   sendSSE(req, res) {
-    console.log("Hello sendSSE");
     res.writeHead(200, {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache",
