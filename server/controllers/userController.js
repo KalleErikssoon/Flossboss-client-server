@@ -1,4 +1,5 @@
 const UserModel = require('../models/user');
+const jwt = require('jsonwebtoken');
 const getMQTTHandler = require('../MQTTHandler')
 const HOST = process.env.MQTT_URL;
 const USERNAME = process.env.MQTT_USER;
@@ -97,6 +98,39 @@ async updateByID(req, res){
       const updatedUser = await UserModel.findByIdAndUpdate(id, updateData, { new: true });
       res.status(200).json(updatedUser);
   } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  }
+
+  async updateByAuthenticationId(req, res){
+    // Extract the token from the request headers
+    const token = req.headers.usertoken;
+    let userId;
+
+    // Verify the token and extract the user ID
+    try {
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+        userId = decoded.userId;
+    } catch (error) {
+        return res.status(401).send('Invalid Token');
+    }
+    const { name, phoneNumber, password } = req.body;
+
+    try {
+      const user = await UserModel.findById(userId);
+      if(!user){
+        return res.status(404).send('User not found');
+      }
+
+      const updatedData = {};
+      if (name) updatedData.name = name;
+      if (phoneNumber) updatedData.phoneNumber = phoneNumber;
+      if (password) updatedData.password = password;
+
+      const updatedUser = await UserModel.findByIdAndUpdate(userId, updatedData, { new: true });
+      res.status(200).json(updatedUser);
+    } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
     }

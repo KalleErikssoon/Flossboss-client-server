@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "5a78bc2b-6cbe-4815-860d-d5a73aca12d5",
+		"_postman_id": "7454afdf-b104-4ad2-a08f-9d4ae00b9587",
 		"name": "server Copy",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29410899"
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29427223"
 	},
 	"item": [
 		{
@@ -39,15 +39,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/users",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users"
-					]
-				}
+				"url": "{{host}}/users"
 			},
 			"response": []
 		},
@@ -78,15 +70,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/users",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users"
-					]
-				}
+				"url": "{{host}}/users"
 			},
 			"response": []
 		},
@@ -117,15 +101,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/login",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"login"
-					]
-				}
+				"url": "{{host}}/login"
 			},
 			"response": []
 		},
@@ -156,15 +132,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/login",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"login"
-					]
-				}
+				"url": "{{host}}/login"
 			},
 			"response": []
 		},
@@ -195,15 +163,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/login",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"login"
-					]
-				}
+				"url": "{{host}}/login"
 			},
 			"response": []
 		},
@@ -225,15 +185,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/users",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users"
-					]
-				}
+				"url": "{{host}}/users"
 			},
 			"response": []
 		},
@@ -255,16 +207,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/users/{{user}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users",
-						"{{user}}"
-					]
-				}
+				"url": "{{host}}/users/{{user}}"
 			},
 			"response": []
 		},
@@ -286,16 +229,7 @@
 			"request": {
 				"method": "DELETE",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/users/{{user}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users",
-						"{{user}}"
-					]
-				}
+				"url": "{{host}}/users/{{user}}"
 			},
 			"response": []
 		},
@@ -330,15 +264,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/users",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users"
-					]
-				}
+				"url": "{{host}}/users"
 			},
 			"response": []
 		},
@@ -360,15 +286,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/clinics",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"clinics"
-					]
-				}
+				"url": "{{host}}/clinics"
 			},
 			"response": []
 		},
@@ -390,17 +308,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/clinics/655cb0c8596ef74251a5cc3d/appointments",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"clinics",
-						"655cb0c8596ef74251a5cc3d",
-						"appointments"
-					]
-				}
+				"url": "{{host}}/clinics/655cb0c8596ef74251a5cc3d/appointments"
 			},
 			"response": []
 		},
@@ -466,23 +374,14 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"date\": \"2023-12-01\",\r\n    \"_clinicId\": \"655cb0c8596ef74251a5cc3d\",\r\n    \"timeTo\": \"10:00\",\r\n    \"timeFrom\": \"11:00\",\r\n    \"_dentistId\": \"65686817678d11680fafdb5c\",\r\n    \"isAvailable\": true,\r\n    \"isPending\": false,\r\n    \"isBooked\": false\r\n}",
+					"raw": "{\r\n    \"date\": \"2023-12-15\",\r\n    \"_clinicId\": \"655cb0c8596ef74251a5cc3d\",\r\n    \"timeTo\": \"10:00\",\r\n    \"timeFrom\": \"11:00\",\r\n    \"_dentistId\": \"65686817678d11680fafdb5c\",\r\n    \"isAvailable\": true,\r\n    \"isPending\": false,\r\n    \"isBooked\": false\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/clinics/appointments",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"clinics",
-						"appointments"
-					]
-				}
+				"url": "{{host}}/clinics/appointments"
 			},
 			"response": []
 		},
@@ -504,19 +403,7 @@
 			"request": {
 				"method": "PATCH",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/users/{{user}}/appointments/{{appointment}}/confirm",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users",
-						"{{user}}",
-						"appointments",
-						"{{appointment}}",
-						"confirm"
-					]
-				}
+				"url": "{{host}}/users/{{user}}/appointments/{{appointment}}/confirm"
 			},
 			"response": []
 		},
@@ -538,19 +425,7 @@
 			"request": {
 				"method": "PATCH",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/users/{{user}}/appointments/{{appointment}}/pending",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users",
-						"{{user}}",
-						"appointments",
-						"{{appointment}}",
-						"pending"
-					]
-				}
+				"url": "{{host}}/users/{{user}}/appointments/{{appointment}}/pending"
 			},
 			"response": []
 		},
@@ -572,19 +447,7 @@
 			"request": {
 				"method": "PATCH",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/users/{{user}}/appointments/{{appointment}}/cancel",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users",
-						"{{user}}",
-						"appointments",
-						"{{appointment}}",
-						"cancel"
-					]
-				}
+				"url": "{{host}}/users/{{user}}/appointments/{{appointment}}/cancel"
 			},
 			"response": []
 		},
@@ -606,16 +469,7 @@
 			"request": {
 				"method": "DELETE",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/users/{{user}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users",
-						"{{user}}"
-					]
-				}
+				"url": "{{host}}/users/{{user}}"
 			},
 			"response": []
 		},
@@ -637,17 +491,139 @@
 			"request": {
 				"method": "DELETE",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/clinics/appointments/{{appointment}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"clinics",
-						"appointments",
-						"{{appointment}}"
-					]
+				"url": "{{host}}/clinics/appointments/{{appointment}}"
+			},
+			"response": []
+		},
+		{
+			"name": "New User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"userId\", responseData._id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function() {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
 				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Test User\",\r\n    \"password\": \"123\",\r\n    \"email\": \"test@test.com\",\r\n    \"phoneNumber\": \"12345\",\r\n    \"message\": \"tesasdfadfadfastmessagedshfafldsljh\"\r\n     \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{host}}/users"
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"authToken\", responseData.token);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"password\": \"123\",\r\n    \"email\": \"test@test.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{host}}/login"
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateUserInfoByAuth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var bodyData = JSON.parse(pm.response.text());\r",
+							"var userId = bodyData._id;\r",
+							"pm.collectionVariables.set(\"userId\", userId);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "usertoken",
+						"value": "{{authToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"New Name Test\",\r\n  \"phoneNumber\": \"1234567890\",\r\n  \"password\": \"newpassword123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{host}}/update"
+			},
+			"response": []
+		},
+		{
+			"name": "user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "{{host}}/users/{{userId}}"
 			},
 			"response": []
 		}
@@ -686,6 +662,15 @@
 			"key": "appointment",
 			"value": "",
 			"type": "string"
+		},
+		{
+			"key": "authToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": ""
 		}
 	]
 }
