@@ -7,6 +7,7 @@ import Register from "./components/Register";
 import { AppProvider } from './context/AppProvider';
 import BookingPage from './pages/BookingPage';
 import Navbar from './components/Navbar';
+import MyAccountPage from './pages/MyAccountPage'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/settings" element={<UserSettings />}/>
+          <Route path="/myaccount" element={<MyAccountPage />}/>
         </Routes>
       </BrowserRouter>
     </AppProvider>
