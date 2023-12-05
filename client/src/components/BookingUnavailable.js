@@ -2,7 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-function BookingUnavailable({ show, onHide, onReset, timeSlot, date }) {
+function BookingUnavailable({ show, onHide, onReset, date }) {
   const handleClose = () => {
     onHide();
     onReset(date);

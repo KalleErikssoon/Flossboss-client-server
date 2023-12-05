@@ -1,25 +1,23 @@
 const ClinicModel = require("../models/clinic");
 const AppointmentModel = require("../models/appointment");
+const topics = require("../mqttTopics");
 const getMQTTHandler = require("../MQTTHandler");
 const HOST = process.env.MQTT_URL;
 const USERNAME = process.env.MQTT_USER;
 const PASSWORD = process.env.MQTT_PASSWORD;
 global.dateScores = {};
-global.topics = ["topic1", "topic2", "topic3", "topic4"];
 global.sseConnections = [];
 
 const mqttHandler = getMQTTHandler(HOST, USERNAME, PASSWORD);
 mqttHandler.connect();
 // Subscribe to topics
-global.topics.forEach((topic) => {
+topics.forEach((topic) => {
   mqttHandler.client.subscribe(topic);
 });
 
 mqttHandler.client.on("message", (topic, message) => {
-  console.log(global.dateScores);
   try {
     const appointment = JSON.parse(message.toString());
-    console.log(appointment);
     const dateString = new Date(appointment.date).toISOString().split("T")[0];
 
     // Ensure the date entry exists in the dateScores
@@ -186,7 +184,6 @@ class ClinicController {
   }
   async deleteAppointment(req, res) {
     const id = req.params.appointmentId;
-    console.log(id);
     try {
       const result = await AppointmentModel.findByIdAndDelete(id);
       if (!result) {
@@ -198,7 +195,6 @@ class ClinicController {
       res.status(500).send("Internal Server Error");
     }
   }
-  /////////////////////////////////// SSE ///////////////////////////////////////////
   async getAppointments(req, res) {
     try {
       const clinicid = req.params.clinicid;
