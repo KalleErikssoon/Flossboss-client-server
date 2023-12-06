@@ -11,6 +11,7 @@ const indexRouter = require("./routes/index");
 const userRouter = require("./routes/users");
 const loginRouter = require("./routes/login");
 const clinicRouter = require("./routes/clinic");
+const settingsRouter = require("./routes/userSettings");
 
 var app = express();
 
@@ -21,7 +22,11 @@ app.set("view engine", "jade");
 app.use(logger("dev"));
 app.use(express.json());
 const corsOptions = {
-  origin: ["http://localhost:3001"], // Replace with your frontend's URL
+  origin: [
+    "http://localhost:3001",
+    "http://localhost:3002",
+    "http://localhost:3003",
+  ], // Replace with your frontend's URL
   credentials: true, // If your frontend needs to send credentials
 };
 
@@ -35,6 +40,7 @@ app.use("/", indexRouter);
 app.use("/users", userRouter);
 app.use("/login", loginRouter);
 app.use("/clinics", clinicRouter);
+app.use("/update", settingsRouter);
 
 // Connect to database
 const mongoURI = process.env.MONGODB_URI;

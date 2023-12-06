@@ -1,5 +1,6 @@
 const UserModel = require("../models/user");
 const AppointmentModel = require("../models/appointment");
+const jwt = require("jsonwebtoken");
 const getMQTTHandler = require("../MQTTHandler");
 const HOST = process.env.MQTT_URL;
 const USERNAME = process.env.MQTT_USER;
@@ -98,6 +99,80 @@ class UserController {
     }
   }
 
+  async updateByAuthenticationId(req, res) {
+    // Extract the token from the request headers
+    const token = req.headers.usertoken;
+    let userId;
+
+    // Verify the token and extract the user ID
+    try {
+      const decoded = jwt.verify(token, process.env.SECRET_KEY);
+      userId = decoded.userId;
+    } catch (error) {
+      return res.status(401).send("Invalid Token");
+    }
+    const { name, phoneNumber, password } = req.body;
+
+    try {
+      const user = await UserModel.findById(userId);
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+
+      const updatedData = {};
+      if (name) updatedData.name = name;
+      if (phoneNumber) updatedData.phoneNumber = phoneNumber;
+      if (password) updatedData.password = password;
+
+      const updatedUser = await UserModel.findByIdAndUpdate(
+        userId,
+        updatedData,
+        { new: true }
+      );
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+
+  async updateByAuthenticationId(req, res) {
+    // Extract the token from the request headers
+    const token = req.headers.usertoken;
+    let userId;
+
+    // Verify the token and extract the user ID
+    try {
+      const decoded = jwt.verify(token, process.env.SECRET_KEY);
+      userId = decoded.userId;
+    } catch (error) {
+      return res.status(401).send("Invalid Token");
+    }
+    const { name, phoneNumber, password } = req.body;
+
+    try {
+      const user = await UserModel.findById(userId);
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+
+      const updatedData = {};
+      if (name) updatedData.name = name;
+      if (phoneNumber) updatedData.phoneNumber = phoneNumber;
+      if (password) updatedData.password = password;
+
+      const updatedUser = await UserModel.findByIdAndUpdate(
+        userId,
+        updatedData,
+        { new: true }
+      );
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+
   async confirmAppointment(req, res) {
     const userId = req.params.id;
     const appointmentId = req.params.appointmentId;
@@ -106,8 +181,8 @@ class UserController {
       const topic = "flossboss/appointment/request/confirm";
       const message = `{
       "_id": "${appointmentId}",
-      "userId": "${userId}",
-      "clinicId": "${clinicId}"
+      "_userId": "${userId}",
+      "_clinicId": "${clinicId}"
     }`;
       mqttHandler.publish(topic, message);
       res.status(200).send("Checking booking");
@@ -122,13 +197,13 @@ class UserController {
     const clinicId = req.body.clinicId;
     try {
       const appointment = await AppointmentModel.findById(appointmentId);
-      if (appointment.isPending === false) {
+      if (appointment.isPending === false && appointment.isBooked === false) {
         try {
           const topic = "flossboss/appointment/request/pending";
           const message = `{
           "_id": "${appointmentId}",
-          "userId": "${userId}",
-          "clinicId": "${clinicId}"
+          "_userId": "${userId}",
+          "_clinicId": "${clinicId}"
         }`;
           mqttHandler.publish(topic, message);
           res.status(200).send("Booking is in Progress");
@@ -151,8 +226,8 @@ class UserController {
       const topic = "flossboss/appointment/request/cancel";
       const message = `{
       "_id": "${appointmentId}",
-      "userId": "${userId}",
-      "clinicId": "${clinicId}"
+      "_userId": "${userId}",
+      "_clinicId": "${clinicId}"
     }`;
       mqttHandler.publish(topic, message);
       res.status(200).send("Checking booking");
@@ -161,4 +236,5 @@ class UserController {
     }
   }
 }
+
 module.exports = UserController;

@@ -4,6 +4,7 @@ import UserLogo from '../assets/UserLogo.png'
 import { AppContext } from '../context/AppProvider';
 import LoginContainer from '../components/LoginContainer'
 import { logout } from '../utils/logout';
+import { Link } from 'react-router-dom';
 
 
 const NavbarComponent = () => {
@@ -29,14 +30,17 @@ const NavbarComponent = () => {
                 borderRadius: '5px', 
                 padding: '15px' }}>
 
-                <button onClick={() => { /* Handle profile settings, this will be implemented */ }}
-                style = {{
-                    ...buttonStyle, 
-                    marginRight: '10px',
-                    backgroundColor: '#4B5FE2',
-                    borderColor: '#4B5FE2',
-                    color: 'white'
-                    }}>Profile Settings</button>
+            <Link to="/settings" style={{
+                ...buttonStyle, 
+                display: 'block',  
+                padding: '10px',  
+                textAlign: 'center',  
+                textDecoration: 'none',  
+                backgroundColor: '#4B5FE2',
+                color: 'white',
+                marginBottom: '10px',  
+                borderColor: '#4B5FE2',
+            }}>Profile Settings</Link>
                 <button onClick= { logout }
                 style = {{
                     ...buttonStyle,

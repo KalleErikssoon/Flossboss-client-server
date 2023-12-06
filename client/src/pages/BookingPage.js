@@ -149,6 +149,11 @@ export default function BookingPage() {
         `http://localhost:3000/users//${userId}/appointments/${selectedAppointment}/confirm`,
         { clinicId: clinic_id }
       );
+      setShowBookingModal(false);
+      alert("Your booking is confirmed");
+      if (selectedDate) {
+        handleDateSelect(selectedDate);
+      }
     } catch (error) {
       console.error("Error confirming appointment:", error);
     }
@@ -167,10 +172,14 @@ export default function BookingPage() {
     const clinic_id = clinicId;
     try {
       await axios.patch(
-        `http://localhost:3000/users//${userId}/appointments/${selectedAppointment}/cancel`,
+        `http://localhost:3000/users/${userId}/appointments/${selectedAppointment}/cancel`,
         { clinicId: clinic_id }
       );
-      handleDateSelect(date);
+
+      // Set a timeout for handleDateSelect
+      setTimeout(() => {
+        handleDateSelect(date);
+      }, 500); // 2000 milliseconds (2 seconds) delay
     } catch (error) {
       console.error("Error cancelling appointment:", error);
     }

@@ -18,7 +18,10 @@ topics.forEach((topic) => {
 mqttHandler.client.on("message", (topic, message) => {
   try {
     const appointment = JSON.parse(message.toString());
-    const dateString = new Date(appointment.date).toISOString().split("T")[0];
+    console.log(appointment);
+    const dateString = new Date(appointment.date.$date)
+      .toISOString()
+      .split("T")[0];
 
     // Ensure the date entry exists in the dateScores
     if (!dateScores[dateString]) {
@@ -29,12 +32,12 @@ mqttHandler.client.on("message", (topic, message) => {
     const oldAvailability = dateScores[dateString].isAvailable;
 
     // Update the count based on the appointment attributes
-    if (appointment.isAvailable && appointment.isPending) {
+    if (appointment.isPending) {
       dateScores[dateString].count = Math.max(
         dateScores[dateString].count - 1,
         0
       );
-    } else {
+    } else if (!appointment.pending && !appointment.isBooked) {
       dateScores[dateString].count++;
     }
 
@@ -210,7 +213,10 @@ class ClinicController {
         isBooked: false,
         isPending: false,
         isAvailable: true,
-        date: { $gte: currentDate, $lte: nextMonthDate },
+        date: {
+          $gte: currentDate,
+          $lte: nextMonthDate,
+        },
       });
 
       if (appointments.length === 0) {
