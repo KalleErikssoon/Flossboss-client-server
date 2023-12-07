@@ -9,11 +9,10 @@ const ClinicsContainer = () => {
   const [clinics, setClinics] = React.useState([]);
   const [dateFrom, setDateFrom] = React.useState("");
   const [dateTo, setDateTo] = React.useState("");
-  const [validationMessage, setValidationMessage] = React.useState("");
 
   // This Function will retreive all clinics regardless if they are available or not
 
-  const fetchClinicsData = async (dateFrom = null, dateTo = null) => {
+  const fetchClinicsData = async (dateFrom, dateTo, shouldFilterByDate) => {
     try {
       const response = await axios.get("http://localhost:3000/clinics");
       const clinicsWithAvailability = await Promise.all(
@@ -32,37 +31,52 @@ const ClinicsContainer = () => {
           }
         })
       );
-      setClinics(clinicsWithAvailability);
+
+      if (shouldFilterByDate) {
+        const availableClinics = clinicsWithAvailability.filter(
+          (clinic) => clinic.slotsAvailable
+        );
+        setClinics(availableClinics);
+      } else {
+        setClinics(clinicsWithAvailability);
+      }
     } catch (error) {
       console.error("Error fetching clinics:", error);
     }
   };
 
   React.useEffect(() => {
-    fetchClinicsData();
+    fetchClinicsData(null, null, false);
   }, []); // This runs only once when the component mounts
 
   const handleSubmit = () => {
-    // Reset validation message
-    setValidationMessage("");
+    let errorMessage = "";
+    let shouldFilterByDate = false;
 
     if (!dateFrom || !dateTo) {
-      setValidationMessage("Please select both Date From and Date To.");
-      return;
+      errorMessage = "Please select both Date From and Date To.";
+    } else {
+      const from = new Date(dateFrom);
+      const to = new Date(dateTo);
+
+      if (to < from) {
+        errorMessage = "Date To should be equal to or later than Date From.";
+      } else {
+        shouldFilterByDate = true;
+      }
     }
 
-    const from = new Date(dateFrom);
-    const to = new Date(dateTo);
-
-    if (to < from) {
-      setValidationMessage(
-        "Date To should be equal to or later than Date From."
-      );
-      return;
+    if (errorMessage) {
+      alert(errorMessage);
+      handleReset();
+    } else {
+      fetchClinicsData(dateFrom, dateTo, shouldFilterByDate); // Fetch clinics for the selected date range
     }
-
-    // Fetch data with the selected date range
-    fetchClinicsData(dateFrom, dateTo);
+  };
+  const handleReset = () => {
+    setDateFrom("");
+    setDateTo("");
+    fetchClinicsData(null, null, false); // Fetch all clinics without filtering
   };
 
   const generateDateOptions = () => {
@@ -109,6 +123,7 @@ const ClinicsContainer = () => {
             </select>
 
             <button onClick={handleSubmit}>Submit</button>
+            <button onClick={handleReset}>Reset</button>
           </div>
         </Col>
         <Col md={12} xl={6} className="mb-3">
