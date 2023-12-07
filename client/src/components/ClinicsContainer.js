@@ -4,11 +4,13 @@ import { Container, Row, Col } from "react-bootstrap";
 import CustomMap from "./CustomMap";
 import "../App.css";
 import ClinicsList from "./ClinicsList";
+import swedishRegions from "../swedishRegions";
 
 const ClinicsContainer = () => {
   const [clinics, setClinics] = React.useState([]);
   const [dateFrom, setDateFrom] = React.useState("");
   const [dateTo, setDateTo] = React.useState("");
+  const [selectedRegion, setSelectedRegion] = React.useState("");
 
   // This Function will retreive all clinics regardless if they are available or not
 
@@ -121,7 +123,18 @@ const ClinicsContainer = () => {
                 </option>
               ))}
             </select>
-
+            <label>Region: </label>
+            <select
+              value={selectedRegion}
+              onChange={(e) => setSelectedRegion(e.target.value)}
+            >
+              <option value="">Select Region</option>
+              {swedishRegions.map((region, index) => (
+                <option key={index} value={region.name}>
+                  {region.name}
+                </option>
+              ))}
+            </select>
             <button onClick={handleSubmit}>Submit</button>
             <button onClick={handleReset}>Reset</button>
           </div>
