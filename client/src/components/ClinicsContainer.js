@@ -9,37 +9,61 @@ const ClinicsContainer = () => {
   const [clinics, setClinics] = React.useState([]);
   const [dateFrom, setDateFrom] = React.useState("");
   const [dateTo, setDateTo] = React.useState("");
+  const [validationMessage, setValidationMessage] = React.useState("");
 
   // This Function will retreive all clinics regardless if they are available or not
 
-  React.useEffect(() => {
-    const fetchClinicsData = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/clinics");
-        const clinicsWithAvailability = await Promise.all(
-          response.data.map(async (clinic) => {
-            try {
-              const availabilityResponse = await axios.get(
-                `http://localhost:3000/clinics/appointments/available/${clinic._id}`
-              );
-              return { ...clinic, slotsAvailable: availabilityResponse.data };
-            } catch {
-              console.log(
-                `No appointment found for the following clinic:  ${clinic._id}`
-              );
-              // Default to false if the API call for slot availability fails
-              return { ...clinic, slotsAvailable: false };
-            }
-          })
-        );
-        setClinics(clinicsWithAvailability);
-      } catch (error) {
-        console.error("Error fetching clinics:", error);
-      }
-    };
+  const fetchClinicsData = async (dateFrom = null, dateTo = null) => {
+    try {
+      const response = await axios.get("http://localhost:3000/clinics");
+      const clinicsWithAvailability = await Promise.all(
+        response.data.map(async (clinic) => {
+          try {
+            const availabilityResponse = await axios.get(
+              `http://localhost:3000/clinics/appointments/available/${clinic._id}?startDate=${dateFrom}&endDate=${dateTo}`
+            );
+            return { ...clinic, slotsAvailable: availabilityResponse.data };
+          } catch {
+            console.log(
+              `No appointment found for the following clinic:  ${clinic._id}`
+            );
+            // Default to false if the API call for slot availability fails
+            return { ...clinic, slotsAvailable: false };
+          }
+        })
+      );
+      setClinics(clinicsWithAvailability);
+    } catch (error) {
+      console.error("Error fetching clinics:", error);
+    }
+  };
 
+  React.useEffect(() => {
     fetchClinicsData();
-  }, []);
+  }, []); // This runs only once when the component mounts
+
+  const handleSubmit = () => {
+    // Reset validation message
+    setValidationMessage("");
+
+    if (!dateFrom || !dateTo) {
+      setValidationMessage("Please select both Date From and Date To.");
+      return;
+    }
+
+    const from = new Date(dateFrom);
+    const to = new Date(dateTo);
+
+    if (to < from) {
+      setValidationMessage(
+        "Date To should be equal to or later than Date From."
+      );
+      return;
+    }
+
+    // Fetch data with the selected date range
+    fetchClinicsData(dateFrom, dateTo);
+  };
 
   const generateDateOptions = () => {
     const today = new Date();
@@ -62,6 +86,9 @@ const ClinicsContainer = () => {
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
             >
+              <option value="" disabled>
+                Select From
+              </option>
               {generateDateOptions().map((date) => (
                 <option key={date} value={date}>
                   {date}
@@ -71,6 +98,9 @@ const ClinicsContainer = () => {
 
             <label>Date To: </label>
             <select value={dateTo} onChange={(e) => setDateTo(e.target.value)}>
+              <option value="" disabled>
+                Select To
+              </option>
               {generateDateOptions().map((date) => (
                 <option key={date} value={date}>
                   {date}
@@ -78,7 +108,7 @@ const ClinicsContainer = () => {
               ))}
             </select>
 
-            <button>Submit</button>
+            <button onClick={handleSubmit}>Submit</button>
           </div>
         </Col>
         <Col md={12} xl={6} className="mb-3">
