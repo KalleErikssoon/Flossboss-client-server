@@ -3,10 +3,14 @@ import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
 import CustomMap from "./CustomMap";
 import "../App.css";
-import ClinicsList from './ClinicsList'
+import ClinicsList from "./ClinicsList";
 
 const ClinicsContainer = () => {
   const [clinics, setClinics] = React.useState([]);
+  const [dateFrom, setDateFrom] = React.useState("");
+  const [dateTo, setDateTo] = React.useState("");
+
+  // This Function will retreive all clinics regardless if they are available or not
 
   React.useEffect(() => {
     const fetchClinicsData = async () => {
@@ -37,15 +41,50 @@ const ClinicsContainer = () => {
     fetchClinicsData();
   }, []);
 
+  const generateDateOptions = () => {
+    const today = new Date();
+    const nextMonth = new Date(today.getFullYear(), today.getMonth() + 2, 0); // Last day of the next month
+
+    let dates = [];
+    for (let d = new Date(); d <= nextMonth; d.setDate(d.getDate() + 1)) {
+      dates.push(d.toISOString().split("T")[0]); // Format date as 'YYYY-MM-DD'
+    }
+    return dates;
+  };
+
   return (
     <Container fluid className="p-3">
       <Row>
+        <Col md={12} className="mb-3">
+          <div>
+            <label>Date From: </label>
+            <select
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+            >
+              {generateDateOptions().map((date) => (
+                <option key={date} value={date}>
+                  {date}
+                </option>
+              ))}
+            </select>
+
+            <label>Date To: </label>
+            <select value={dateTo} onChange={(e) => setDateTo(e.target.value)}>
+              {generateDateOptions().map((date) => (
+                <option key={date} value={date}>
+                  {date}
+                </option>
+              ))}
+            </select>
+
+            <button>Submit</button>
+          </div>
+        </Col>
         <Col md={12} xl={6} className="mb-3">
           <div className="border p-3">
             <h3>Clinics List</h3>
-            <ClinicsList 
-            clinics={clinics}
-            />
+            <ClinicsList clinics={clinics} />
           </div>
         </Col>
         <Col md={12} xl={6} className="mb-3">
