@@ -1,10 +1,13 @@
 import React from "react";
 import ClinicsContainer from "./ClinicsContainer";
+import "../App.css";
 
 const Home = () => {
   return (
     <>
-      <ClinicsContainer />
+      <div className="clinics-top-spacing">
+        <ClinicsContainer />
+      </div>
     </>
   );
 };
