@@ -121,9 +121,9 @@ class ClinicController {
 
   // Check if there is an appointment that fulfills specific criteria(To have a better performance comparing to the previous function)
   async getOneAppointment(req, res) {
-    console.log("I am called?");
     try {
       const clinicId = req.params.clinicid;
+      const region = req.query.region;
       const startDate =
         req.query.startDate && req.query.startDate !== "null"
           ? new Date(req.query.startDate)
@@ -132,9 +132,6 @@ class ClinicController {
         req.query.endDate && req.query.endDate !== "null"
           ? new Date(req.query.endDate)
           : new Date(new Date().setMonth(new Date().getMonth() + 2));
-
-      console.log(startDate);
-      console.log(endDate);
 
       const appointmentExists = await AppointmentModel.findOne({
         _clinicId: clinicId,
@@ -150,7 +147,14 @@ class ClinicController {
       if (!appointmentExists) {
         return res.status(404).send("No matching appointment found.");
       }
-
+      if (region) {
+        const clinic = await ClinicModel.findById({ clinicId });
+        if (clinic.region !== region) {
+          return res
+            .status(404)
+            .send("No matching appointment found in the selected region.");
+        }
+      }
       res.status(200).send(true);
     } catch (err) {
       res.status(500).send(err);
