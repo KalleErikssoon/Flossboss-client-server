@@ -39,25 +39,15 @@ const ClinicsContainer = () => {
 
   return (
     <Container fluid className="p-3">
-      {" "}
-      {/* Padding on all sides */}
       <Row>
-        {/* Clinics List */}
         <Col md={12} xl={6} className="mb-3">
-          {" "}
-          {/* On small screens, this takes full width and is above the map */}
-          {/* Replace this div with your ClinicsList component */}
           <div className="border p-3">
-            {" "}
-            {/* Placeholder for ClinicsList */}
             <h3>Clinics List</h3>
             <ClinicsList 
             clinics={clinics}
             />
           </div>
         </Col>
-
-        {/* Custom Map */}
         <Col md={12} xl={6} className="mb-3">
           <div className="map-container">
             <CustomMap clinics={clinics} />
