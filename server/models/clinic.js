@@ -8,11 +8,11 @@ const clinicSchema = new mongoose.Schema({
     unique: true,
   },
   latitude: {
-    type: String,
+    type: Number,
     required: true,
   },
   longitude: {
-    type: String,
+    type: Number,
     required: true,
   },
   openingHours: {
@@ -23,7 +23,26 @@ const clinicSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  employeeId: [{ type: String }],
+  address: {
+    type: String,
+  },
+  openForm: {
+    type: String,
+  },
+  openTo: {
+    type: String,
+  },
+  region: {
+    type: String,
+  },
+  zipcode: {
+    type: String,
+  },
+  dentists: [{ type: String }],
 });
 
-module.exports = mongoose.model("Clinic", clinicSchema);
+module.exports = mongoose.model(
+  "clinic-testing",
+  clinicSchema,
+  "clinic-testing"
+);

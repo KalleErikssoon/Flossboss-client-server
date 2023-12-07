@@ -1,43 +1,47 @@
-import React from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import React from "react";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
-function ConfirmBooking({ show, onHide, onReset, timeSlot, date, onConfirm, clinic }) {
+function ConfirmBooking({
+  show,
+  onHide,
+  onReset,
+  timeSlot,
+  date,
+  onConfirm,
+  clinicName,
+}) {
+  const formattedDate = date ? date.toLocaleDateString() : "";
 
-  const formattedDate = date ? date.toLocaleDateString() : ''
-  
   const handleClose = () => {
     onHide();
-    onReset(); 
+    onReset(date);
   };
-  
+
   return (
     <>
-      <Modal
-        show={show}
-        onHide={() => { handleClose(); onReset(); }}
-        backdrop="static"
-        keyboard={false}
-        size="lg"
-        centered
-      >
+      <Modal show={show} backdrop="static" keyboard={false} size="lg" centered>
         <Modal.Header>
           <Modal.Title>Booking Confirmation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p className="modal-p">   
-          By confirming you will book the following appointment: <br /><br />
-          <b>Clinic:</b>  {clinic} <br />
-          <b>Date:</b> {formattedDate} <br />
-          <b>Time:</b> {timeSlot} <br /><br />
-          Please click <b>Confirm</b> to confirm your booking.
+          <p className="modal-p">
+            By confirming you will book the following appointment: <br />
+            <br />
+            <b>Clinic:</b> {clinicName} <br />
+            <b>Date:</b> {formattedDate} <br />
+            <b>Time:</b> {timeSlot} <br />
+            <br />
+            Please click <b>Confirm</b> to confirm your booking.
           </p>
         </Modal.Body>
         <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={onConfirm}>Confirm</Button>
+          <Button variant="primary" onClick={onConfirm}>
+            Confirm
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

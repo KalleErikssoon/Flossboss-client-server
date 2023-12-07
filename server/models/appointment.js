@@ -35,8 +35,12 @@ const appointmentSchema = new mongoose.Schema({
   },
   isAvailable: {
     type: Boolean,
-    required: true
-  }
+    required: true,
+  },
 });
 
-module.exports = mongoose.model("Appointment", appointmentSchema);
+module.exports = mongoose.model(
+  "timeslot-testing",
+  appointmentSchema,
+  "timeslot-testing"
+);
