@@ -190,7 +190,21 @@ async updateByID(req, res){
       res.status(500).send("internal server error");
     }
   }
-  
+
+  async getUserAppointments(req, res) {
+    const userId = req.params.id; 
+
+    try {
+        // Fetches appointments where _userId matches the logged-in user's ID
+        const appointments = await Appointment.find({ _userId: userId });
+        res.json(appointments);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+  }
 }
+  
+
 
 module.exports = UserController;
