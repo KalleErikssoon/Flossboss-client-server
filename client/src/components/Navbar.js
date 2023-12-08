@@ -80,7 +80,7 @@ const NavbarComponent = () => {
                         // These items will only be displayed if a user is logged in
                         <>
                             <li className="nav-item">
-                                <a className="nav-link" href="/profile">My Account</a>
+                                <a className="nav-link" href="/myaccount">My Account</a>
                             </li>
                         </>
                     )}
