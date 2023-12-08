@@ -1,10 +1,8 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 const ClinicController = require("../controllers/clinicController");
-const logWorker = require('../middleware/loggingMiddleware');
 
 const controller = new ClinicController();
-router.use(logWorker);
 
 router.get("/", controller.getAllClinics);
 router.get(
