@@ -14,14 +14,19 @@ const ClinicsContainer = () => {
 
   // This Function will retreive all clinics regardless if they are available or not
 
-  const fetchClinicsData = async (dateFrom, dateTo, shouldFilterByDate) => {
+  const fetchClinicsData = async (
+    dateFrom,
+    dateTo,
+    shouldFilterByDate,
+    selectedRegion
+  ) => {
     try {
       const response = await axios.get("http://localhost:3000/clinics");
       const clinicsWithAvailability = await Promise.all(
         response.data.map(async (clinic) => {
           try {
             const availabilityResponse = await axios.get(
-              `http://localhost:3000/clinics/appointments/available/${clinic._id}?startDate=${dateFrom}&endDate=${dateTo}`
+              `http://localhost:3000/clinics/appointments/available/${clinic._id}?startDate=${dateFrom}&endDate=${dateTo}&region=${selectedRegion}`
             );
             return { ...clinic, slotsAvailable: availabilityResponse.data };
           } catch {
@@ -48,14 +53,14 @@ const ClinicsContainer = () => {
   };
 
   React.useEffect(() => {
-    fetchClinicsData(null, null, false);
+    fetchClinicsData(null, null, false, "");
   }, []); // This runs only once when the component mounts
 
   const handleSubmit = () => {
     let errorMessage = "";
     let shouldFilterByDate = false;
 
-    if (!dateFrom || !dateTo) {
+    if ((!dateFrom && dateTo) || (dateFrom && !dateTo)) {
       errorMessage = "Please select both Date From and Date To.";
     } else {
       const from = new Date(dateFrom);
@@ -72,13 +77,14 @@ const ClinicsContainer = () => {
       alert(errorMessage);
       handleReset();
     } else {
-      fetchClinicsData(dateFrom, dateTo, shouldFilterByDate); // Fetch clinics for the selected date range
+      fetchClinicsData(dateFrom, dateTo, shouldFilterByDate, selectedRegion); // Fetch clinics for the selected date range
     }
   };
   const handleReset = () => {
     setDateFrom("");
     setDateTo("");
-    fetchClinicsData(null, null, false); // Fetch all clinics without filtering
+    setSelectedRegion("");
+    fetchClinicsData(null, null, false, ""); // Fetch all clinics without filtering
   };
 
   const generateDateOptions = () => {
@@ -128,7 +134,9 @@ const ClinicsContainer = () => {
               value={selectedRegion}
               onChange={(e) => setSelectedRegion(e.target.value)}
             >
-              <option value="">Select Region</option>
+              <option value="" disabled>
+                Select Region
+              </option>
               {swedishRegions.map((region, index) => (
                 <option key={index} value={region.name}>
                   {region.name}

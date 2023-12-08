@@ -39,34 +39,44 @@ const CustomMap = ({ clinics, google }) => {
   };
 
   const onBookClick = () => {
-    navigate('/booking', { state: { clinicId: activeClinic._id, clinicName: activeClinic.name} }); 
+    navigate("/booking", {
+      state: { clinicId: activeClinic._id, clinicName: activeClinic.name },
+    });
   };
 
   return (
-      <Map google={google} zoom={9} initialCenter={{ lat: 57.7289, lng: 11.9746 }}>
-        {memoizedMarkers}
+    <Map
+      google={google}
+      zoom={4}
+      initialCenter={{ lat: 63.1282, lng: 18.6435 }}
+    >
+      {memoizedMarkers}
 
-        <InfoWindow
-          position={
-            activeClinic ? { lat: activeClinic.latitude, lng: activeClinic.longitude } : null
-          }
-          visible={activeClinic != null}
-          onClose={onCloseInfoWindow}
-        >
-          <div>
-            <h2>{activeClinic?.name}</h2>
-            <p>Opening Hours: {activeClinic?.openingHours}</p>
-            {activeClinic?.slotsAvailable ? (
-              <button id="bookButton" onClick={onBookClick}>Book</button>
-            ) : (
-              <p>No slots available for the next months.</p>
-            )}
-          </div>
-        </InfoWindow>
-      </Map>
+      <InfoWindow
+        position={
+          activeClinic
+            ? { lat: activeClinic.latitude, lng: activeClinic.longitude }
+            : null
+        }
+        visible={activeClinic != null}
+        onClose={onCloseInfoWindow}
+      >
+        <div>
+          <h2>{activeClinic?.name}</h2>
+          <p>Opening Hours: {activeClinic?.openingHours}</p>
+          {activeClinic?.slotsAvailable ? (
+            <button id="bookButton" onClick={onBookClick}>
+              Book
+            </button>
+          ) : (
+            <p>No slots available for the next months.</p>
+          )}
+        </div>
+      </InfoWindow>
+    </Map>
   );
 };
 
 export default GoogleApiWrapper({
-  apiKey: process.env.REACT_APP_GOOGLE_MAPS_KEY
+  apiKey: process.env.REACT_APP_GOOGLE_MAPS_KEY,
 })(CustomMap);
