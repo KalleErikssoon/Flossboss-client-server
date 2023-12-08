@@ -3,7 +3,6 @@ const router = express.Router({ mergeParams: true });
 const UserController = require('../controllers/userController')
 
 const controller = new UserController();
-
 /* GET users listing. */
 router.get('/', controller.getAllUsers);
 router.get('/:id', controller.getUserById);
