@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const UserController = require('../controllers/userController')
+const logWorker = require('../middleware/loggingMiddleware');
 
 const controller = new UserController();
-
+router.use(logWorker);
 /* GET users listing. */
 router.get('/', controller.getAllUsers);
 router.get('/:id', controller.getUserById);

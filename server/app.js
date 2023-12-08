@@ -12,10 +12,33 @@ const userRouter = require("./routes/users");
 const loginRouter = require("./routes/login");
 const clinicRouter = require("./routes/clinic");
 const settingsRouter = require("./routes/userSettings");
+const cluster = require('cluster');
+const os = require('os');
 
-var app = express();
+const app = express();
 
-// view engine setup
+if (cluster.isMaster) {
+  const numCPUs = os.cpus().length;
+
+  console.log(`Master process is running with PID ${process.pid}`);
+
+  // Fork workers.
+  for (let i = 0; i < numCPUs; i++) {
+      cluster.fork();
+  }
+
+  cluster.on('exit', (worker, code, signal) => {
+      console.log(`Worker ${worker.process.pid} died`);
+      console.log('Forking a new worker...');
+      cluster.fork();
+  });
+} else {
+  // Workers can share any TCP connection
+  // Here, it is an HTTP server
+  const app = express();
+  const http = require('http');
+
+  // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
@@ -79,5 +102,9 @@ mqttHandler.subscribe("flossbosstest");
 
 // Publish a message to a topic
 mqttHandler.publish("flossbosstest", "Hello Mqtt");
+const server = http.createServer(app);
 
-module.exports = app;
+  app.listen(process.env.PORT || 3000, () => {
+      console.log(`Worker ${process.pid} started`);
+  });
+}
