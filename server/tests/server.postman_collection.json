@@ -32,7 +32,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"aaa\",\r\n    \"password\": \"testahmed\",\r\n    \"email\": \"testemail@test.com\",\r\n    \"phoneNumber\": \"1122836464\",\r\n    \"message\": \"tesasdfadfadfastmessagedshfafldsljh\"\r\n     \r\n}",
+					"raw": "{\r\n    \"name\": \"aaa\",\r\n    \"password\": \"testahmed\",\r\n    \"email\": \"testemail@test.com\",\r\n    \"phoneNumber\": 1122836464,\r\n    \"message\": []\r\n     \r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -323,7 +323,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"aaa\",\r\n    \"password\": \"testahmed\",\r\n    \"email\": \"testemail@test.com\",\r\n    \"phoneNumber\": \"1122836464\",\r\n    \"message\": \"tesasdfadfadfastmessagedshfafldsljh\"\r\n     \r\n}",
+					"raw": "{\r\n    \"name\": \"aaa\",\r\n    \"password\": \"testahmed\",\r\n    \"email\": \"testemail@test.com\",\r\n    \"phoneNumber\": 1122836464,\r\n    \"message\": []\r\n     \r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
