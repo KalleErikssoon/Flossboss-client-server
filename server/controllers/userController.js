@@ -1,4 +1,5 @@
 const UserModel = require('../models/user');
+const Appointment = require('../models/appointment');
 const jwt = require('jsonwebtoken');
 const getMQTTHandler = require('../MQTTHandler')
 const HOST = process.env.MQTT_URL;
@@ -189,6 +190,7 @@ async updateByID(req, res){
       res.status(500).send("internal server error");
     }
   }
+  
 }
 
 module.exports = UserController;
