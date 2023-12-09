@@ -2,8 +2,9 @@ import React from "react";
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from "google-maps-react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
+import swedishRegions from "../swedishRegions";
 
-const CustomMap = ({ clinics, google }) => {
+const CustomMap = ({ clinics, google, selectedRegion, clinicsAvailable }) => {
   const [activeClinic, setActiveClinic] = React.useState(null);
   const navigate = useNavigate();
 
@@ -29,6 +30,19 @@ const CustomMap = ({ clinics, google }) => {
       }, 0);
     }
   });
+  const mapSettings = React.useMemo(() => {
+    if (clinicsAvailable && selectedRegion) {
+      const region = swedishRegions.find((r) => r.name === selectedRegion);
+      if (region) {
+        return {
+          center: { lat: region.latitude, lng: region.longitude },
+          zoom: region.zoom,
+        };
+      }
+    }
+    // Default settings
+    return { center: { lat: 63.1282, lng: 18.6435 }, zoom: 5 };
+  }, [selectedRegion, clinicsAvailable]);
 
   const onMarkerClick = (clinic) => {
     setActiveClinic(clinic);
@@ -45,11 +59,7 @@ const CustomMap = ({ clinics, google }) => {
   };
 
   return (
-    <Map
-      google={google}
-      zoom={4}
-      initialCenter={{ lat: 63.1282, lng: 18.6435 }}
-    >
+    <Map google={google} zoom={mapSettings.zoom} center={mapSettings.center}>
       {memoizedMarkers}
 
       <InfoWindow

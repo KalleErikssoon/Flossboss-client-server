@@ -149,8 +149,6 @@ class ClinicController {
         return res.status(404).send("No matching appointment found.");
       }
       if (region) {
-        console.log("I am a region", region);
-        console.log("I am clinic Id", clinicId);
         const clinic = await ClinicModel.findOne({ _id: clinicId });
         console.log("I am a clinic and thats my region", clinic.region);
         if (clinic.region !== region) {

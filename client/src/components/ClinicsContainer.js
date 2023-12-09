@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
+import { useCallback } from "react";
 import CustomMap from "./CustomMap";
 import "../App.css";
 import ClinicsList from "./ClinicsList";
@@ -11,13 +12,15 @@ const ClinicsContainer = () => {
   const [dateFrom, setDateFrom] = React.useState("");
   const [dateTo, setDateTo] = React.useState("");
   const [selectedRegion, setSelectedRegion] = React.useState("");
+  const [confirmedRegion, setConfirmedRegion] = React.useState("");
+  const [submitClicked, setSubmitClicked] = React.useState(false);
 
   // This Function will retreive all clinics regardless if they are available or not
 
   const fetchClinicsData = async (
     dateFrom,
     dateTo,
-    shouldFilterByDate,
+    shouldFilter,
     selectedRegion
   ) => {
     try {
@@ -39,7 +42,7 @@ const ClinicsContainer = () => {
         })
       );
 
-      if (shouldFilterByDate) {
+      if (shouldFilter) {
         const availableClinics = clinicsWithAvailability.filter(
           (clinic) => clinic.slotsAvailable
         );
@@ -58,7 +61,7 @@ const ClinicsContainer = () => {
 
   const handleSubmit = () => {
     let errorMessage = "";
-    let shouldFilterByDate = false;
+    let shouldFilter = false;
 
     if ((!dateFrom && dateTo) || (dateFrom && !dateTo)) {
       errorMessage = "Please select both Date From and Date To.";
@@ -69,7 +72,7 @@ const ClinicsContainer = () => {
       if (to < from) {
         errorMessage = "Date To should be equal to or later than Date From.";
       } else {
-        shouldFilterByDate = true;
+        shouldFilter = true;
       }
     }
 
@@ -77,15 +80,19 @@ const ClinicsContainer = () => {
       alert(errorMessage);
       handleReset();
     } else {
-      fetchClinicsData(dateFrom, dateTo, shouldFilterByDate, selectedRegion); // Fetch clinics for the selected date range
+      setConfirmedRegion(selectedRegion);
+      fetchClinicsData(dateFrom, dateTo, shouldFilter, selectedRegion); // Fetch clinics for the selected date range
     }
+    setSubmitClicked(true);
   };
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
+    // Your existing handleReset logic
     setDateFrom("");
     setDateTo("");
     setSelectedRegion("");
-    fetchClinicsData(null, null, false, ""); // Fetch all clinics without filtering
-  };
+    setConfirmedRegion("");
+    fetchClinicsData(null, null, false, selectedRegion); // Fetch all clinics without filtering
+  }, [selectedRegion]);
 
   const generateDateOptions = () => {
     const today = new Date();
@@ -97,6 +104,24 @@ const ClinicsContainer = () => {
     }
     return dates;
   };
+
+  React.useEffect(() => {
+    let timeoutId;
+    if (submitClicked && clinics.length === 0) {
+      timeoutId = setTimeout(() => {
+        alert("No clinics available.");
+        setSubmitClicked(false); // Reset the state after showing the alert
+        handleReset();
+      }, 1000);
+    }
+
+    // Cleanup function to clear the timeout if the component unmounts
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [clinics, submitClicked, handleReset]);
 
   return (
     <Container fluid className="p-3">
@@ -155,7 +180,11 @@ const ClinicsContainer = () => {
         </Col>
         <Col md={12} xl={6} className="mb-3">
           <div className="map-container">
-            <CustomMap clinics={clinics} />
+            <CustomMap
+              clinics={clinics}
+              selectedRegion={confirmedRegion}
+              clinicsAvailable={clinics.length}
+            />
           </div>
         </Col>
       </Row>
