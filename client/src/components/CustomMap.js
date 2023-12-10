@@ -32,16 +32,27 @@ const CustomMap = ({ clinics, google, selectedRegion, clinicsAvailable }) => {
   });
   const mapSettings = React.useMemo(() => {
     if (clinicsAvailable && selectedRegion) {
+      console.log(
+        "Selected Region:",
+        selectedRegion,
+        "Clinics Available:",
+        clinicsAvailable
+      );
       const region = swedishRegions.find((r) => r.name === selectedRegion);
       if (region) {
         return {
           center: { lat: region.latitude, lng: region.longitude },
           zoom: region.zoom,
         };
+      } else {
+        console.log("Region not found in swedishRegions for:", selectedRegion);
       }
     }
     // Default settings
-    return { center: { lat: 63.1282, lng: 18.6435 }, zoom: 5 };
+    return {
+      center: { lat: 63.1282, lng: 18.6435 },
+      zoom: 5,
+    };
   }, [selectedRegion, clinicsAvailable]);
 
   const onMarkerClick = (clinic) => {

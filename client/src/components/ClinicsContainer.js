@@ -17,19 +17,14 @@ const ClinicsContainer = () => {
 
   // This Function will retreive all clinics regardless if they are available or not
 
-  const fetchClinicsData = async (
-    dateFrom,
-    dateTo,
-    shouldFilter,
-    selectedRegion
-  ) => {
+  const fetchClinicsData = async (dateFrom, dateTo, shouldFilter, Region) => {
     try {
       const response = await axios.get("http://localhost:3000/clinics");
       const clinicsWithAvailability = await Promise.all(
         response.data.map(async (clinic) => {
           try {
             const availabilityResponse = await axios.get(
-              `http://localhost:3000/clinics/appointments/available/${clinic._id}?startDate=${dateFrom}&endDate=${dateTo}&region=${selectedRegion}`
+              `http://localhost:3000/clinics/appointments/available/${clinic._id}?startDate=${dateFrom}&endDate=${dateTo}&region=${Region}`
             );
             return { ...clinic, slotsAvailable: availabilityResponse.data };
           } catch {
@@ -91,8 +86,14 @@ const ClinicsContainer = () => {
     setDateTo("");
     setSelectedRegion("");
     setConfirmedRegion("");
-    fetchClinicsData(null, null, false, selectedRegion); // Fetch all clinics without filtering
-  }, [selectedRegion]);
+    console.log(
+      "I am selected region",
+      selectedRegion,
+      "and I am confirmed region",
+      confirmedRegion
+    );
+    fetchClinicsData(null, null, false, ""); // Fetch all clinics without filtering
+  }, [selectedRegion, confirmedRegion]);
 
   const generateDateOptions = () => {
     const today = new Date();
