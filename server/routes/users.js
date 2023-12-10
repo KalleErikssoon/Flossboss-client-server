@@ -13,6 +13,8 @@ router.patch('/:id', controller.updateByID);
 router.patch('/:id/appointments/:appointmentId/pending', controller.pendingAppointment);
 router.patch('/:id/appointments/:appointmentId/confirm', controller.confirmAppointment);
 router.patch('/:id/appointments/:appointmentId/cancel', controller.cancelAppointment);
+router.patch('/:id/appointments/:appointmentId/cancelTwo', controller.cancelAppointmentTwo);
+
 
 
 module.exports = router;

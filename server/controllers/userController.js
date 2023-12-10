@@ -239,12 +239,52 @@ class UserController {
     }
   }
 
+  //This method is a copy of cancelAppointment above, but with added functionality for also
+  // updating the booked, pending and available attributes in the db. Also sets the userId to null so that
+  //it is not connected to any user, i.e. it can be booked by another user.
+  // Check with team if we should use this one instead
+  async cancelAppointmentTwo(req, res) {
+    const appointmentId = req.params.appointmentId;
+
+    try {
+        // Update the appointment status in the database
+        await AppointmentModel.findByIdAndUpdate(appointmentId, {
+            isBooked: false,
+            isPending: false,
+            isAvailable: true,
+            _userId: null
+        });
+
+        // Then continue with MQTT message publishing
+        const userId = req.params.id;
+        const clinicId = req.body.clinicId;
+        const topic = "flossboss/appointment/request/cancel";
+        const message = `{
+            "_id": "${appointmentId}",
+            "_userId": "${userId}",
+            "_clinicId": "${clinicId}"
+        }`;
+        mqttHandler.publish(topic, message);
+
+        res.status(200).send("Cancellation processed");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal server error");
+    }
+}
+
+
   async getUserAppointments(req, res) {
     const userId = req.params.id;
 
     try {
-        // Fetches appointments where _userId matches the logged-in user's ID
-        const appointments = await AppointmentModel.find({ _userId: userId });
+      
+        // Fetches appointments where _userId in the appointment object matches the logged-in user's ID
+        // and the isBooked attribute is set to true
+        const appointments = await AppointmentModel.find({ 
+          _userId: userId, 
+          isBooked: true 
+        });
 
         // Manually fetch the clinic data for each appointment
         const appointmentsWithClinicData = await Promise.all(appointments.map(async (appointment) => {
