@@ -57,6 +57,9 @@ const ClinicsContainer = () => {
   const handleSubmit = () => {
     let errorMessage = "";
     let shouldFilter = false;
+    if (!dateFrom && !dateTo && !selectedRegion) {
+      errorMessage = "Please enter the filtering fields";
+    }
 
     if ((!dateFrom && dateTo) || (dateFrom && !dateTo)) {
       errorMessage = "Please select both Date From and Date To.";
@@ -176,7 +179,7 @@ const ClinicsContainer = () => {
         <Col md={12} xl={6} className="mb-3">
           <div className="border p-3">
             <h3>Clinics List</h3>
-            <ClinicsList clinics={clinics} />
+            <ClinicsList clinics={clinics} selectedRegion={confirmedRegion} />
           </div>
         </Col>
         <Col md={12} xl={6} className="mb-3">

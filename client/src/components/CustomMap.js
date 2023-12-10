@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from "google-maps-react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import swedishRegions from "../swedishRegions";
 const CustomMap = ({ clinics, google, selectedRegion, clinicsAvailable }) => {
   const [activeClinic, setActiveClinic] = React.useState(null);
   const navigate = useNavigate();
+  const mapRef = useRef(null);
 
   const memoizedMarkers = React.useMemo(() => {
     return clinics.map((clinic) => (
@@ -30,29 +31,19 @@ const CustomMap = ({ clinics, google, selectedRegion, clinicsAvailable }) => {
       }, 0);
     }
   });
-  const mapSettings = React.useMemo(() => {
-    if (clinicsAvailable && selectedRegion) {
-      console.log(
-        "Selected Region:",
-        selectedRegion,
-        "Clinics Available:",
-        clinicsAvailable
-      );
+  React.useEffect(() => {
+    if (clinicsAvailable && selectedRegion && mapRef.current) {
       const region = swedishRegions.find((r) => r.name === selectedRegion);
       if (region) {
-        return {
-          center: { lat: region.latitude, lng: region.longitude },
-          zoom: region.zoom,
-        };
-      } else {
-        console.log("Region not found in swedishRegions for:", selectedRegion);
+        const { latitude, longitude, zoom } = region;
+        mapRef.current.map.panTo({ lat: latitude, lng: longitude });
+        mapRef.current.map.setZoom(zoom);
       }
+    } else {
+      // If the condition is not met, revert back to the initial settings
+      mapRef.current.map.panTo({ lat: 63.1282, lng: 18.6435 }); // Sweden's coordinates
+      mapRef.current.map.setZoom(5); // Default zoom level
     }
-    // Default settings
-    return {
-      center: { lat: 63.1282, lng: 18.6435 },
-      zoom: 5,
-    };
   }, [selectedRegion, clinicsAvailable]);
 
   const onMarkerClick = (clinic) => {
@@ -70,7 +61,15 @@ const CustomMap = ({ clinics, google, selectedRegion, clinicsAvailable }) => {
   };
 
   return (
-    <Map google={google} zoom={mapSettings.zoom} center={mapSettings.center}>
+    <Map
+      google={google}
+      zoom={5}
+      ref={mapRef}
+      initialCenter={{
+        lat: 63.1282,
+        lng: 18.6435, // Sweden's coordinates
+      }}
+    >
       {memoizedMarkers}
 
       <InfoWindow
@@ -84,7 +83,10 @@ const CustomMap = ({ clinics, google, selectedRegion, clinicsAvailable }) => {
       >
         <div>
           <h2>{activeClinic?.name}</h2>
-          <p>Opening Hours: {activeClinic?.openingHours}</p>
+          <p>
+            Opening Hours: {activeClinic?.openFrom} - {activeClinic?.openTo}
+          </p>
+          <p>Address: {activeClinic?.address}</p>
           {activeClinic?.slotsAvailable ? (
             <button id="bookButton" onClick={onBookClick}>
               Book

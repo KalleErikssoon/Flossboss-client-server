@@ -1,28 +1,35 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/clinicsList.css";
-function ClinicsList({ clinics }) {
+function ClinicsList({ clinics, selectedRegion }) {
   const navigate = useNavigate();
 
   const onBookClick = (name, id) => {
-    console.log("abc");
     navigate("/booking", { state: { clinicId: id, clinicName: name } });
   };
 
   return (
     <ul className="clinics-list">
-      {clinics.map((clinicsObj, index) => (
+      {clinics.map((clinic, index) => (
         <li key={index} className="clinic-item">
           <span className="clinic">
-            {clinicsObj.name} <br /> {clinicsObj.region} <br />{" "}
-            {clinicsObj.address}
+            <strong>Name:</strong> {clinic.name} <br />
+            {selectedRegion ? (
+              <>
+                <strong>Address:</strong> {clinic.address} <br />
+                <strong>Zipcode:</strong> {clinic.zipcode}
+              </>
+            ) : (
+              <>
+                <strong>Region:</strong> {clinic.region} <br />
+                <strong>Zipcode:</strong> {clinic.zipcode}
+              </>
+            )}
           </span>
-          {clinicsObj?.slotsAvailable ? (
+          {clinic?.slotsAvailable ? (
             <button
               className="btn btn-primary"
-              onClick={() => {
-                onBookClick(clinicsObj.name, clinicsObj._id);
-              }}
+              onClick={() => onBookClick(clinic.name, clinic._id)}
             >
               Book
             </button>
