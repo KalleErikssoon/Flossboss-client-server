@@ -27,14 +27,23 @@ const MyAccountPage = () => {
     const handleCancelAppointment = async (appointmentId) => {
         const userId = localStorage.getItem('userIdSession');
         if (userId) {
-            try {
-                await axios.patch(`http://localhost:3000/users/${userId}/appointments/${appointmentId}/cancelTwo`);
-                fetchAppointments(userId); // update the list on the page after canceling
-            } catch (error) {
-                console.error('Error cancelling appointment:', error);
+            // Display confirmation dialog
+            const isConfirmed = window.confirm("Are you sure you want to cancel your appointment?");
+            if (isConfirmed) {
+                // User clicked 'OK', proceed with cancellation
+                try {
+                    await axios.patch(`http://localhost:3000/users/${userId}/appointments/${appointmentId}/cancelTwo`);
+                    fetchAppointments(userId); // update the list on the page after canceling
+                } catch (error) {
+                    console.error('Error cancelling appointment:', error);
+                }
+            } else {
+                // User clicked 'Cancel', do nothing
+                console.log("Cancellation aborted");
             }
         }
     };
+    
 
     if (loading) {
         return <div>Loading...</div>;
