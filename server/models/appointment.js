@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-// Define the clinic schema
+// Define the appointment schema
 const appointmentSchema = new mongoose.Schema({
   date: {
     type: Date,
@@ -35,8 +35,11 @@ const appointmentSchema = new mongoose.Schema({
   },
   isAvailable: {
     type: Boolean,
-    required: true
-  }
+    required: true,
+  },
 });
 
-module.exports = mongoose.model("Appointment", appointmentSchema);
+module.exports = mongoose.model(
+  "Appointment",
+  appointmentSchema
+);

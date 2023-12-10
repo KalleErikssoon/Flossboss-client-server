@@ -39,6 +39,9 @@
     padding-bottom: 90%;
   }
 }
+.clinics-top-spacing {
+  margin-top: 100px; /* Adjust this value as needed */
+}
 
 @keyframes App-logo-spin {
   from {
