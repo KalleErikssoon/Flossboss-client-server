@@ -242,8 +242,7 @@ class UserController {
   //This method is a copy of cancelAppointment above, but with added functionality for also
   // updating the booked, pending and available attributes in the db. Also sets the userId to null so that
   //it is not connected to any user, i.e. it can be booked by another user.
-  // Check with team if we should use this one instead
-  async cancelAppointmentTwo(req, res) {
+    async cancelBookedAppointment(req, res) {
     const appointmentId = req.params.appointmentId;
 
     try {

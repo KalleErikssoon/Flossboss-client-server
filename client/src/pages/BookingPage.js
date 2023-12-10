@@ -147,7 +147,7 @@ export default function BookingPage() {
     try {
       await axios.patch(
         `http://localhost:3000/users//${userId}/appointments/${selectedAppointment}/confirm`,
-        { clinicId: clinic_id }
+        { clinicId: clinic_id, userId: userId }
       );
       setShowBookingModal(false);
       alert("Your booking is confirmed");

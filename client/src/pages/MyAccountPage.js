@@ -32,7 +32,7 @@ const MyAccountPage = () => {
             if (isConfirmed) {
                 // User clicked 'OK', proceed with cancellation
                 try {
-                    await axios.patch(`http://localhost:3000/users/${userId}/appointments/${appointmentId}/cancelTwo`);
+                    await axios.patch(`http://localhost:3000/users/${userId}/appointments/${appointmentId}/cancelBooked`);
                     fetchAppointments(userId); // update the list on the page after canceling
                 } catch (error) {
                     console.error('Error cancelling appointment:', error);
