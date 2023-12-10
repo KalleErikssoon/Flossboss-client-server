@@ -37,6 +37,8 @@ const MyAccountPage = () => {
             <p>Date: {appointment.date}</p>
             <p>Start: {appointment.timeTo}</p>
             <p>End: {appointment.timeFrom}</p>
+            <p>Clinic Name: {appointment.clinicName}</p>
+
 
 
             {/* Add more details here */}

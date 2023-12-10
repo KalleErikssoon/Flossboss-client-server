@@ -1,10 +1,12 @@
 const UserModel = require('../models/user');
 const Appointment = require('../models/appointment');
+const ClinicModel = require('../models/clinic');
 const jwt = require('jsonwebtoken');
 const getMQTTHandler = require('../MQTTHandler')
 const HOST = process.env.MQTT_URL;
 const USERNAME = process.env.MQTT_USER;
 const PASSWORD = process.env.MQTT_PASSWORD;
+const mongoose = require('mongoose');
 
 const mqttHandler = getMQTTHandler(HOST, USERNAME, PASSWORD);
 
@@ -192,17 +194,29 @@ async updateByID(req, res){
   }
 
   async getUserAppointments(req, res) {
-    const userId = req.params.id; 
+    const userId = req.params.id;
 
     try {
         // Fetches appointments where _userId matches the logged-in user's ID
         const appointments = await Appointment.find({ _userId: userId });
-        res.json(appointments);
+
+        // Manually fetch the clinic data for each appointment
+        const appointmentsWithClinicData = await Promise.all(appointments.map(async (appointment) => {
+            const clinicId = new mongoose.Types.ObjectId(appointment._clinicId);
+            const clinic = await ClinicModel.findById(clinicId).exec();
+            return {
+                ...appointment.toObject(),
+                clinicName: clinic ? clinic.name : 'Unknown Clinic'
+            };
+        }));
+
+        res.json(appointmentsWithClinicData);
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
-  }
+}
+
 }
   
 
