@@ -1,9 +1,10 @@
 const UserModel = require("../models/user");
+const UsersLoggedIn = require('../models/usersLoggedIn');
 const jwt = require("jsonwebtoken");
 
 class LoginController {
 
-  async login(req, res) {
+  login = async (req, res) => {
     
     const { email, password } = req.body;
 
@@ -16,6 +17,8 @@ class LoginController {
       } else if (user.password !== password) {
         return res.status(401).json({ message: "Incorrect password" });
       }
+      //increment amount of users logged in
+      await this.incrementLoggedInUsers();
 
       const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
         expiresIn: "1h",
@@ -27,6 +30,11 @@ class LoginController {
       console.error(error);
       res.status(500).json("Internal Server error");
     }
+  }
+  
+  incrementLoggedInUsers = async () => {
+    // Find document or create it if it doesn't exist
+    const loggedInInfo = await UsersLoggedIn.findOneAndUpdate({}, { $inc: { loggedInUsers: 1 } }, { upsert: true, new: true });
   }
 }
 
