@@ -2,6 +2,8 @@ const UserModel = require("../models/user");
 const AppointmentModel = require("../models/appointment");
 const jwt = require("jsonwebtoken");
 const getMQTTHandler = require("../MQTTHandler");
+const UsersLoggedIn = require("../models/usersLoggedIn");
+
 const HOST = process.env.MQTT_URL;
 const USERNAME = process.env.MQTT_USER;
 const PASSWORD = process.env.MQTT_PASSWORD;
@@ -234,6 +236,19 @@ class UserController {
     } catch (error) {
       res.status(500).send("internal server error");
     }
+  }
+
+  async decrementLoggedInUsers(req, res) {
+    // Ensure that the count doesn't go below zero
+    try {
+    const loggedInInfo = await UsersLoggedIn.findOne();
+    if (loggedInInfo && loggedInInfo.loggedInUsers > 0) {
+      await UsersLoggedIn.findOneAndUpdate({}, { $inc: { loggedInUsers: -1 } });
+    }
+    res.status(200).send("User logged out");
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
   }
 }
 
