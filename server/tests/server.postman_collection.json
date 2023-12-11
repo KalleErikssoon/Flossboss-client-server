@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "ee9cbca7-83ed-4c95-9a63-391981769a2f",
+		"_postman_id": "4caecdea-fdd7-48ec-b87c-7add328d9472",
 		"name": "server Copy 2",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29410947"
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29427223"
 	},
 	"item": [
 		{
@@ -32,22 +32,14 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"aaa\",\r\n    \"password\": \"testahmed\",\r\n    \"email\": \"testemail@test.com\",\r\n    \"phoneNumber\": 1122836464,\r\n    \"message\": []\r\n     \r\n}",
+					"raw": "{\r\n    \"name\": \"aaa\",\r\n    \"password\": \"testahmed\",\r\n    \"email\": \"testemail@test.com\",\r\n    \"phoneNumber\": \"1122836464\",\r\n    \"message\": \"tesasdfadfadfastmessagedshfafldsljh\"\r\n     \r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/users",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users"
-					]
-				}
+				"url": "{{host}}/users"
 			},
 			"response": []
 		},
@@ -78,15 +70,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/users",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users"
-					]
-				}
+				"url": "{{host}}/users"
 			},
 			"response": []
 		},
@@ -117,15 +101,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/login",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"login"
-					]
-				}
+				"url": "{{host}}/login"
 			},
 			"response": []
 		},
@@ -156,15 +132,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/login",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"login"
-					]
-				}
+				"url": "{{host}}/login"
 			},
 			"response": []
 		},
@@ -195,15 +163,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/login",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"login"
-					]
-				}
+				"url": "{{host}}/login"
 			},
 			"response": []
 		},
@@ -225,15 +185,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/users",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users"
-					]
-				}
+				"url": "{{host}}/users"
 			},
 			"response": []
 		},
@@ -255,16 +207,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/users/{{user}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users",
-						"{{user}}"
-					]
-				}
+				"url": "{{host}}/users/{{user}}"
 			},
 			"response": []
 		},
@@ -286,16 +229,7 @@
 			"request": {
 				"method": "DELETE",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/users/{{user}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users",
-						"{{user}}"
-					]
-				}
+				"url": "{{host}}/users/{{user}}"
 			},
 			"response": []
 		},
@@ -323,22 +257,14 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"aaa\",\r\n    \"password\": \"testahmed\",\r\n    \"email\": \"testemail@test.com\",\r\n    \"phoneNumber\": 1122836464,\r\n    \"message\": []\r\n     \r\n}",
+					"raw": "{\r\n    \"name\": \"aaa\",\r\n    \"password\": \"testahmed\",\r\n    \"email\": \"testemail@test.com\",\r\n    \"phoneNumber\": \"1122836464\",\r\n    \"message\": \"tesasdfadfadfastmessagedshfafldsljh\"\r\n     \r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/users",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users"
-					]
-				}
+				"url": "{{host}}/users"
 			},
 			"response": []
 		},
@@ -360,15 +286,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/clinics",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"clinics"
-					]
-				}
+				"url": "{{host}}/clinics"
 			},
 			"response": []
 		},
@@ -400,23 +318,14 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"date\": \"2023-12-15T00:00:00.000+00:00\",\r\n    \"_clinicId\": \"657323632c6998c2880a3947\",\r\n    \"timeTo\": \"10:00\",\r\n    \"timeFrom\": \"11:00\",\r\n    \"_dentistId\": \"65686817678d11680fafdb5c\",\r\n    \"_userId\": \"65686817678d11680fafdb5c\",\r\n    \"isAvailable\": true,\r\n    \"isPending\": false,\r\n    \"isBooked\": false\r\n}",
+					"raw": "{\r\n    \"date\": \"2023-12-31\",\r\n    \"_clinicId\": \"656b98cdd6ac46835c9ee97d\",\r\n    \"timeTo\": \"10:00\",\r\n    \"timeFrom\": \"11:00\",\r\n    \"_dentistId\": \"65686817678d11680fafdb5c\",\r\n    \"isAvailable\": true,\r\n    \"isPending\": false,\r\n    \"isBooked\": false\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/clinics/appointments",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"clinics",
-						"appointments"
-					]
-				}
+				"url": "{{host}}/clinics/appointments"
 			},
 			"response": []
 		},
@@ -438,18 +347,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/clinics/{{clinicid}}/appointments/calendar",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"clinics",
-						"{{clinicid}}",
-						"appointments",
-						"calendar"
-					]
-				}
+				"url": "{{host}}/clinics/{{clinicid}}/appointments/calendar"
 			},
 			"response": []
 		},
@@ -472,13 +370,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/clinics/{{clinicid}}/appointments?selectedDate={{date}}",
+					"raw": "{{host}}/clinics/656b98cdd6ac46835c9ee97d/appointments?selectedDate={{date}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"clinics",
-						"{{clinicid}}",
+						"656b98cdd6ac46835c9ee97d",
 						"appointments"
 					],
 					"query": [
@@ -488,6 +386,41 @@
 						}
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "new appointment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"bodyData = JSON.parse(responseBody);\r",
+							"appointmentId = bodyData._id;\r",
+							"pm.collectionVariables.set(\"appointment\", appointmentId);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function() {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2023-12-15\",\r\n    \"_clinicId\": \"655cb0c8596ef74251a5cc3d\",\r\n    \"timeTo\": \"10:00\",\r\n    \"timeFrom\": \"11:00\",\r\n    \"_dentistId\": \"65686817678d11680fafdb5c\",\r\n    \"isAvailable\": true,\r\n    \"isPending\": false,\r\n    \"isBooked\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{host}}/clinics/appointments"
 			},
 			"response": []
 		},
@@ -509,19 +442,7 @@
 			"request": {
 				"method": "PATCH",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/users/{{user}}/appointments/{{appointment}}/confirm",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users",
-						"{{user}}",
-						"appointments",
-						"{{appointment}}",
-						"confirm"
-					]
-				}
+				"url": "{{host}}/users/{{user}}/appointments/{{appointment}}/confirm"
 			},
 			"response": []
 		},
@@ -543,19 +464,7 @@
 			"request": {
 				"method": "PATCH",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/users/{{user}}/appointments/{{appointment}}/pending",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users",
-						"{{user}}",
-						"appointments",
-						"{{appointment}}",
-						"pending"
-					]
-				}
+				"url": "{{host}}/users/{{user}}/appointments/{{appointment}}/pending"
 			},
 			"response": []
 		},
@@ -577,19 +486,7 @@
 			"request": {
 				"method": "PATCH",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/users/{{user}}/appointments/{{appointment}}/cancel",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users",
-						"{{user}}",
-						"appointments",
-						"{{appointment}}",
-						"cancel"
-					]
-				}
+				"url": "{{host}}/users/{{user}}/appointments/{{appointment}}/cancel"
 			},
 			"response": []
 		},
@@ -611,16 +508,7 @@
 			"request": {
 				"method": "DELETE",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/users/{{user}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users",
-						"{{user}}"
-					]
-				}
+				"url": "{{host}}/users/{{user}}"
 			},
 			"response": []
 		},
@@ -642,17 +530,7 @@
 			"request": {
 				"method": "DELETE",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/clinics/appointments/{{appointment}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"clinics",
-						"appointments",
-						"{{appointment}}"
-					]
-				}
+				"url": "{{host}}/clinics/appointments/{{appointment}}"
 			},
 			"response": []
 		},
@@ -686,15 +564,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/users",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users"
-					]
-				}
+				"url": "{{host}}/users"
 			},
 			"response": []
 		},
@@ -728,15 +598,68 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/login",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"login"
-					]
+				"url": "{{host}}/login"
+			},
+			"response": []
+		},
+		{
+			"name": "New Appointment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"bodyData = JSON.parse(responseBody);\r",
+							"appointmentId = bodyData._id;\r",
+							"date = bodyData.date;\r",
+							"clinicId = bodyData._clinicId;\r",
+							"pm.collectionVariables.set(\"clinicid\", clinicId);\r",
+							"pm.collectionVariables.set(\"appointment\", appointmentId);\r",
+							"pm.collectionVariables.set(\"date\", date);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function() {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
 				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"date\": \"2023-12-20\",\r\n  \"timeTo\": \"12:00\",\r\n  \"timeFrom\": \"13:00\",\r\n  \"_dentistId\": \"12345\",\r\n  \"_userId\": \"6565ba6a733873a596f71da7\",\r\n  \"_clinicId\": \"656b98cdd6ac46835c9ee97d\",\r\n  \"isBooked\": true,\r\n  \"isPending\": false,\r\n  \"isAvailable\": true\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{host}}/clinics/appointments"
+			},
+			"response": []
+		},
+		{
+			"name": "User Cancel Booking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": "{{host}}/users/{{userId}}/appointments/{{appointment}}/cancelBooked"
 			},
 			"response": []
 		},
@@ -778,15 +701,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{host}}/update",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"update"
-					]
-				}
+				"url": "{{host}}/update"
 			},
 			"response": []
 		},
@@ -808,16 +723,29 @@
 			"request": {
 				"method": "DELETE",
 				"header": [],
-				"url": {
-					"raw": "{{host}}/users/{{userId}}",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"users",
-						"{{userId}}"
-					]
+				"url": "{{host}}/users/{{userId}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Appointment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
 				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "{{host}}/clinics/appointments/{{appointment}}"
 			},
 			"response": []
 		}

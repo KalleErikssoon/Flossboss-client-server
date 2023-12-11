@@ -1,10 +1,13 @@
-const UserModel = require("../models/user");
+const UserModel = require('../models/user');
 const AppointmentModel = require("../models/appointment");
-const jwt = require("jsonwebtoken");
-const getMQTTHandler = require("../MQTTHandler");
+const ClinicModel = require('../models/clinic');
+
+const jwt = require('jsonwebtoken');
+const getMQTTHandler = require('../MQTTHandler')
 const HOST = process.env.MQTT_URL;
 const USERNAME = process.env.MQTT_USER;
 const PASSWORD = process.env.MQTT_PASSWORD;
+const mongoose = require('mongoose');
 
 const mqttHandler = getMQTTHandler(HOST, USERNAME, PASSWORD);
 
@@ -235,6 +238,61 @@ class UserController {
       res.status(500).send("internal server error");
     }
   }
+
+  //This method is a copy of cancelAppointment above, but with added functionality for also
+  // updating the booked, pending and available attributes in the db. Also sets the userId to null so that
+  //it is not connected to any user, i.e. it can be booked by another user.
+    async cancelBookedAppointment(req, res) {
+      const userId = req.params.id;
+      const appointmentId = req.params.appointmentId;
+      const clinicId = req.body.clinicId;
+      try {
+        const topic = "flossboss/appointment/request/canceluser";
+        const message = `{
+          "_id": "${appointmentId}",
+          "_userId": "${userId}",
+          "_clinicId": "${clinicId}"
+        }`;
+        
+        mqttHandler.publish(topic, message);
+        res.status(200).send("Booking cancelled");
+      } catch (error) {
+        res.status(500).send("internal server error");
+      }
+    }
+
+
+  async getUserAppointments(req, res) {
+    const userId = req.params.id;
+
+    try {
+      
+        // Fetches appointments where _userId in the appointment object matches the logged-in user's ID
+        // and the isBooked attribute is set to true
+        const appointments = await AppointmentModel.find({ 
+          _userId: userId, 
+          isBooked: true 
+        });
+
+        // Manually fetch the clinic data for each appointment
+        const appointmentsWithClinicData = await Promise.all(appointments.map(async (appointment) => {
+            const clinicId = new mongoose.Types.ObjectId(appointment._clinicId);
+            const clinic = await ClinicModel.findById(clinicId).exec();
+            return {
+                ...appointment.toObject(),
+                clinicName: clinic ? clinic.name : 'Unknown Clinic'
+            };
+        }));
+
+        res.json(appointmentsWithClinicData);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
 }
+
+}
+  
+
 
 module.exports = UserController;
