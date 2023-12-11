@@ -243,34 +243,23 @@ class UserController {
   // updating the booked, pending and available attributes in the db. Also sets the userId to null so that
   //it is not connected to any user, i.e. it can be booked by another user.
     async cancelBookedAppointment(req, res) {
-    const appointmentId = req.params.appointmentId;
-
-    try {
-        // Update the appointment status in the database
-        await AppointmentModel.findByIdAndUpdate(appointmentId, {
-            isBooked: false,
-            isPending: false,
-            isAvailable: true,
-            _userId: null
-        });
-
-        // Then continue with MQTT message publishing
-        const userId = req.params.id;
-        const clinicId = req.body.clinicId;
-        const topic = "flossboss/appointment/request/cancel";
+      const userId = req.params.id;
+      const appointmentId = req.params.appointmentId;
+      const clinicId = req.body.clinicId;
+      try {
+        const topic = "flossboss/appointment/request/canceluser";
         const message = `{
-            "_id": "${appointmentId}",
-            "_userId": "${userId}",
-            "_clinicId": "${clinicId}"
+          "_id": "${appointmentId}",
+          "_userId": "${userId}",
+          "_clinicId": "${clinicId}"
         }`;
+        
         mqttHandler.publish(topic, message);
-
-        res.status(200).send("Cancellation processed");
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Internal server error");
+        res.status(200).send("Booking cancelled");
+      } catch (error) {
+        res.status(500).send("internal server error");
+      }
     }
-}
 
 
   async getUserAppointments(req, res) {
