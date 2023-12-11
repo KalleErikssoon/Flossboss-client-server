@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from "google-maps-react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
+import swedishRegions from "../swedishRegions";
 
-const CustomMap = ({ clinics, google }) => {
+const CustomMap = ({ clinics, google, selectedRegion, clinicsAvailable }) => {
   const [activeClinic, setActiveClinic] = React.useState(null);
   const navigate = useNavigate();
+  const mapRef = useRef(null);
 
   const memoizedMarkers = React.useMemo(() => {
     return clinics.map((clinic) => (
@@ -29,6 +31,20 @@ const CustomMap = ({ clinics, google }) => {
       }, 0);
     }
   });
+  React.useEffect(() => {
+    if (clinicsAvailable && selectedRegion && mapRef.current) {
+      const region = swedishRegions.find((r) => r.name === selectedRegion);
+      if (region) {
+        const { latitude, longitude, zoom } = region;
+        mapRef.current.map.panTo({ lat: latitude, lng: longitude });
+        mapRef.current.map.setZoom(zoom);
+      }
+    } else {
+      // If the condition is not met, revert back to the initial settings
+      mapRef.current.map.panTo({ lat: 63.1282, lng: 18.6435 }); // Sweden's coordinates
+      mapRef.current.map.setZoom(5); // Default zoom level
+    }
+  }, [selectedRegion, clinicsAvailable]);
 
   const onMarkerClick = (clinic) => {
     setActiveClinic(clinic);
@@ -39,34 +55,51 @@ const CustomMap = ({ clinics, google }) => {
   };
 
   const onBookClick = () => {
-    navigate('/booking', { state: { clinicId: activeClinic._id, clinicName: activeClinic.name} }); 
+    navigate("/booking", {
+      state: { clinicId: activeClinic._id, clinicName: activeClinic.name },
+    });
   };
 
   return (
-      <Map google={google} zoom={9} initialCenter={{ lat: 57.7289, lng: 11.9746 }}>
-        {memoizedMarkers}
+    <Map
+      google={google}
+      zoom={5}
+      ref={mapRef}
+      initialCenter={{
+        lat: 63.1282,
+        lng: 18.6435, // Sweden's coordinates
+      }}
+    >
+      {memoizedMarkers}
 
-        <InfoWindow
-          position={
-            activeClinic ? { lat: activeClinic.latitude, lng: activeClinic.longitude } : null
-          }
-          visible={activeClinic != null}
-          onClose={onCloseInfoWindow}
-        >
-          <div>
-            <h2>{activeClinic?.name}</h2>
-            <p>Opening Hours: {activeClinic?.openingHours}</p>
-            {activeClinic?.slotsAvailable ? (
-              <button id="bookButton" onClick={onBookClick}>Book</button>
-            ) : (
-              <p>No slots available for the next months.</p>
-            )}
-          </div>
-        </InfoWindow>
-      </Map>
+      <InfoWindow
+        position={
+          activeClinic
+            ? { lat: activeClinic.latitude, lng: activeClinic.longitude }
+            : null
+        }
+        visible={activeClinic != null}
+        onClose={onCloseInfoWindow}
+      >
+        <div>
+          <h2>{activeClinic?.name}</h2>
+          <p>
+            Opening Hours: {activeClinic?.openFrom} - {activeClinic?.openTo}
+          </p>
+          <p>Address: {activeClinic?.address}</p>
+          {activeClinic?.slotsAvailable ? (
+            <button id="bookButton" onClick={onBookClick}>
+              Book
+            </button>
+          ) : (
+            <p>No slots available for the next months.</p>
+          )}
+        </div>
+      </InfoWindow>
+    </Map>
   );
 };
 
 export default GoogleApiWrapper({
-  apiKey: process.env.REACT_APP_GOOGLE_MAPS_KEY
+  apiKey: process.env.REACT_APP_GOOGLE_MAPS_KEY,
 })(CustomMap);
