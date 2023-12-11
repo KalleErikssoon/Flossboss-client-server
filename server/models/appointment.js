@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-// Define the clinic schema
+// Define the appointment schema
 const appointmentSchema = new mongoose.Schema({
   date: {
     type: Date,
