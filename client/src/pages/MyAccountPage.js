@@ -35,7 +35,7 @@ const MyAccountPage = () => {
                     await axios.patch(`http://localhost:3000/users/${userId}/appointments/${appointmentId}/cancelBooked`);
                     setTimeout(() => {
                         fetchAppointments(userId); // update the list on the page after canceling
-                    }, 500); // Delay of 2 seconds (2000 milliseconds)
+                    }, 500); 
                 } catch (error) {
                     console.error('Error cancelling appointment:', error);
                 }
