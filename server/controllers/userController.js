@@ -27,17 +27,18 @@ class UserController {
         messages: messages,
       });
 
-      const existingUser = await UserModel.findOne({ name });
+      const existingUser = await UserModel.findOne({ email });
 
       if (existingUser) {
-        return res.status(400).send("User already exists");
-      }
+        return res.status(400).send("A user with that email already exists");
+      } else {
 
       await newUser.save();
 
       res.status(201).json(newUser);
+      }
     } catch (err) {
-      res.status(500).json({ err: "ERROR" });
+      res.status(500).json({ err: err });
     }
   }
 
