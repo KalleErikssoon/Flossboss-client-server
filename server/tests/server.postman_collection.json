@@ -32,7 +32,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"aaa\",\r\n    \"password\": \"testahmed\",\r\n    \"email\": \"testemail@test.com\",\r\n    \"phoneNumber\": \"1122836464\",\r\n    \"message\": \"tesasdfadfadfastmessagedshfafldsljh\"\r\n     \r\n}",
+					"raw": "{\r\n    \"name\": \"aaa\",\r\n    \"password\": \"testahmed\",\r\n    \"email\": \"testemail@test.com\",\r\n    \"phoneNumber\": 1122836464,\r\n    \"message\": []\r\n     \r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -323,7 +323,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"aaa\",\r\n    \"password\": \"testahmed\",\r\n    \"email\": \"testemail@test.com\",\r\n    \"phoneNumber\": \"1122836464\",\r\n    \"message\": \"tesasdfadfadfastmessagedshfafldsljh\"\r\n     \r\n}",
+					"raw": "{\r\n    \"name\": \"aaa\",\r\n    \"password\": \"testahmed\",\r\n    \"email\": \"testemail@test.com\",\r\n    \"phoneNumber\": 1122836464,\r\n    \"message\": []\r\n     \r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -400,7 +400,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"date\": \"2023-12-31\",\r\n    \"_clinicId\": \"656b98cdd6ac46835c9ee97d\",\r\n    \"timeTo\": \"10:00\",\r\n    \"timeFrom\": \"11:00\",\r\n    \"_dentistId\": \"65686817678d11680fafdb5c\",\r\n    \"isAvailable\": true,\r\n    \"isPending\": false,\r\n    \"isBooked\": false\r\n}",
+					"raw": "{\r\n    \"date\": \"2023-12-15T00:00:00.000+00:00\",\r\n    \"_clinicId\": \"657323632c6998c2880a3947\",\r\n    \"timeTo\": \"10:00\",\r\n    \"timeFrom\": \"11:00\",\r\n    \"_dentistId\": \"65686817678d11680fafdb5c\",\r\n    \"_userId\": \"65686817678d11680fafdb5c\",\r\n    \"isAvailable\": true,\r\n    \"isPending\": false,\r\n    \"isBooked\": false\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -472,13 +472,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/clinics/656b98cdd6ac46835c9ee97d/appointments?selectedDate={{date}}",
+					"raw": "{{host}}/clinics/{{clinicid}}/appointments?selectedDate={{date}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"clinics",
-						"656b98cdd6ac46835c9ee97d",
+						"{{clinicid}}",
 						"appointments"
 					],
 					"query": [
@@ -486,50 +486,6 @@
 							"key": "selectedDate",
 							"value": "{{date}}"
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "new appointment",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"bodyData = JSON.parse(responseBody);\r",
-							"appointmentId = bodyData._id;\r",
-							"pm.collectionVariables.set(\"appointment\", appointmentId);\r",
-							"\r",
-							"pm.test(\"Status code is 201\", function() {\r",
-							"    pm.response.to.have.status(201);\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"date\": \"2023-12-15\",\r\n    \"_clinicId\": \"655cb0c8596ef74251a5cc3d\",\r\n    \"timeTo\": \"10:00\",\r\n    \"timeFrom\": \"11:00\",\r\n    \"_dentistId\": \"65686817678d11680fafdb5c\",\r\n    \"isAvailable\": true,\r\n    \"isPending\": false,\r\n    \"isBooked\": false\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{host}}/clinics/appointments",
-					"host": [
-						"{{host}}"
-					],
-					"path": [
-						"clinics",
-						"appointments"
 					]
 				}
 			},
