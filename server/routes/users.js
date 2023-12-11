@@ -13,6 +13,7 @@ router.patch('/:id', controller.updateByID);
 router.patch('/:id/appointments/:appointmentId/pending', controller.pendingAppointment);
 router.patch('/:id/appointments/:appointmentId/confirm', controller.confirmAppointment);
 router.patch('/:id/appointments/:appointmentId/cancel', controller.cancelAppointment);
+router.put('/logout', controller.decrementLoggedInUsers);
 router.patch('/:id/appointments/:appointmentId/cancelBooked', controller.cancelBookedAppointment);
 
 

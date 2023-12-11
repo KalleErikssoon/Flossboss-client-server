@@ -1,9 +1,9 @@
 const UserModel = require('../models/user');
 const AppointmentModel = require("../models/appointment");
+const jwt = require("jsonwebtoken");
+const getMQTTHandler = require("../MQTTHandler");
+const UsersLoggedIn = require("../models/usersLoggedIn");
 const ClinicModel = require('../models/clinic');
-
-const jwt = require('jsonwebtoken');
-const getMQTTHandler = require('../MQTTHandler')
 const HOST = process.env.MQTT_URL;
 const USERNAME = process.env.MQTT_USER;
 const PASSWORD = process.env.MQTT_PASSWORD;
@@ -240,6 +240,18 @@ class UserController {
     }
   }
 
+  async decrementLoggedInUsers(req, res) {
+    // Ensure that the count doesn't go below zero
+    try {
+    const loggedInInfo = await UsersLoggedIn.findOne();
+    if (loggedInInfo && loggedInInfo.loggedInUsers > 0) {
+      await UsersLoggedIn.findOneAndUpdate({}, { $inc: { loggedInUsers: -1 } });
+    }
+    res.status(200).send("User logged out");
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+  }
   //This method is a copy of cancelAppointment above, but with added functionality for also
   // updating the booked, pending and available attributes in the db. Also sets the userId to null so that
   //it is not connected to any user, i.e. it can be booked by another user.
@@ -290,10 +302,7 @@ class UserController {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
+  }
 }
-
-}
-  
-
 
 module.exports = UserController;

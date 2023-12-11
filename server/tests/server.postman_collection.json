@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "4caecdea-fdd7-48ec-b87c-7add328d9472",
+		"_postman_id": "6f0d3be7-84d6-418a-a7f2-ae873e183376",
 		"name": "server Copy 2",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
-		"_exporter_id": "29427223"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29410899"
 	},
 	"item": [
 		{
@@ -208,6 +208,53 @@
 				"method": "GET",
 				"header": [],
 				"url": "{{host}}/users/{{user}}"
+			},
+			"response": []
+		},
+		{
+			"name": "log out",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "usertoken",
+						"value": "{{authToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"New Name Test\",\r\n  \"phoneNumber\": \"1234567890\",\r\n  \"password\": \"newpassword123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/users/logout",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"users",
+						"logout"
+					]
+				}
 			},
 			"response": []
 		},
