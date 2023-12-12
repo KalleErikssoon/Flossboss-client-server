@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import Logo from '../assets/FlossBossLogo.png';
-import UserLogo from '../assets/UserLogo.png'
+import UserLogo from '../assets/UserLogo_BlueGradient.png'
 import { AppContext } from '../context/AppProvider';
 import LoginContainer from '../components/LoginContainer'
 import { logout } from '../utils/logout';
