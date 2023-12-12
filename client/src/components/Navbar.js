@@ -67,44 +67,56 @@ const NavbarComponent = () => {
     };
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light p-1">
-          <a className="navbar-brand mx-auto" href="/" style={{ fontSize: '35px', fontFamily: 'Adiro'}}>
+        <>
+        <style>
+                {`
+                @media (max-width: 768px) {
+                    .navbar-brand-text {
+                        display: none;
+                    }
+                }
+                .navbar-custom {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                }
+                .right-nav {
+                    display: flex;
+                    align-items: center;
+                }
+                `}
+            </style>
+
+        <nav className="navbar navbar-expand-lg navbar-light bg-light p-1 navbar-custom">
+          <a className="navbar-brand" href="/" style={{ fontSize: '35px', fontFamily: 'Adiro'}}>
             <img src={Logo} alt="Logo" style={{ height: 'auto', width: '70px' }} />
-            FlossBoss
+            <span className="navbar-brand-text">FlossBoss</span>
           </a>
           
-          <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul className="navbar-nav align-items-lg-center">
-              {/* Other nav items here */}
+          <div className="right-nav">
               {isLoggedIn && (
                         // These items will only be displayed if a user is logged in
-                        <>
-                            <li className="nav-item">
-                                <a className="nav-link" href="/myaccount">My Account</a>
-                            </li>
-                        </>
+                             <a className="nav-link" href="/myaccount">My Account</a>
                     )}
-            </ul>
-            <div style={{ textAlign: 'center', marginRight: '20px', marginLeft: '3  0px' }}>
-              <button className="user-logo-button" 
-                style={{ background: 'none', border: 'none', padding: 0, fontSize: '18px', fontFamily: 'Adiro' }} 
-                onClick={handleUserLogoClick}>
 
-                <img src={UserLogo} alt="User Logo" style={{ height: 'auto', width: '35px' }} />
-                {!isLoggedIn && <div>Login/Register</div>}
-                {isLoggedIn && <div>{userName}</div>}
-              </button>
-            </div>
+            <button className="user-logo-button" 
+                        style={{ background: 'none', border: 'none', padding: 0, marginLeft: '20px', fontSize: '18px', fontFamily: 'Adiro' }} 
+                        onClick={handleUserLogoClick}>
+                        <img src={UserLogo} alt="User Logo" style={{ height: 'auto', width: '35px' }} />
+                        {!isLoggedIn && <div>Login/Register</div>}
+                        {isLoggedIn && <div>{userName}</div>}
+                    </button>
             {showPopupMenu && <PopupMenu />}
           </div>
-  
+        </nav>
           {showUserModal && (
               <LoginContainer
                   handleClose={() => setShowUserModal(false)}
                   visible={showUserModal}
               />
           )}
-        </nav>
+        </>
       );
   };
 
