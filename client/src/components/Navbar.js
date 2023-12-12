@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import Logo from '../assets/FlossBossLogo.png';
+import Logo from '../assets/FlossBossNewLogo.png';
 import UserLogo from '../assets/UserLogo_BlueGradient.png'
 import { AppContext } from '../context/AppProvider';
 import LoginContainer from '../components/LoginContainer'
@@ -28,7 +28,8 @@ const NavbarComponent = () => {
                 backgroundColor: 'white', 
                 border: '1px solid grey', 
                 borderRadius: '5px', 
-                padding: '15px' }}>
+                padding: '15px',
+                zIndex: 1000,  }}>
 
             <Link to="/settings" style={{
                 ...buttonStyle, 
@@ -75,23 +76,32 @@ const NavbarComponent = () => {
                         display: none;
                     }
                 }
+                .left-nav {
+                    padding-left: 10px;
+                }
+                .left-nav-two {
+                    padding-left: 5px;
+                }
                 .navbar-custom {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     width: 100%;
+                    background-color: #F1F2F5;
+                    
                 }
                 .right-nav {
                     display: flex;
                     align-items: center;
+                    padding-right: 15px;
                 }
                 `}
             </style>
 
-        <nav className="navbar navbar-expand-lg navbar-light bg-light p-1 navbar-custom">
-          <a className="navbar-brand" href="/" style={{ fontSize: '35px', fontFamily: 'Adiro'}}>
+        <nav className="navbar navbar-expand-lg navbar-light p-1 navbar-custom">
+          <a className="navbar-brand left-nav" href="/" style={{ fontSize: '35px', fontFamily: 'Adiro'}}>
             <img src={Logo} alt="Logo" style={{ height: 'auto', width: '70px' }} />
-            <span className="navbar-brand-text">FlossBoss</span>
+            <span className="navbar-brand-text left-nav-two">FlossBoss</span>
           </a>
           
           <div className="right-nav">
