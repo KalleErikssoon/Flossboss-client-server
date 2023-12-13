@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useRef, useEffect } from 'react';
 import Logo from '../assets/FlossBossNewLogo.png';
 import UserLogo from '../assets/UserLogo_BlueGradient.png'
 import { AppContext } from '../context/AppProvider';
@@ -12,6 +12,26 @@ const NavbarComponent = () => {
     const { isLoggedIn, showUserModal, setShowUserModal } = useContext(AppContext);
     const [showPopupMenu, setShowPopupMenu] = useState(false);
     const userName = localStorage.getItem('userName'); 
+    const PopupMenuRef = useRef(null);
+
+
+    const handleClickOutside = (event) => {
+        if (PopupMenuRef.current && !PopupMenuRef.current.contains(event.target)) {
+            setShowPopupMenu(false);
+        }
+    }
+
+    useEffect(() => {
+        if (showPopupMenu) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [showPopupMenu]);
 
 
     const PopupMenu = () => {
@@ -21,7 +41,7 @@ const NavbarComponent = () => {
             fontFamily: 'Arial'
         }
         return (
-            <div style={{ 
+            <div ref= {PopupMenuRef} style={{ 
                 position: 'absolute', 
                 right: '20px', 
                 top: '60px', 

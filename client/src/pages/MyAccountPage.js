@@ -60,9 +60,9 @@ const MyAccountPage = () => {
                         <Card className="mb-3">
                             <Card.Body>
                                 <Card.Title>{appointment.clinicName}</Card.Title>
-                                <div>Date: {appointment.date}</div>
-                                <div>Start: {appointment.timeTo}</div>
-                                <div>End: {appointment.timeFrom}</div>
+                                <div>Date: {appointment.date.slice(0, 10)}</div>
+                                <div>Start: {appointment.timeFrom}</div>
+                                <div>End: {appointment.timeTo}</div>
                                 <div>Clinic Name: {appointment.clinicName}</div>
                                 <Button 
                                     variant="danger" 

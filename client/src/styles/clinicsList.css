@@ -1,5 +1,6 @@
 .clinics-list {
     overflow-y: auto;
+    max-height: 400px;
     list-style: none;
     padding: 0;
     margin: 0;
