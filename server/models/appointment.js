@@ -40,7 +40,7 @@ const appointmentSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model(
-  "timeslot-testing",
+  "timeslots",
   appointmentSchema,
-  "timeslot-testing"
+  
 );

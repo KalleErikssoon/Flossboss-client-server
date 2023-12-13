@@ -42,7 +42,6 @@ const clinicSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model(
-  "clinic-testing",
+  "clinics",
   clinicSchema,
-  "clinic-testing"
 );
