@@ -12,8 +12,7 @@ const userRouter = require("./routes/users");
 const loginRouter = require("./routes/login");
 const clinicRouter = require("./routes/clinic");
 const settingsRouter = require("./routes/userSettings");
-const cluster = require("cluster");
-const os = require("os");
+const ClinicController = require("./controllers/clinicController");
 
 const app = express();
 const http = require("http");
@@ -33,12 +32,22 @@ app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+const HOST = process.env.MQTT_URL;
+const USERNAME = process.env.MQTT_USER;
+const PASSWORD = process.env.MQTT_PASSWORD;
 
+const mqttHandler = getMQTTHandler(HOST, USERNAME, PASSWORD);
+
+// Connect to the MQTT broker
+mqttHandler.connect();
+
+// Initialize Clinic Controller with MQTT Handler
+const clinicController = new ClinicController(mqttHandler);
 // Routers
 app.use("/", indexRouter);
 app.use("/users", userRouter);
 app.use("/login", loginRouter);
-app.use("/clinics", clinicRouter);
+app.use("/clinics", clinicRouter(clinicController));
 app.use("/update", settingsRouter);
 
 // Connect to database
@@ -64,20 +73,6 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-const HOST = process.env.MQTT_URL;
-const USERNAME = process.env.MQTT_USER;
-const PASSWORD = process.env.MQTT_PASSWORD;
-
-const mqttHandler = getMQTTHandler(HOST, USERNAME, PASSWORD);
-
-// Connect to the MQTT broker
-mqttHandler.connect();
-
-// Subscribe to a topic
-mqttHandler.subscribe("flossbosstest");
-
-// Publish a message to a topic
-mqttHandler.publish("flossbosstest", "Hello Mqtt");
 const server = http.createServer(app);
 
 app.listen(process.env.PORT || 3000, () => {
