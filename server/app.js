@@ -24,7 +24,11 @@ app.set("view engine", "jade");
 app.use(logger("dev"));
 app.use(express.json());
 const corsOptions = {
-  origin: "http://localhost:3001",
+  origin: [
+    "http://localhost:3001",
+    "http://localhost:3002",
+    "http://localhost:3003",
+  ],
   credentials: true,
 };
 
