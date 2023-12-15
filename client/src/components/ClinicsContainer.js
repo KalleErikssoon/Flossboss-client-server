@@ -6,6 +6,7 @@ import CustomMap from "./CustomMap";
 import "../App.css";
 import ClinicsList from "./ClinicsList";
 import swedishRegions from "../swedishRegions";
+import {useNavigate} from 'react-router-dom'
 
 const ClinicsContainer = () => {
   const [clinics, setClinics] = React.useState([]);
@@ -14,7 +15,9 @@ const ClinicsContainer = () => {
   const [selectedRegion, setSelectedRegion] = React.useState("");
   const [confirmedRegion, setConfirmedRegion] = React.useState("");
   const [submitClicked, setSubmitClicked] = React.useState(false);
+  const [hasServerError, setServerError] = React.useState(false);
 
+  const navigate = useNavigate();
   // This Function will retreive all clinics regardless if they are available or not
 
   const fetchClinicsData = async (dateFrom, dateTo, shouldFilter, Region) => {
@@ -46,10 +49,16 @@ const ClinicsContainer = () => {
         setClinics(clinicsWithAvailability);
       }
     } catch (error) {
-      console.error("Error fetching clinics:", error);
+      if(error.response && error.response.status === 500) {
+        setServerError(true);
+      } else if (!error.response || error.code === 'ECONNABORTED')
+        setServerError(true);
     }
   };
 
+  if(hasServerError === true) {
+    navigate('/error')
+  }
   React.useEffect(() => {
     fetchClinicsData(null, null, false, "");
   }, []); // This runs only once when the component mounts
