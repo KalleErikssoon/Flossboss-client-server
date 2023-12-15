@@ -19,7 +19,9 @@ class ClinicController {
     this.mqttHandler.client.on("message", (topic, message) => {
       try {
         const appointment = JSON.parse(message.toString());
-        if (appointment._clinicId === global.clinicID) {
+        console.log(appointment)
+        const existsDate = appointment.hasOwnProperty("date");
+        if (appointment._clinicId === global.clinicID && existsDate) {
           const dateString = new Date(appointment.date.$date)
             .toISOString()
             .split("T")[0];
