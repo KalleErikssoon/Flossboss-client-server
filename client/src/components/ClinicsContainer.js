@@ -1,5 +1,6 @@
 import React from "react";
-import axios from "axios";
+//import axios from "axios";
+import axiosInstance from "../axiosInterceptor";
 import { Container, Row, Col } from "react-bootstrap";
 import { useCallback } from "react";
 import CustomMap from "./CustomMap";
@@ -19,11 +20,11 @@ const ClinicsContainer = () => {
 
   const fetchClinicsData = async (dateFrom, dateTo, shouldFilter, Region) => {
     try {
-      const response = await axios.get("http://localhost:3000/clinics");
+      const response = await axiosInstance.get("http://localhost:3000/clinics");
       const clinicsWithAvailability = await Promise.all(
         response.data.map(async (clinic) => {
           try {
-            const availabilityResponse = await axios.get(
+            const availabilityResponse = await axiosInstance.get(
               `http://localhost:3000/clinics/appointments/available/${clinic._id}?startDate=${dateFrom}&endDate=${dateTo}&region=${Region}`
             );
             return { ...clinic, slotsAvailable: availabilityResponse.data };
