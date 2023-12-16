@@ -7,7 +7,6 @@ import BookingUnavailable from "../components/BookingUnavailable";
 import "react-calendar/dist/Calendar.css";
 import "../styles/bookingPage.css";
 import Breadcrumb from "../components/Breadcrumb";
-import axios from "axios";
 import { useLocation } from "react-router-dom";
 
 export default function BookingPage() {
