@@ -4,6 +4,7 @@ import Calendar from "../components/Calendar";
 import TimeSlot from "../components/TimeSlot";
 import ConfirmBooking from "../components/ConfirmBooking";
 import BookingUnavailable from "../components/BookingUnavailable";
+import LoadingSpinner from "../components/LoadingSpinner";
 import "react-calendar/dist/Calendar.css";
 import "../styles/bookingPage.css";
 import Breadcrumb from "../components/Breadcrumb";
@@ -29,6 +30,7 @@ export default function BookingPage() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [dates, setDates] = useState([]);
   const [availableTimeSlots, setTimeSlots] = useState([]);
+  const [isBooking, setIsBooking] = useState(false);
 
   //method called on entering page to get all appointments available from database in the date interval
   React.useEffect(() => {
@@ -147,18 +149,22 @@ export default function BookingPage() {
   //makes an axios request to the server for patching the appointment to pending
   const confirmBooking = async () => {
     const clinic_id = clinicId;
+    setShowBookingModal(false);
+    setIsBooking(true); // Start loading
     try {
       await axiosInstance.patch(
         `http://localhost:3000/users//${userId}/appointments/${selectedAppointment}/confirm`,
         { clinicId: clinic_id }
       );
-      setShowBookingModal(false);
+
       alert("Your booking is confirmed");
       if (selectedDate) {
         handleDateSelect(selectedDate);
       }
     } catch (error) {
       console.error("Error confirming appointment:", error);
+    } finally {
+      setIsBooking(false); // Stop loading
     }
   };
 
@@ -236,6 +242,7 @@ export default function BookingPage() {
           </div>
         </div>
       </div>
+      {isBooking && <LoadingSpinner />}
       <ConfirmBooking
         show={showBookingModal}
         onHide={() => setShowBookingModal(false)}
