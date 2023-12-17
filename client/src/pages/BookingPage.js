@@ -1,12 +1,13 @@
 import React, { useState } from "react";
+import axiosInstance from "../axiosInterceptor";
 import Calendar from "../components/Calendar";
 import TimeSlot from "../components/TimeSlot";
 import ConfirmBooking from "../components/ConfirmBooking";
 import BookingUnavailable from "../components/BookingUnavailable";
+import LoadingSpinner from "../components/LoadingSpinner";
 import "react-calendar/dist/Calendar.css";
 import "../styles/bookingPage.css";
 import Breadcrumb from "../components/Breadcrumb";
-import axios from "axios";
 import { useLocation } from "react-router-dom";
 
 export default function BookingPage() {
@@ -29,6 +30,7 @@ export default function BookingPage() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [dates, setDates] = useState([]);
   const [availableTimeSlots, setTimeSlots] = useState([]);
+  const [isBooking, setIsBooking] = useState(false);
 
   //method called on entering page to get all appointments available from database in the date interval
   React.useEffect(() => {
@@ -36,7 +38,7 @@ export default function BookingPage() {
 
     async function getAppointment() {
       try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           `http://localhost:3000/clinics/${clinicId}/appointments/calendar`
         );
         if (isComponentMounted) {
@@ -96,8 +98,9 @@ export default function BookingPage() {
     const clinic_id = clinicId;
     setSelectedTimeSlot(timeSlot);
     setSelectedAppointment(appointment);
-    setTimeout(async () => {
-      const response = await axios.patch(
+
+    try {
+      const response = await axiosInstance.patch(
         `http://localhost:3000/users/${userId}/appointments/${appointment}/pending`,
         { clinicId: clinic_id }
       );
@@ -107,7 +110,9 @@ export default function BookingPage() {
       } else {
         setshowUnavailableModal(true);
       }
-    }, 0);
+    } catch (error) {
+      console.error("Error during booking:", error);
+    }
   };
 
   //handles when a user selects a date
@@ -123,7 +128,7 @@ export default function BookingPage() {
         ("0" + (date.getMonth() + 1)).slice(-2),
         ("0" + date.getDate()).slice(-2),
       ].join("-");
-      const response = await axios.get(
+      const response = await axiosInstance.get(
         `http://localhost:3000/clinics/${clinicId}/appointments?selectedDate=${formattedDate}`
       );
       const timeslots = response.data.map((appointment) => {
@@ -144,18 +149,22 @@ export default function BookingPage() {
   //makes an axios request to the server for patching the appointment to pending
   const confirmBooking = async () => {
     const clinic_id = clinicId;
+    setShowBookingModal(false);
+    setIsBooking(true); // Start loading
     try {
-      await axios.patch(
+      await axiosInstance.patch(
         `http://localhost:3000/users//${userId}/appointments/${selectedAppointment}/confirm`,
         { clinicId: clinic_id }
       );
-      setShowBookingModal(false);
+
       alert("Your booking is confirmed");
       if (selectedDate) {
         handleDateSelect(selectedDate);
       }
     } catch (error) {
       console.error("Error confirming appointment:", error);
+    } finally {
+      setIsBooking(false); // Stop loading
     }
   };
 
@@ -171,7 +180,7 @@ export default function BookingPage() {
   const resetTimeSlot = async (date) => {
     const clinic_id = clinicId;
     try {
-      await axios.patch(
+      await axiosInstance.patch(
         `http://localhost:3000/users/${userId}/appointments/${selectedAppointment}/cancel`,
         { clinicId: clinic_id }
       );
@@ -233,6 +242,7 @@ export default function BookingPage() {
           </div>
         </div>
       </div>
+      {isBooking && <LoadingSpinner />}
       <ConfirmBooking
         show={showBookingModal}
         onHide={() => setShowBookingModal(false)}

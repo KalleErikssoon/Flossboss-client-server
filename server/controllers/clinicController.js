@@ -19,7 +19,8 @@ class ClinicController {
     this.mqttHandler.client.on("message", (topic, message) => {
       try {
         const appointment = JSON.parse(message.toString());
-        if (appointment._clinicId === global.clinicID) {
+        const existsDate = appointment.hasOwnProperty("date");
+        if (appointment._clinicId === global.clinicID && existsDate) {
           const dateString = new Date(appointment.date.$date)
             .toISOString()
             .split("T")[0];
@@ -41,8 +42,6 @@ class ClinicController {
           } else if (!appointment.isPending && !appointment.isBooked) {
             dateScores[dateString].count++;
           }
-
-          console.log("I am the score", dateScores[dateString].count);
 
           // Update isAvailable based on the count
           dateScores[dateString].isAvailable = dateScores[dateString].count > 0;
@@ -66,7 +65,6 @@ class ClinicController {
 
   // Gett all clinics from the database
   async getAllClinics(req, res) {
-    console.log("Hello I am clinics");
     try {
       const clinic = await ClinicModel.find({});
       if (!clinic) {

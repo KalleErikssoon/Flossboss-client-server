@@ -1,12 +1,11 @@
 import React from "react";
-import axios from "axios";
+import axiosInstance from "../axiosInterceptor";
 import { Container, Row, Col } from "react-bootstrap";
 import { useCallback } from "react";
 import CustomMap from "./CustomMap";
 import "../App.css";
 import ClinicsList from "./ClinicsList";
 import swedishRegions from "../swedishRegions";
-import {useNavigate} from 'react-router-dom'
 
 const ClinicsContainer = () => {
   const [clinics, setClinics] = React.useState([]);
@@ -15,18 +14,16 @@ const ClinicsContainer = () => {
   const [selectedRegion, setSelectedRegion] = React.useState("");
   const [confirmedRegion, setConfirmedRegion] = React.useState("");
   const [submitClicked, setSubmitClicked] = React.useState(false);
-  const [hasServerError, setServerError] = React.useState(false);
 
-  const navigate = useNavigate();
   // This Function will retreive all clinics regardless if they are available or not
 
   const fetchClinicsData = async (dateFrom, dateTo, shouldFilter, Region) => {
     try {
-      const response = await axios.get("http://localhost:3000/clinics");
+      const response = await axiosInstance.get("http://localhost:3000/clinics");
       const clinicsWithAvailability = await Promise.all(
         response.data.map(async (clinic) => {
           try {
-            const availabilityResponse = await axios.get(
+            const availabilityResponse = await axiosInstance.get(
               `http://localhost:3000/clinics/appointments/available/${clinic._id}?startDate=${dateFrom}&endDate=${dateTo}&region=${Region}`
             );
             return { ...clinic, slotsAvailable: availabilityResponse.data };
@@ -49,16 +46,10 @@ const ClinicsContainer = () => {
         setClinics(clinicsWithAvailability);
       }
     } catch (error) {
-      if(error.response && error.response.status === 500) {
-        setServerError(true);
-      } else if (!error.response || error.code === 'ECONNABORTED')
-        setServerError(true);
+      console.error("Error fetching clinics:", error);
     }
   };
 
-  if(hasServerError === true) {
-    navigate('/error')
-  }
   React.useEffect(() => {
     fetchClinicsData(null, null, false, "");
   }, []); // This runs only once when the component mounts
