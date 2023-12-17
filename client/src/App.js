@@ -6,15 +6,13 @@ import UserSettings from "./components/UserSettings";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import { AppProvider } from "./context/AppProvider";
-import { ErrorProvider, useError } from "./context/ErrorContext"; // Import ErrorProvider
-import { setupAxiosInterceptor } from "./axiosInterceptor"; // Import the setup function
+import { ErrorProvider, useError } from "./context/ErrorContext";
+import { setupAxiosInterceptor } from "./axiosInterceptor";
 import BookingPage from "./pages/BookingPage";
 import Navbar from "./components/Navbar";
 import MyAccountPage from "./pages/MyAccountPage";
 import ErrorPage from "./pages/ErrorPage";
-
 import "bootstrap/dist/css/bootstrap.min.css";
-// App.js
 import { useNavigate } from "react-router-dom";
 
 const AxiosInterceptorSetup = () => {
