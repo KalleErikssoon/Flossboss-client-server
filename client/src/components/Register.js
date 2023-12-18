@@ -92,6 +92,7 @@ const Register = ({ swtichPage }) => {
           name="name"
           value={user.name}
           onChange={handleChange}
+          maxLength={30}
           required
         />
         <Form.Control.Feedback>looks good!</Form.Control.Feedback>
@@ -106,6 +107,7 @@ const Register = ({ swtichPage }) => {
           name="password"
           value={user.password}
           onChange={handleChange}
+          maxLength={30}
           required
         />
         <Form.Control.Feedback>looks good!</Form.Control.Feedback>
@@ -120,6 +122,7 @@ const Register = ({ swtichPage }) => {
           name="email"
           value={user.email}
           onChange={handleChange}
+          maxLength={30}
           required
         />
         <Form.Control.Feedback>looks good!</Form.Control.Feedback>
@@ -134,6 +137,7 @@ const Register = ({ swtichPage }) => {
           name="phoneNumber"
           value={user.phoneNumber}
           onChange={handleChange}
+          maxLength={30}
           required
         />
         <Form.Control.Feedback>looks good!</Form.Control.Feedback>
