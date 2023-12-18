@@ -16,7 +16,14 @@ const Register = ({ swtichPage }) => {
   const [validated, setValidated] = useState(false);
 
   const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
+  
+    if (name === 'email') {
+      const isValidEmail = value.includes('.');
+      e.target.setCustomValidity(isValidEmail ? '' : 'Invalid');
+    }
+  
     const form = e.currentTarget;
     if (form.checkValidity() === false) {
       e.preventDefault();
@@ -24,14 +31,22 @@ const Register = ({ swtichPage }) => {
       setValidated(true);
     }
   };
+  
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
     const form = e.currentTarget;
-    if (form.checkValidity() === false) {
-      e.preventDefault();
-      e.stopPropagation();
-      setValidated(true);
-    }
+
+    if (!form.checkValidity() || !isValidEmail(user.email)) {
+    e.stopPropagation();
+    alert('Please ensure all fields are filled in correctly before submitting.');
+    return;
+  }
 
     try {
       const response = await axiosInstance.post(
