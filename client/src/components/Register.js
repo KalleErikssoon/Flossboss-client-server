@@ -17,6 +17,11 @@ const Register = ({ swtichPage }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === 'phoneNumber' && value.toString().length > 30) {
+      return; 
+    }
+
     setUser({ ...user, [name]: value });
   
     if (name === 'email') {
