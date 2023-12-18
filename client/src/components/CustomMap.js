@@ -1,13 +1,16 @@
-import React, { useRef } from "react";
+import React, { useRef, useContext } from "react";
 import { Map, Marker, InfoWindow, GoogleApiWrapper } from "google-maps-react";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
 import swedishRegions from "../swedishRegions";
+import { AppContext } from '../context/AppProvider';
+import LoginContainer from './LoginContainer'
 
 const CustomMap = ({ clinics, google, selectedRegion, clinicsAvailable }) => {
   const [activeClinic, setActiveClinic] = React.useState(null);
   const navigate = useNavigate();
   const mapRef = useRef(null);
+  const { isLoggedIn, showUserModal, setShowUserModal } = useContext(AppContext);
 
   const memoizedMarkers = React.useMemo(() => {
     return clinics.map((clinic) => (
@@ -55,12 +58,17 @@ const CustomMap = ({ clinics, google, selectedRegion, clinicsAvailable }) => {
   };
 
   const onBookClick = () => {
+    if(isLoggedIn) {
     navigate("/booking", {
       state: { clinicId: activeClinic._id, clinicName: activeClinic.name },
     });
+    } else {
+      setShowUserModal(true);
+    }
   };
 
   return (
+    <>
     <Map
       google={google}
       zoom={5}
@@ -97,6 +105,12 @@ const CustomMap = ({ clinics, google, selectedRegion, clinicsAvailable }) => {
         </div>
       </InfoWindow>
     </Map>
+    {showUserModal && 
+    <LoginContainer
+    handleClose={() => setShowUserModal(false)}
+    visible={showUserModal}
+    />}
+    </>
   );
 };
 
