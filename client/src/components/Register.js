@@ -16,7 +16,19 @@ const Register = ({ swtichPage }) => {
   const [validated, setValidated] = useState(false);
 
   const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    if (name === 'phoneNumber' && value.toString().length > 30) {
+      return; 
+    }
+
+    setUser({ ...user, [name]: value });
+  
+    if (name === 'email') {
+      const isValidEmail = value.includes('.');
+      e.target.setCustomValidity(isValidEmail ? '' : 'Invalid');
+    }
+  
     const form = e.currentTarget;
     if (form.checkValidity() === false) {
       e.preventDefault();
@@ -24,14 +36,22 @@ const Register = ({ swtichPage }) => {
       setValidated(true);
     }
   };
+  
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
     const form = e.currentTarget;
-    if (form.checkValidity() === false) {
-      e.preventDefault();
-      e.stopPropagation();
-      setValidated(true);
-    }
+
+    if (!form.checkValidity() || !isValidEmail(user.email)) {
+    e.stopPropagation();
+    alert('Please ensure all fields are filled in correctly before submitting.');
+    return;
+  }
 
     try {
       const response = await axiosInstance.post(
@@ -77,6 +97,7 @@ const Register = ({ swtichPage }) => {
           name="name"
           value={user.name}
           onChange={handleChange}
+          maxLength={30}
           required
         />
         <Form.Control.Feedback>looks good!</Form.Control.Feedback>
@@ -91,6 +112,7 @@ const Register = ({ swtichPage }) => {
           name="password"
           value={user.password}
           onChange={handleChange}
+          maxLength={30}
           required
         />
         <Form.Control.Feedback>looks good!</Form.Control.Feedback>
@@ -105,6 +127,7 @@ const Register = ({ swtichPage }) => {
           name="email"
           value={user.email}
           onChange={handleChange}
+          maxLength={30}
           required
         />
         <Form.Control.Feedback>looks good!</Form.Control.Feedback>
@@ -119,6 +142,7 @@ const Register = ({ swtichPage }) => {
           name="phoneNumber"
           value={user.phoneNumber}
           onChange={handleChange}
+          maxLength={30}
           required
         />
         <Form.Control.Feedback>looks good!</Form.Control.Feedback>
