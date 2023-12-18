@@ -1,18 +1,17 @@
-const UserModel = require('../models/user');
+const UserModel = require("../models/user");
 const AppointmentModel = require("../models/appointment");
 const jwt = require("jsonwebtoken");
 const getMQTTHandler = require("../MQTTHandler");
 const UsersLoggedIn = require("../models/usersLoggedIn");
-const ClinicModel = require('../models/clinic');
+const ClinicModel = require("../models/clinic");
 const HOST = process.env.MQTT_URL;
 const USERNAME = process.env.MQTT_USER;
 const PASSWORD = process.env.MQTT_PASSWORD;
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 global.userId = null;
 const mqttHandler = getMQTTHandler(HOST, USERNAME, PASSWORD);
 
 class UserController {
-  
   async createUser(req, res) {
     try {
       const name = req.body.name;
@@ -33,10 +32,9 @@ class UserController {
       if (existingUser) {
         return res.status(400).send("A user with that email already exists");
       } else {
+        await newUser.save();
 
-      await newUser.save();
-
-      res.status(201).json(newUser);
+        res.status(201).json(newUser);
       }
     } catch (err) {
       res.status(500).json({ err: err });
@@ -193,33 +191,33 @@ class UserController {
           "_userId": "${userId}",
           "_clinicId": "${clinicId}"
         }`;
-  
-      let acknowledged = false;
-      await mqttHandler.publish(topic, message, {qos: 1});
 
-      // Subscribe outside of the publish callback
-      
-      await mqttHandler.client.on("message", (receivedTopic, message) => {
-        console.log(message + "abc");
-        if (receivedTopic === confirmTopic && message) {
-          acknowledged = true;
-          res.status(200).send("Appointment confirmed");
-        }
+      await mqttHandler.publish(topic, message, { qos: 1 });
+
+      const waitForConfirmation = new Promise((resolve, reject) => {
+        const onMessage = (receivedTopic, message) => {
+          if (receivedTopic === confirmTopic) {
+            mqttHandler.client.removeListener("message", onMessage);
+            resolve(message);
+          }
+        };
+
+        mqttHandler.client.on("message", onMessage);
+
+        // Set the timeout for the promise
+        const timeout = 5000;
+        setTimeout(() => {
+          mqttHandler.client.removeListener("message", onMessage);
+          reject(new Error("Confirmation timeout"));
+        }, timeout);
       });
-      
-      // Set the timeout outside of the publish callback
-      const timeout = 5000;
-      setTimeout(() => {
-        if (!acknowledged) {
-          res.status(503).send("Service Unavailable: No confirmation received");
-        }
-      }, timeout);
-  
+
+      await waitForConfirmation;
+      res.status(200).send("Appointment confirmed");
     } catch (error) {
       res.status(500).send("Internal server error");
     }
   }
-  
 
   async pendingAppointment(req, res) {
     const userId = req.params.id;
@@ -235,7 +233,7 @@ class UserController {
           "_userId": "${userId}",
           "_clinicId": "${clinicId}"
         }`;
-          mqttHandler.publish(topic, message, {qos: 1});
+          mqttHandler.publish(topic, message, { qos: 1 });
           res.status(200).send("Booking is in Progress");
         } catch (error) {
           res.status(500).send("Internal server error");
@@ -259,7 +257,7 @@ class UserController {
       "_userId": "${userId}",
       "_clinicId": "${clinicId}"
     }`;
-      mqttHandler.publish(topic, message, {qos: 1});
+      mqttHandler.publish(topic, message, { qos: 1 });
       res.status(200).send("Checking booking");
     } catch (error) {
       res.status(500).send("internal server error");
@@ -271,12 +269,15 @@ class UserController {
     try {
       const loggedInInfo = await UsersLoggedIn.findOne();
       if (loggedInInfo && loggedInInfo.loggedInUsers > 0) {
-        await UsersLoggedIn.findOneAndUpdate({}, { $inc: { loggedInUsers: -1 } });
+        await UsersLoggedIn.findOneAndUpdate(
+          {},
+          { $inc: { loggedInUsers: -1 } }
+        );
       }
       res.status(200).send("User logged out");
     } catch (error) {
       res.status(500).send("Internal Server Error");
-  }
+    }
   }
   //This method is a copy of cancelAppointment above, but with added functionality for also
   // updating the booked, pending and available attributes in the db. Also sets the userId to null so that
@@ -296,20 +297,19 @@ class UserController {
           "_userId": "${userId}",
           "_clinicId": "${clinicId}"
         }`;
-  
+
       let acknowledged = false;
-      await mqttHandler.publish(topic, message, {qos: 1});
+      await mqttHandler.publish(topic, message, { qos: 1 });
 
       // Subscribe outside of the publish callback
-      
+
       await mqttHandler.client.on("message", (receivedTopic, message) => {
-        console.log(message + "abc");
         if (receivedTopic === confirmTopic && message) {
           acknowledged = true;
           res.status(200).send("Appointment confirmed");
         }
       });
-      
+
       // Set the timeout outside of the publish callback
       const timeout = 5000;
       setTimeout(() => {
@@ -317,39 +317,38 @@ class UserController {
           res.status(503).send("Service Unavailable: No confirmation received");
         }
       }, timeout);
-  
     } catch (error) {
       res.status(500).send("Internal server error");
     }
   }
 
-
   async getUserAppointments(req, res) {
     const userId = req.params.id;
 
     try {
-      
-        // Fetches appointments where _userId in the appointment object matches the logged-in user's ID
-        // and the isBooked attribute is set to true
-        const appointments = await AppointmentModel.find({ 
-          _userId: userId, 
-          isBooked: true 
-        });
+      // Fetches appointments where _userId in the appointment object matches the logged-in user's ID
+      // and the isBooked attribute is set to true
+      const appointments = await AppointmentModel.find({
+        _userId: userId,
+        isBooked: true,
+      });
 
-        // Manually fetch the clinic data for each appointment
-        const appointmentsWithClinicData = await Promise.all(appointments.map(async (appointment) => {
-            const clinicId = new mongoose.Types.ObjectId(appointment._clinicId);
-            const clinic = await ClinicModel.findById(clinicId).exec();
-            return {
-                ...appointment.toObject(),
-                clinicName: clinic ? clinic.name : 'Unknown Clinic'
-            };
-        }));
+      // Manually fetch the clinic data for each appointment
+      const appointmentsWithClinicData = await Promise.all(
+        appointments.map(async (appointment) => {
+          const clinicId = new mongoose.Types.ObjectId(appointment._clinicId);
+          const clinic = await ClinicModel.findById(clinicId).exec();
+          return {
+            ...appointment.toObject(),
+            clinicName: clinic ? clinic.name : "Unknown Clinic",
+          };
+        })
+      );
 
-        res.json(appointmentsWithClinicData);
+      res.json(appointmentsWithClinicData);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+      console.error(error);
+      res.status(500).send("Internal Server Error");
     }
   }
 }
