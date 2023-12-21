@@ -6,7 +6,7 @@ The FlossBoss project is a web-based system for dental appointment management th
 This repository contains the JavaScript codebase for the client/server aspects of the system. The front end is built using React, creating a dynamic and user-friendly interface for patients, while the back end utilizes Express.js to efficiently handle user data through a RESTful API. By segregating the client/server side from the Java-based services, the project achieves a clear separation of concerns. This approach not only streamlines development but also significantly simplifies the Continuous Integration and Continuous Delivery (CI/CD) processes, ensuring smoother deployments and easier maintenance of the system.
 ## Table of contents
 1. [System Overview](#system-overview)
-2. [Technologies Used](#technologies-&-tools-used-in-this- repository)
+2. [Technologies Used](#technologies-&-tools-used-in-this-repository)
 3. [Visuals](#visuals)
 4. [Installation guide](#installation-guide)
 5. [Authors and Acknowledgments](#authors-and-acknowledgments)
