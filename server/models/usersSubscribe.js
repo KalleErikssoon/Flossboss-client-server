@@ -9,9 +9,13 @@ const usersSubscribedSchema = new mongoose.Schema ({
         type: Date,
         required: true
       },
+      clinicName: {
+        type: String,
+        required: true
+      },
       userEmails: [{
         type: String,
       }]
 });
 
-module.exports = mongoose.model("usersSubscribed", usersSubscribedSchema);
+module.exports = mongoose.model("user-subscriptions", usersSubscribedSchema);

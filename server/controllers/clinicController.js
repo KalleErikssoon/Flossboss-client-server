@@ -291,12 +291,14 @@ class ClinicController {
       console.log("Clinic ID:", clinicId); 
       const selectedDate = req.body.date;
       const userEmail = req.body.email;
+      const clinicName = req.body.clinicName;
       const clinic = await UsersSubscribedModel.findOne({ _clinicId: clinicId, date: selectedDate });
       if (!clinic) {
         const newSubscription = new UsersSubscribedModel ({
           _clinicId: clinicId,
           date: selectedDate,
-          userEmails: userEmail
+          userEmails: [userEmail],
+          clinicName: clinicName 
         });
         await newSubscription.save();
         res.status(200).json(newSubscription);

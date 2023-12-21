@@ -228,7 +228,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"date\": \"2024-12-31T00:00:00.000Z\",\r\n    \"email\": \"abcde@gmail.com\"\r\n}",
+					"raw": "{\r\n    \"date\": \"2024-12-31T00:00:00.000Z\",\r\n    \"email\": \"abcde@gmail.com\",\r\n    \"clinicName\": \"Abc Clinic\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
