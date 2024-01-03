@@ -1,10 +1,55 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../axiosInterceptor";
-import { Card, Container, Row, Col, Button } from "react-bootstrap";
+import { Card, Container, Row, Col, Button, Dropdown, Modal } from "react-bootstrap";
+import MyAccountClinicsList from "../components/MyAccountClinicsList";
+import CalendarComponent from "../components/CalendarUserSubscription";
+
+// sets all the dates in the calendar from todays date and 1 month ahead to available
+const generateDatesAvailable = () => {
+  let dates = {};
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth();
+
+  // Calculate the last day of the next month
+  const lastDayNextMonth = new Date(currentYear, currentMonth + 2, 0);
+
+  for (let date = new Date(currentDate); date <= lastDayNextMonth; date.setDate(date.getDate() + 1)) {
+    const formattedDate = date.toISOString().split("T")[0];
+    dates[formattedDate] = { count: 1 }; // Marking the date as available
+
+  }
+
+  return dates;
+};
 
 const MyAccountPage = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [clinics, setClinics] = useState([]);
+  const [selectedClinic, setSelectedClinic] = useState(null);
+  const datesAvailable = generateDatesAvailable();
+  const[showModal, setShowModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [userEmail, setUserEmail] = useState(null);
+
+  useEffect(() => {
+    const fetchClinics = async () => {
+        try {
+            const response = await axiosInstance.get("http://localhost:3000/clinics");
+            setClinics(response.data);
+        } catch (error) {
+            console.error("Error fetching clinics:", error);
+        }
+    };
+    fetchClinics();
+  }, []);
+
+  const handleClinicSelect = (clinic) => {
+    console.log("Selected clinic: ", clinic.name, "Clinic id: ", clinic._id);
+    setSelectedClinic(clinic);
+  };
+
 
   useEffect(() => {
     const userId = localStorage.getItem("userIdSession");
@@ -12,6 +57,15 @@ const MyAccountPage = () => {
       fetchAppointments(userId);
     }
   }, []);
+
+  useEffect(() => {
+    // Fetch user email directly from localStorage
+    const email = localStorage.getItem('Email');
+    if (email) {
+      setUserEmail(email);
+    }
+  }, []);
+  
 
   const fetchAppointments = async (userId) => {
     try {
@@ -25,6 +79,42 @@ const MyAccountPage = () => {
       setLoading(false);
     }
   };
+
+  // Method for when a user clicks a calendar date (subscribes to that date and clinic)
+  const handleDateSelect = (value) => {
+    // Adjust the date for the time zone offset before converting to ISO string
+    const offset = value.getTimezoneOffset();
+    const adjustedDate = new Date(value.getTime() - (offset * 60 * 1000));
+    setSelectedDate(adjustedDate.toISOString().split('T')[0]);
+    setShowModal(true);
+  };
+  
+
+  //A user subscribes to a date belonging to a specific clinic.
+  const handleSubscribe = async () => {
+
+    if(!selectedClinic || !selectedDate) {
+      console.error("Clinic or date not selected");
+      return;
+    }
+
+    const subscriptionData = {
+      clinicId: selectedClinic._id,
+      date: selectedDate,
+      email: userEmail,
+      clinicName: selectedClinic.name
+    };
+
+    try {
+      const response = await axiosInstance.put(`http://localhost:3000/clinics/${selectedClinic._id}`, subscriptionData);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error subscribing", error);
+    }
+    setShowModal(false);
+   
+  };
+
 
   const handleCancelAppointment = async (appointmentId) => {
     const userId = localStorage.getItem("userIdSession");
@@ -57,6 +147,7 @@ const MyAccountPage = () => {
   }
 
   return (
+    <>
     <Container>
       <h1>My Appointments</h1>
       <Row>
@@ -85,7 +176,49 @@ const MyAccountPage = () => {
           </Col>
         ))}
       </Row>
+      <Row>
+        <Col md={12}>
+            <h3>Clinics</h3>
+            <Dropdown>
+                <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                    Select Clinic
+                </Dropdown.Toggle>
+                <Dropdown.Menu style={{ maxHeight: '300px', overflowY: 'auto'}}>
+                    <MyAccountClinicsList clinics={clinics} onClinicSelect={handleClinicSelect} />
+                </Dropdown.Menu>
+            </Dropdown>
+        </Col>
+        {selectedClinic && (
+          <Col md={12}>
+          <h3> Subscribe to a date for {selectedClinic.name} </h3>
+          <CalendarComponent
+          activeStartDate={new Date()} //start from today
+          onDateSelect={(handleDateSelect)}
+          datesAvailable={datesAvailable}
+          />
+          <CalendarComponent //second calendar
+          activeStartDate={new Date(new Date().getFullYear(), new Date().getMonth()+1, 1)} //first day of that month
+          onDateSelect={(handleDateSelect)}
+          />
+          </Col>
+
+        )}
+      </Row>
+    <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Subscribe</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Do you want to subscribe to {selectedDate && selectedDate}?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleSubscribe}>
+            Subscribe
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
+    </>
   );
 };
 
