@@ -18,8 +18,6 @@ const generateDatesAvailable = () => {
     const formattedDate = date.toISOString().split("T")[0];
     dates[formattedDate] = { count: 1 }; // Marking the date as available
 
-    // Debugging: Log each date added
-    //console.log(formattedDate);
   }
 
   return dates;
@@ -34,11 +32,6 @@ const MyAccountPage = () => {
   const[showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
-
-  //const [datesUnavailable, setDatesUnavailable] = useState({});
-
-  //const today = new Date();
-  // const firstDayNextMonth = new Date(today.getFullYear, today.getMonth() +1, 1);
 
   useEffect(() => {
     const fetchClinics = async () => {
@@ -55,7 +48,6 @@ const MyAccountPage = () => {
   const handleClinicSelect = (clinic) => {
     console.log("Selected clinic: ", clinic.name, "Clinic id: ", clinic._id);
     setSelectedClinic(clinic);
-    //console.log(datesUnavailable);
   };
 
 
@@ -88,7 +80,7 @@ const MyAccountPage = () => {
     }
   };
 
-  // Logic for when a user clicks a calendar date (subscribes to that date and clinic)
+  // Method for when a user clicks a calendar date (subscribes to that date and clinic)
   const handleDateSelect = (value) => {
     // Adjust the date for the time zone offset before converting to ISO string
     const offset = value.getTimezoneOffset();
@@ -98,6 +90,7 @@ const MyAccountPage = () => {
   };
   
 
+  //A user subscribes to a date belonging to a specific clinic.
   const handleSubscribe = async () => {
 
     if(!selectedClinic || !selectedDate) {
