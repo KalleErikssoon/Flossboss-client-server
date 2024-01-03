@@ -9,5 +9,7 @@ export const logout = async () => {
       }
     localStorage.removeItem('userIdSession');
     localStorage.removeItem('token');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('Email');
     window.location.href = '/';
 };

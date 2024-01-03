@@ -33,6 +33,7 @@ const MyAccountPage = () => {
   const datesAvailable = generateDatesAvailable();
   const[showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [userEmail, setUserEmail] = useState(null);
 
   //const [datesUnavailable, setDatesUnavailable] = useState({});
 
@@ -65,6 +66,15 @@ const MyAccountPage = () => {
     }
   }, []);
 
+  useEffect(() => {
+    // Fetch user email directly from localStorage
+    const email = localStorage.getItem('Email');
+    if (email) {
+      setUserEmail(email);
+    }
+  }, []);
+  
+
   const fetchAppointments = async (userId) => {
     try {
       const response = await axiosInstance.get(
@@ -80,15 +90,36 @@ const MyAccountPage = () => {
 
   // Logic for when a user clicks a calendar date (subscribes to that date and clinic)
   const handleDateSelect = (value) => {
-    setSelectedDate(value);
+    // Adjust the date for the time zone offset before converting to ISO string
+    const offset = value.getTimezoneOffset();
+    const adjustedDate = new Date(value.getTime() - (offset * 60 * 1000));
+    setSelectedDate(adjustedDate.toISOString().split('T')[0]);
     setShowModal(true);
   };
+  
 
-  const handleSubscribe = () => {
-    // Implement subscription logic here
-    console.log(`Subscribed to: ${selectedDate.toISOString().split("T")[0]}`);
+  const handleSubscribe = async () => {
+
+    if(!selectedClinic || !selectedDate) {
+      console.error("Clinic or date not selected");
+      return;
+    }
+
+    const subscriptionData = {
+      clinicId: selectedClinic._id,
+      date: selectedDate,
+      email: userEmail,
+      clinicName: selectedClinic.name
+    };
+
+    try {
+      const response = await axiosInstance.put(`http://localhost:3000/clinics/${selectedClinic._id}`, subscriptionData);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error subscribing", error);
+    }
     setShowModal(false);
-    // Optionally, add logic to handle the subscription action
+   
   };
 
 
@@ -187,7 +218,7 @@ const MyAccountPage = () => {
           <Modal.Title>Subscribe</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Do you want to subscribe to {selectedDate && selectedDate.toISOString().split("T")[0]}?
+          Do you want to subscribe to {selectedDate && selectedDate}?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={handleSubscribe}>
