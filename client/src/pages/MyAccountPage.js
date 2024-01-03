@@ -1,10 +1,62 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../axiosInterceptor";
-import { Card, Container, Row, Col, Button } from "react-bootstrap";
+import { Card, Container, Row, Col, Button, Dropdown, Modal } from "react-bootstrap";
+import MyAccountClinicsList from "../components/MyAccountClinicsList";
+import CalendarComponent from "../components/CalendarUserSubscription";
+
+// sets all the dates in the calendar from todays date and 1 month ahead to available
+const generateDatesAvailable = () => {
+  let dates = {};
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth();
+
+  // Calculate the last day of the next month
+  const lastDayNextMonth = new Date(currentYear, currentMonth + 2, 0);
+
+  for (let date = new Date(currentDate); date <= lastDayNextMonth; date.setDate(date.getDate() + 1)) {
+    const formattedDate = date.toISOString().split("T")[0];
+    dates[formattedDate] = { count: 1 }; // Marking the date as available
+
+    // Debugging: Log each date added
+    //console.log(formattedDate);
+  }
+
+  return dates;
+};
 
 const MyAccountPage = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [clinics, setClinics] = useState([]);
+  const [selectedClinic, setSelectedClinic] = useState(null);
+  const datesAvailable = generateDatesAvailable();
+  const[showModal, setShowModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  //const [datesUnavailable, setDatesUnavailable] = useState({});
+
+  //const today = new Date();
+  // const firstDayNextMonth = new Date(today.getFullYear, today.getMonth() +1, 1);
+
+  useEffect(() => {
+    const fetchClinics = async () => {
+        try {
+            const response = await axiosInstance.get("http://localhost:3000/clinics");
+            setClinics(response.data);
+        } catch (error) {
+            console.error("Error fetching clinics:", error);
+        }
+    };
+    fetchClinics();
+  }, []);
+
+  const handleClinicSelect = (clinic) => {
+    console.log("Selected clinic: ", clinic.name, "Clinic id: ", clinic._id);
+    setSelectedClinic(clinic);
+    //console.log(datesUnavailable);
+  };
+
 
   useEffect(() => {
     const userId = localStorage.getItem("userIdSession");
@@ -25,6 +77,20 @@ const MyAccountPage = () => {
       setLoading(false);
     }
   };
+
+  // Logic for when a user clicks a calendar date (subscribes to that date and clinic)
+  const handleDateSelect = (value) => {
+    setSelectedDate(value);
+    setShowModal(true);
+  };
+
+  const handleSubscribe = () => {
+    // Implement subscription logic here
+    console.log(`Subscribed to: ${selectedDate.toISOString().split("T")[0]}`);
+    setShowModal(false);
+    // Optionally, add logic to handle the subscription action
+  };
+
 
   const handleCancelAppointment = async (appointmentId) => {
     const userId = localStorage.getItem("userIdSession");
@@ -57,6 +123,7 @@ const MyAccountPage = () => {
   }
 
   return (
+    <>
     <Container>
       <h1>My Appointments</h1>
       <Row>
@@ -85,7 +152,51 @@ const MyAccountPage = () => {
           </Col>
         ))}
       </Row>
+      <Row>
+        <Col md={12}>
+            <h3>Clinics</h3>
+            <Dropdown>
+                <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                    Select Clinic
+                </Dropdown.Toggle>
+                <Dropdown.Menu style={{ maxHeight: '300px', overflowY: 'auto'}}>
+                    <MyAccountClinicsList clinics={clinics} onClinicSelect={handleClinicSelect} />
+                </Dropdown.Menu>
+            </Dropdown>
+        </Col>
+        {selectedClinic && (
+          <Col md={12}>
+          <h3> Subscribe to a date for {selectedClinic.name} </h3>
+          <CalendarComponent
+          activeStartDate={new Date()} //start from today
+          onDateSelect={(handleDateSelect)}
+          datesAvailable={datesAvailable}
+          />
+          <CalendarComponent //second calendar
+          activeStartDate={new Date(new Date().getFullYear(), new Date().getMonth()+1, 1)} //first day of that month
+          onDateSelect={(handleDateSelect)}
+          //datesAvailable={datesUnavailable}
+          />
+          </Col>
+
+        )}
+      </Row>
+    {/* Modal for confirming subscription */}
+    <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Subscribe</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Do you want to subscribe to {selectedDate && selectedDate.toISOString().split("T")[0]}?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleSubscribe}>
+            Subscribe
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
+    </>
   );
 };
 

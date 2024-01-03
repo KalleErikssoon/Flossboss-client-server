@@ -267,6 +267,27 @@ class ClinicController {
     }
   }
 
+  async getUnavailableAppointments(req, res) {
+    // Make sure to reset the value of the clinic Id to false
+    try {
+      const currentDate = new Date();
+      const nextMonthLastDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 2,
+        0 // Last day of next month
+      );
+  
+      const availableDates = [];
+      for (let date = new Date(currentDate); date <= nextMonthLastDate; date.setDate(date.getDate() + 1)) {
+        availableDates.push(new Date(date).toISOString().split("T")[0]);
+      }
+  
+      res.status(200).json(availableDates);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  }
+
   sendSSE(req, res) {
     res.writeHead(200, {
       "Content-Type": "text/event-stream",

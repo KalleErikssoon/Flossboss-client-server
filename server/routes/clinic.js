@@ -1,3 +1,5 @@
+const ClinicController = require("../controllers/clinicController");
+
 module.exports = function (clinicController) {
   const express = require("express");
   const router = express.Router({ mergeParams: true });
@@ -7,6 +9,7 @@ module.exports = function (clinicController) {
     "/:clinicid/appointments/",
     clinicController.getAppointmentsOnSpecificDate
   );
+  router.get("/:clinicid/unavailableAppointments", clinicController.getUnavailableAppointments);
   router.get(
     "/:clinicid/appointments/calendar",
     clinicController.getAppointments
