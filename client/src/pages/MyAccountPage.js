@@ -199,13 +199,11 @@ const MyAccountPage = () => {
           <CalendarComponent //second calendar
           activeStartDate={new Date(new Date().getFullYear(), new Date().getMonth()+1, 1)} //first day of that month
           onDateSelect={(handleDateSelect)}
-          //datesAvailable={datesUnavailable}
           />
           </Col>
 
         )}
       </Row>
-    {/* Modal for confirming subscription */}
     <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Subscribe</Modal.Title>
