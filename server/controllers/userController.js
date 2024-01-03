@@ -292,31 +292,33 @@ class UserController {
 
     try {
       const topic = "flossboss/appointment/request/canceluser";
-      const message = `{
-          "_id": "${appointmentId}",
-          "_userId": "${userId}",
-          "_clinicId": "${clinicId}"
-        }`;
-
-      let acknowledged = false;
-      await mqttHandler.publish(topic, message, { qos: 1 });
-
-      // Subscribe outside of the publish callback
-
-      await mqttHandler.client.on("message", (receivedTopic, message) => {
-        if (receivedTopic === confirmTopic && message) {
-          acknowledged = true;
-          res.status(200).send("Appointment confirmed");
-        }
+      const message = JSON.stringify({
+        _id: appointmentId,
+        _userId: userId,
+        _clinicId: clinicId,
       });
 
-      // Set the timeout outside of the publish callback
-      const timeout = 5000;
-      setTimeout(() => {
-        if (!acknowledged) {
-          res.status(503).send("Service Unavailable: No confirmation received");
-        }
-      }, timeout);
+      await mqttHandler.publish(topic, message, { qos: 1 });
+
+      const waitForCancellation = new Promise((resolve, reject) => {
+        const onMessage = (receivedTopic, message) => {
+          if (receivedTopic === confirmTopic) {
+            mqttHandler.client.removeListener("message", onMessage);
+            resolve(message);
+          }
+        };
+
+        mqttHandler.client.on("message", onMessage);
+
+        const timeout = 5000;
+        setTimeout(() => {
+          mqttHandler.client.removeListener("message", onMessage);
+          reject(new Error("Cancellation timeout"));
+        }, timeout);
+      });
+
+      await waitForCancellation;
+      res.status(200).send("Appointment cancelled");
     } catch (error) {
       res.status(500).send("Internal server error");
     }

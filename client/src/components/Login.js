@@ -44,11 +44,14 @@ const Login = ({ swtichPage }) => {
       const userid = response.data.userid;
       const token = response.data.token;
       const name = response.data.name;
+      const email = response.data.email;
 
+      console.log(response.data);
       if (userid) {
         localStorage.setItem("userIdSession", userid);
         localStorage.setItem("token", token);
         localStorage.setItem("userName", name);
+        localStorage.setItem("Email", email);
         loginName(response.data); //Malte
         setIsLoggedIn(true); //Malte
 
