@@ -16,6 +16,7 @@ module.exports = function (clinicController) {
     "/appointments/available/:clinicid",
     clinicController.getOneAppointment
   );
+  router.put('/:clinicid', clinicController.updateClientSubscribers)
   router.post("/appointments", clinicController.createAppointment); // This function will be removed later on.
   router.delete(
     "/appointments/:appointmentId",

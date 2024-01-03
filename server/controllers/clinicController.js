@@ -2,6 +2,7 @@ const ClinicModel = require("../models/clinic");
 const AppointmentModel = require("../models/appointment");
 const topics = require("../mqttTopics");
 const mqttHandler = require("../MQTTHandler");
+const UsersSubscribedModel = require("../models/usersSubscribe");
 global.dateScores = {};
 global.sseConnections = [];
 global.clinicID = "";
@@ -282,6 +283,38 @@ class ClinicController {
         (conn) => conn !== connection
       );
     });
+  }
+
+  async updateClientSubscribers(req, res) {
+    try {
+      const clinicId = req.params.clinicid;
+      console.log("Clinic ID:", clinicId); 
+      const selectedDate = req.body.date;
+      const userEmail = req.body.email;
+      const clinicName = req.body.clinicName;
+      const clinic = await UsersSubscribedModel.findOne({ _clinicId: clinicId, date: selectedDate });
+      if (!clinic) {
+        const newSubscription = new UsersSubscribedModel ({
+          _clinicId: clinicId,
+          date: selectedDate,
+          userEmails: [userEmail],
+          clinicName: clinicName 
+        });
+        await newSubscription.save();
+        res.status(200).json(newSubscription);
+      } else {
+        if (!clinic.userEmails.includes(userEmail)) {
+          clinic.userEmails.push(userEmail);
+          await clinic.save();
+          res.status(200).send("User successfully subscribed");
+        } else {
+          res.status(200).send("User already subscribed to this clinic on the selected date");
+        }
+      }
+    } catch (error) {
+      console.error("Error subscribing:", error.message);
+      res.status(500).send("Error subscribing");
+    }
   }
 }
 

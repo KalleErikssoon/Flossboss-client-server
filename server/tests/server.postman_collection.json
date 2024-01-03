@@ -208,6 +208,53 @@
 			"response": []
 		},
 		{
+			"name": "update subscribers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2024-12-31T00:00:00.000Z\",\r\n    \"email\": \"abcde@gmail.com\",\r\n    \"clinicName\": \"Abc Clinic\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/clinics/:clinicid",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"clinics",
+						":clinicid"
+					],
+					"variable": [
+						{
+							"key": "clinicid",
+							"value": "657844d2fb84354ce31a0a78"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "GetAllUsers",
 			"event": [
 				{
