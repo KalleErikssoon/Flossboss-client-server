@@ -494,7 +494,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"date\": \"2023-12-31\",\r\n    \"_clinicId\": \"656b98cdd6ac46835c9ee97d\",\r\n    \"timeTo\": \"10:00\",\r\n    \"timeFrom\": \"11:00\",\r\n    \"_dentistId\": \"65686817678d11680fafdb5c\",\r\n    \"isAvailable\": true,\r\n    \"isPending\": false,\r\n    \"isBooked\": false\r\n}",
+					"raw": "{\r\n    \"date\": \"2024-01-31\",\r\n    \"_clinicId\": \"6572cd114a311da6b9aa2425\",\r\n    \"timeTo\": \"10:00\",\r\n    \"timeFrom\": \"11:00\",\r\n    \"_dentistId\": \"6572ce48f799783dec6e6f0f\",\r\n    \"isAvailable\": true,\r\n    \"isPending\": false,\r\n    \"isBooked\": false\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -566,13 +566,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/clinics/656b98cdd6ac46835c9ee97d/appointments?selectedDate={{date}}",
+					"raw": "{{host}}/clinics/6572cd114a311da6b9aa2425/appointments?selectedDate={{date}}",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"clinics",
-						"656b98cdd6ac46835c9ee97d",
+						"6572cd114a311da6b9aa2425",
 						"appointments"
 					],
 					"query": [
