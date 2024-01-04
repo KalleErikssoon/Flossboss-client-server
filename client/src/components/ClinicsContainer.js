@@ -130,9 +130,9 @@ const ClinicsContainer = () => {
   return (
     <Container fluid className="p-3">
       <Row>
-        <Col md={12} className="mb-3">
+        <Col xs={12} md={3} className="mb-3 d-flex align-items-end">
           <div>
-            <label>Date From: </label>
+            <label>Date From: </label>{" "}
             <select
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
@@ -146,8 +146,12 @@ const ClinicsContainer = () => {
                 </option>
               ))}
             </select>
+          </div>
+        </Col>
 
-            <label>Date To: </label>
+        <Col xs={12} md={3} className="mb-3 d-flex align-items-end">
+          <div>
+            <label>Date To: </label>{" "}
             <select value={dateTo} onChange={(e) => setDateTo(e.target.value)}>
               <option value="" disabled>
                 Select To
@@ -158,7 +162,11 @@ const ClinicsContainer = () => {
                 </option>
               ))}
             </select>
-            <label>Region: </label>
+          </div>
+        </Col>
+        <Col xs={12} md={3} className="mb-3 d-flex align-items-end">
+          <div>
+            <label>Region: </label>{" "}
             <select
               value={selectedRegion}
               onChange={(e) => setSelectedRegion(e.target.value)}
@@ -172,10 +180,18 @@ const ClinicsContainer = () => {
                 </option>
               ))}
             </select>
-            <button onClick={handleSubmit}>Submit</button>
+          </div>
+        </Col>
+        <Col s={12} md={3} className="mb-3 d-flex align-items-end">
+          {" "}
+          <div>
+            <button onClick={handleSubmit} className="mr-2">
+              Submit
+            </button>{" "}
             <button onClick={handleReset}>Reset</button>
           </div>
         </Col>
+
         <Col md={12} xl={6} className="mb-3">
           <div className="border p-3">
             <h3>Clinics List</h3>
