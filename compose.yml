@@ -1,0 +1,11 @@
+services:
+
+  server:
+    image: flossboss/nodejs-server:latest
+    ports:
+      - "3000:3000"
+
+  client: 
+    image: flossboss/client:latest
+    ports:
+      - "3001:80"
