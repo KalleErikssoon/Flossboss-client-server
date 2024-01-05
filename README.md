@@ -20,6 +20,17 @@ Additionally, the server employs MQTT and Server-Sent Events (SSE) to update the
 <img src="https://i.imgur.com/RaZndv5.png" />
 
 ## Technologies and Tools used in this repository
+**Front-end Development:** JavaScript, React
+
+**Back-end Development:** Node.js, Express
+
+**Databases:** MongoDB Cloud
+
+**Containerization:** Docker
+
+**Messaging Protocols:** MQTT (HiveMQ Cloud)
+
+**API Development and Testing:** Postman
 
 ## Visuals
 
@@ -32,7 +43,6 @@ Additionally, the server employs MQTT and Server-Sent Events (SSE) to update the
 - Ahmand Haj Ahmad  
 - Malte Bengtsson  
 - Rizwan Rafiq
-
 
 ## License
 The FlossBoss project is licensed under [MIT](https://git.chalmers.se/courses/dit355/2023/student-teams/dit356-2023-16/flossboss-java-repo/-/blob/main/LICENSE)
