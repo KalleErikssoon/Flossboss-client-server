@@ -48,6 +48,8 @@ Additionally, the server employs MQTT and Server-Sent Events (SSE) to update the
 > * Open the client folder (we recommend using visual code)
 > * Add a text file named **".env"**. Add the REACT_APP_GOOGLE_MAPS_KEY.
 
+#### Step 2:  Run the Services through Docker Desktop
+
 
 
 
