@@ -45,25 +45,26 @@ const MyAccountPage = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
 
+
+  // Fetch clinic data on component mount, runs once when the component is first rendered
   useEffect(() => {
     const fetchClinics = async () => {
-      try {
-        const response = await axiosInstance.get(
-          "http://localhost:3000/clinics"
-        );
-        setClinics(response.data);
-      } catch (error) {
-        console.error("Error fetching clinics:", error);
-      }
+        try {
+            const response = await axiosInstance.get("http://localhost:3000/clinics");
+            setClinics(response.data);
+        } catch (error) {
+            window.alert("Error fetching clinics:");
+        }
     };
     fetchClinics();
   }, []);
 
   const handleClinicSelect = (clinic) => {
-    console.log("Selected clinic: ", clinic.name, "Clinic id: ", clinic._id);
     setSelectedClinic(clinic);
   };
 
+// If userId exists, fetches appointments via fetchAppointments method for that user
+// called once when the component renders
   useEffect(() => {
     const userId = localStorage.getItem("userIdSession");
     if (userId) {
@@ -71,14 +72,17 @@ const MyAccountPage = () => {
     }
   }, []);
 
+  // Sets user email to the email of the user from localstorage if it exists
+  // called once when the component renders
   useEffect(() => {
-    // Fetch user email directly from localStorage
-    const email = localStorage.getItem("Email");
+    const email = localStorage.getItem('Email');
     if (email) {
       setUserEmail(email);
     }
   }, []);
-
+  
+// Fetches appointments via get request to the backend based on userId
+// Updates the Appointments state with the received response data
   const fetchAppointments = async (userId) => {
     try {
       const response = await axiosInstance.get(
@@ -87,7 +91,7 @@ const MyAccountPage = () => {
       setAppointments(response.data);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching appointments:", error);
+      window.alert("Error fetching appointments:");
       setLoading(false);
     }
   };
@@ -103,8 +107,9 @@ const MyAccountPage = () => {
 
   //A user subscribes to a date belonging to a specific clinic.
   const handleSubscribe = async () => {
-    if (!selectedClinic || !selectedDate) {
-      console.error("Clinic or date not selected");
+
+    if(!selectedClinic || !selectedDate) {
+      window.alert("Clinic or date not selected");
       return;
     }
 
@@ -116,17 +121,19 @@ const MyAccountPage = () => {
     };
 
     try {
-      const response = await axiosInstance.put(
-        `http://localhost:3000/clinics/${selectedClinic._id}`,
-        subscriptionData
-      );
-      console.log(response.data);
+      const response = await axiosInstance.put(`http://localhost:3000/clinics/${selectedClinic._id}`, subscriptionData);
+      if(response.data === "User already subscribed to this clinic on the selected date") {
+        window.alert("You are already subscribed to this date!")
+      } else {
+        window.alert("Subscription successful! You will now receive an email sent to the email adress of this account.");
+      }
     } catch (error) {
-      console.error("Error subscribing", error);
+      window.alert("Subscription unsuccessful!");
     }
     setShowModal(false);
   };
 
+// User cancels booked appointment
   const handleCancelAppointment = async (appointmentId) => {
     const userId = localStorage.getItem("userIdSession");
     if (userId) {
@@ -144,11 +151,11 @@ const MyAccountPage = () => {
             fetchAppointments(userId); // update the list on the page after canceling
           }, 500);
         } catch (error) {
-          console.error("Error cancelling appointment:", error);
+          window.alert("Error cancelling appointment:");
         }
       } else {
         // User clicked 'Cancel', do nothing
-        console.log("Cancellation aborted");
+        window.alert("Cancellation aborted");
       }
     }
   };
