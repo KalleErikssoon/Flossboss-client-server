@@ -9,6 +9,7 @@ import "react-calendar/dist/Calendar.css";
 import "../styles/bookingPage.css";
 import Breadcrumb from "../components/Breadcrumb";
 import { useLocation } from "react-router-dom";
+import backgroundImage from "../assets/SuggestedBackground.png";
 
 export default function BookingPage() {
   const userId = localStorage.getItem("userIdSession");
@@ -194,70 +195,80 @@ export default function BookingPage() {
     }
   };
 
+  const backgroundStyle = {
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    minHeight: "100vh",
+  };
+
   return (
-    <div className="container my-4">
-      <Breadcrumb
-        clinic={clinicName}
-        handleCalendar={handleBackToCalendar}
-        date={selectedDate}
-        timeslot={selectedTimeSlot}
-      />
-      <div className="row justify-content-center">
-        <div className="card fluid justify-content-center align-items-flex-end">
-          <div
-            className={`card-body ${
-              showCalendar ? "calendar-view" : "timeslot-view"
-            }`}
-          >
-            {showCalendar ? (
-              <div className="all d-flex flex-wrap align-items-center justify-content-center">
-                <div className="col-lg-4 col-md-6 col-sm-12">
-                  <div className="calendar-container">
-                    <Calendar
-                      className="calendar"
-                      activeStartDate={currentDate}
-                      onDateSelect={handleDateSelect}
-                      datesAvailable={dates}
-                    />
+    <div style={backgroundStyle}>
+      <div className="container my-4">
+        <Breadcrumb
+          clinic={clinicName}
+          handleCalendar={handleBackToCalendar}
+          date={selectedDate}
+          timeslot={selectedTimeSlot}
+        />
+        <div className="row justify-content-center">
+          <div className="card fluid justify-content-center align-items-flex-end">
+            <div
+              className={`card-body ${
+                showCalendar ? "calendar-view" : "timeslot-view"
+              }`}
+            >
+              {showCalendar ? (
+                <div className="all d-flex flex-wrap align-items-center justify-content-center">
+                  <div className="col-lg-4 col-md-6 col-sm-12">
+                    <div className="calendar-container">
+                      <Calendar
+                        className="calendar"
+                        activeStartDate={currentDate}
+                        onDateSelect={handleDateSelect}
+                        datesAvailable={dates}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-lg-4 col-md-6 col-sm-12">
+                    <div className="calendar-container">
+                      <Calendar
+                        className="calendar"
+                        activeStartDate={nextMonthDate}
+                        onDateSelect={handleDateSelect}
+                        datesAvailable={dates}
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="col-lg-4 col-md-6 col-sm-12">
-                  <div className="calendar-container">
-                    <Calendar
-                      className="calendar"
-                      activeStartDate={nextMonthDate}
-                      onDateSelect={handleDateSelect}
-                      datesAvailable={dates}
-                    />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <TimeSlot
-                className="timeslot"
-                onBookClick={handleBookClick}
-                timeSlots={availableTimeSlots}
-              />
-            )}
+              ) : (
+                <TimeSlot
+                  className="timeslot"
+                  onBookClick={handleBookClick}
+                  timeSlots={availableTimeSlots}
+                />
+              )}
+            </div>
           </div>
         </div>
+        {isBooking && <LoadingSpinner />}
+        <ConfirmBooking
+          show={showBookingModal}
+          onHide={() => setShowBookingModal(false)}
+          timeSlot={selectedTimeSlot}
+          date={selectedDate}
+          onReset={resetTimeSlot}
+          onConfirm={confirmBooking}
+          clinicName={clinicName}
+        />
+        <BookingUnavailable
+          show={showUnavailableModal}
+          onHide={() => setshowUnavailableModal(false)}
+          date={selectedDate}
+          onReset={handleDateSelect}
+        />
       </div>
-      {isBooking && <LoadingSpinner />}
-      <ConfirmBooking
-        show={showBookingModal}
-        onHide={() => setShowBookingModal(false)}
-        timeSlot={selectedTimeSlot}
-        date={selectedDate}
-        onReset={resetTimeSlot}
-        onConfirm={confirmBooking}
-        clinicName={clinicName}
-      />
-      <BookingUnavailable
-        show={showUnavailableModal}
-        onHide={() => setshowUnavailableModal(false)}
-        date={selectedDate}
-        onReset={handleDateSelect}
-      />
     </div>
   );
 }
