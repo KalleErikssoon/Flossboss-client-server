@@ -45,7 +45,7 @@ Additionally, the server employs MQTT and Server-Sent Events (SSE) to update the
 #### Step 1: Edit configuration files
 > * Open the server folder (we recommend using visual studio code)
 > * Add a text file named **".env"**. Add the MONGODB_URI, MQTT URL, MQTT_USER, MQTT_PASSWORD, and SECRET_KEY.
-> * Open the client folder (we recommend using visual code)
+> * Open the client folder (we recommend using visual studio code)
 > * Add a text file named **".env"**. Add the REACT_APP_GOOGLE_MAPS_KEY.
 
 #### Step 2:  Run the Services through Docker Desktop
