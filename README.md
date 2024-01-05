@@ -33,6 +33,12 @@ Additionally, the server employs MQTT and Server-Sent Events (SSE) to update the
 **API Development and Testing:** Postman
 
 ## Visuals
+<img src="https://i.imgur.com/QDTTqkq.png"/>
+<img src="https://i.imgur.com/FbzKfM2.png"/>
+<img src="https://i.imgur.com/7MHlwDg.png"/>
+<img src="https://i.imgur.com/5VaYObZ.png"/>
+<img src="https://i.imgur.com/2YnBmaS.png"/>
+<img src="https://i.imgur.com/y1HmZ0e.png"/>
 
 ## Installation guide
 ### Prerequisites
