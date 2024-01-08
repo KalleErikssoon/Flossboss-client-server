@@ -40,7 +40,26 @@ Additionally, the server employs MQTT and Server-Sent Events (SSE) to update the
 <img src="https://i.imgur.com/T042Eqq.png"/>
 <img src="https://i.imgur.com/y1HmZ0e.png"/>
 
+## Run with Docker
+
+All the services and the client/server are uploaded to the projects [Dockerhub page](https://hub.docker.com/u/flossboss).
+
+To run docker images on your system you need to first install the [docker engine](https://www.docker.com/) on your local system. We recommend installing the desktop version to easily keep track of your current containers and CPU usage.
+
+Due to a current issue with the docker engine, Arm64 and Amd64 systems are not compatible with images built on the opposing architecture. To solve this problem we have images for both Arm64 and Amd64, choose the one that matches you system architecture.
+
+#### Run on Arm64 architecture
+1. Navigate to the repository root folder.
+2. To start services run "docker compose -f compose.arm.yml up -d"
+3. To exit services run "docker compose -f compose.arm.yml down"
+
+#### Run on Amd64 architecture
+1. Navigate to the repository root folder.
+2. To start services run "docker compose -f compose.amd.yml up -d"
+3. To exit services run "docker compose -f compose.amd.yml down"
+
 ## Installation guide
+
 ### Prerequisites
 * Node Package manager [Link to download](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 * MongoDB Cloud database [Link to download](https://account.mongodb.com/account/login?signedOut=true)
@@ -54,13 +73,9 @@ Additionally, the server employs MQTT and Server-Sent Events (SSE) to update the
 > * Open the client folder (we recommend using visual studio code)
 > * Add a text file named **".env"**. Add the REACT_APP_GOOGLE_MAPS_KEY.
 
-#### Step 2:  Run the Services through Docker Desktop
-
-
-
 
 ## Authors and Acknowledgments
-- Isaac Lindegren Ternbom  
+- Isaac Lindegren Ternbom 
 - Joel Celén  
 - Karl Eriksson  
 - Ahmand Haj Ahmad  
