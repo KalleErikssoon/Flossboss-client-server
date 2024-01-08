@@ -42,9 +42,9 @@ Additionally, the server employs MQTT and Server-Sent Events (SSE) to update the
 
 ## Installation guide
 ### Prerequisites
-* Node Package manager [Link to npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-* MongoDB Cloud database [Link to MongoDB](https://account.mongodb.com/account/login?signedOut=true)
-* HiveMQ Cloud MQTT Broker [Link to HiveMQ](https://auth.hivemq.cloud/login?state=hKFo2SByblBzUXBWYVZhdkNSYlhPQ3NHUi1BMFNHcFRpVnFZRqFupWxvZ2luo3RpZNkgd0U1VUNSTlZFM1ZFNHZ0SW9jWWhqS2lodHJNSmYta0qjY2lk2SBJYWpvNGUzMmp4d1VzOEFkRnhneFFuMlZQM1l3SVpUSw&client=Iajo4e32jxwUs8AdFxgxQn2VP3YwIZTK&protocol=oauth2&audience=hivemq-cloud-api&redirect_uri=https%3A%2F%2Fconsole.hivemq.cloud&scope=openid%20profile%20email&response_type=code&response_mode=query&nonce=UjJhUnZOUlJnd3RmbjZmNFBGWX5uc2w3bHZERW5tRmVHMHl6MDFjXzVMbQ%3D%3D&code_challenge=cOpID4Iew7D-HcwtkQjs-7GYcfrwzD7JV9QTPQNOJgU&code_challenge_method=S256&auth0Client=eyJuYW1lIjoiYXV0aDAtc3BhLWpzIiwidmVyc2lvbiI6IjEuMjIuNiJ9)
+* Node Package manager [Link to download](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+* MongoDB Cloud database [Link to download](https://account.mongodb.com/account/login?signedOut=true)
+* HiveMQ Cloud MQTT Broker [Link to download](https://auth.hivemq.cloud/login?state=hKFo2SByblBzUXBWYVZhdkNSYlhPQ3NHUi1BMFNHcFRpVnFZRqFupWxvZ2luo3RpZNkgd0U1VUNSTlZFM1ZFNHZ0SW9jWWhqS2lodHJNSmYta0qjY2lk2SBJYWpvNGUzMmp4d1VzOEFkRnhneFFuMlZQM1l3SVpUSw&client=Iajo4e32jxwUs8AdFxgxQn2VP3YwIZTK&protocol=oauth2&audience=hivemq-cloud-api&redirect_uri=https%3A%2F%2Fconsole.hivemq.cloud&scope=openid%20profile%20email&response_type=code&response_mode=query&nonce=UjJhUnZOUlJnd3RmbjZmNFBGWX5uc2w3bHZERW5tRmVHMHl6MDFjXzVMbQ%3D%3D&code_challenge=cOpID4Iew7D-HcwtkQjs-7GYcfrwzD7JV9QTPQNOJgU&code_challenge_method=S256&auth0Client=eyJuYW1lIjoiYXV0aDAtc3BhLWpzIiwidmVyc2lvbiI6IjEuMjIuNiJ9)
 * Docker Desktop [Link to download](https://www.docker.com/products/docker-desktop/)
 * Postman [Link to download](https://www.postman.com/downloads/)
 
