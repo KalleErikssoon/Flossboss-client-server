@@ -1,0 +1,11 @@
+services:
+
+  server:
+    image: flossboss/nodejs-server:arm64
+    ports:
+      - "3000:3000"
+
+  client: 
+    image: flossboss/client:arm64
+    ports:
+      - "3001:80"
