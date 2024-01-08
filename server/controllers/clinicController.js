@@ -106,7 +106,7 @@ class ClinicController {
           $lte: nextDay,
         },
       })
-        .sort({ timeSlot: 1 })
+        .sort({ timeFrom: 1 })
         .exec();
 
       if (appointments.length === 0) {
@@ -114,6 +114,7 @@ class ClinicController {
           .status(404)
           .send("No appointments found for the given clinic.");
       }
+      console.log()
       res.status(200).json(appointments);
     } catch (err) {
       res.status(500).send(err);
