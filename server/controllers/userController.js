@@ -177,6 +177,9 @@ class UserController {
   }
 
   async confirmAppointment(req, res) {
+    
+    const delay = Math.floor(Math.random() * (750 - 50 + 1)) + 50;
+    setTimeout(async () => {
     const userId = req.params.id;
     const appointmentId = req.params.appointmentId;
     const clinicId = req.body.clinicId;
@@ -217,33 +220,42 @@ class UserController {
     } catch (error) {
       res.status(500).send("Internal server error");
     }
+  }, delay);
   }
 
   async pendingAppointment(req, res) {
-    const userId = req.params.id;
-    const appointmentId = req.params.appointmentId;
-    const clinicId = req.body.clinicId;
-    try {
-      const appointment = await AppointmentModel.findById(appointmentId);
-      if (appointment.isPending === false && appointment.isBooked === false) {
-        try {
-          const topic = "flossboss/appointment/request/pending";
-          const message = `{
-          "_id": "${appointmentId}",
-          "_userId": "${userId}",
-          "_clinicId": "${clinicId}"
-        }`;
-          mqttHandler.publish(topic, message, { qos: 1 });
-          res.status(200).send("Booking is in Progress");
-        } catch (error) {
-          res.status(500).send("Internal server error");
+    // Generate a random delay
+    const delay = Math.floor(Math.random() * (750 - 50 + 1)) + 50;
+  
+    // Delay the execution of the main logic
+    setTimeout(async () => {
+      const userId = req.params.id;
+      const appointmentId = req.params.appointmentId;
+      const clinicId = req.body.clinicId;
+  
+      try {
+        const appointment = await AppointmentModel.findById(appointmentId);
+  
+        if (appointment.isPending === false && appointment.isBooked === false) {
+          try {
+            const topic = "flossboss/appointment/request/pending";
+            const message = `{
+              "_id": "${appointmentId}",
+              "_userId": "${userId}",
+              "_clinicId": "${clinicId}"
+            }`;
+            mqttHandler.publish(topic, message, { qos: 1 });
+            res.status(200).send("Booking is in Progress");
+          } catch (error) {
+            res.status(500).send("Internal server error");
+          }
+        } else {
+          res.status(200).send("TimeSlot is Booked");
         }
-      } else {
-        res.status(200).send("TimeSlot is Booked");
+      } catch (error) {
+        res.status(500).send("Internal server error");
       }
-    } catch (error) {
-      res.status(500).send("internal server error");
-    }
+    }, delay);
   }
 
   async cancelAppointment(req, res) {
