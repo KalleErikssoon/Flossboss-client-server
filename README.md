@@ -72,12 +72,11 @@ Due to a current issue with the docker engine, Arm64 and Amd64 systems are not c
 > * Add a text file named **".env"**. Add the MONGODB_URI, MQTT URL, MQTT_USER, MQTT_PASSWORD, and SECRET_KEY.
 > * Open the client folder (we recommend using visual studio code)
 > * Add a text file named **".env"**. Add the REACT_APP_GOOGLE_MAPS_KEY.
-#### Step 2: Run the server side and clinet side
-> * Open a terminal 
+#### Step 2: Run the server side and client side
+> * Open a terminal window in the root directory of the repository (or your preferred IDE)
 > * Type "cd server" and then type "npm run dev"
-> * Open a new terminal
+> * Open a new terminal window in the root directory of the repository (or your preferred IDE)
 > * Type "cd client" and then type "npm start"
-
 
 ## Authors and Acknowledgments
 - Isaac Lindegren Ternbom 
