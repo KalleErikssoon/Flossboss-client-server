@@ -17,7 +17,7 @@ The repository in focus here encapsulates the client/server side of the system, 
 
 Additionally, the server employs MQTT and Server-Sent Events (SSE) to update the web client in real-time, ensuring immediate synchronization of appointment data and notifications for an enhanced user experience.
 ### Development view
-<img src="https://i.imgur.com/murcsPC.png" />
+<img src="https://i.imgur.com/jokHigS.png" />
 
 ## Technologies and Tools used in this repository
 **Front-end Development:** JavaScript, React
