@@ -92,19 +92,13 @@ class ClinicController {
       );
 
       const selectedDate = new Date(req.query.selectedDate);
-      selectedDate.setHours(0, 0, 0, 0); // Set to the start of the selected day
-      const nextDay = new Date(selectedDate);
-      nextDay.setDate(selectedDate.getDate() + 1); // Set to the start of the next day
 
       appointments = await AppointmentModel.find({
         _clinicId: clinicid,
         isBooked: false,
         isPending: false,
         isAvailable: true,
-        date: {
-          $gte: selectedDate,
-          $lte: nextDay,
-        },
+        date: selectedDate,
       })
         .sort({ timeFrom: 1 })
         .exec();
@@ -114,7 +108,6 @@ class ClinicController {
           .status(404)
           .send("No appointments found for the given clinic.");
       }
-      console.log()
       res.status(200).json(appointments);
     } catch (err) {
       res.status(500).send(err);
@@ -310,7 +303,6 @@ class ClinicController {
   async updateClientSubscribers(req, res) {
     try {
       const clinicId = req.params.clinicid;
-      console.log("Clinic ID:", clinicId); 
       const selectedDate = req.body.date;
       const userEmail = req.body.email;
       const clinicName = req.body.clinicName;
