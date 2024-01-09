@@ -178,8 +178,6 @@ class UserController {
 
   async confirmAppointment(req, res) {
     
-    const delay = Math.floor(Math.random() * (750 - 50 + 1)) + 50;
-    setTimeout(async () => {
     const userId = req.params.id;
     const appointmentId = req.params.appointmentId;
     const clinicId = req.body.clinicId;
@@ -220,7 +218,6 @@ class UserController {
     } catch (error) {
       res.status(500).send("Internal server error");
     }
-  }, delay);
   }
 
   async pendingAppointment(req, res) {
